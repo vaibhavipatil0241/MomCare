@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Pregnancy Weight Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f9f0ff 0%, #f0f9ff 100%);
+      color: #333;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    /* Header Styles */
+    .header {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 0.5rem 0;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #7e3af2;
+        text-decoration: none;
+    }
+
+    .logo-icon {
+        background: linear-gradient(135deg, #a78bfa, #818cf8);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+    }
+
+    .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .nav-link {
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.8rem 1.2rem;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: white;
+        background: linear-gradient(135deg, #a78bfa, #818cf8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+    }
+
+    .main-content {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 80px);
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(to right, #a78bfa, #818cf8);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      padding: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      color: #7e3af2;
+    }
+
+    .card-header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .card-header i {
+      font-size: 1.8rem;
+      margin-right: 15px;
+      background: #f0f4ff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-header h2 {
+      font-size: 1.6rem;
+    }
+
+    .export-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4b5563;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #818cf8;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+    }
+
+    button {
+      background: linear-gradient(to right, #8b5cf6, #6366f1);
+      color: white;
+      border: none;
+      padding: 14px 25px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 15px rgba(129, 140, 248, 0.4);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .recommendation {
+      background: #f0f9ff;
+      border-left: 4px solid #60a5fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: flex;
+    }
+
+    .recommendation i {
+      font-size: 2rem;
+      color: #3b82f6;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .recommendation p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    th {
+      background: #818cf8;
+      color: white;
+      text-align: left;
+      padding: 16px;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+
+    tr:hover {
+      background-color: #f0f4ff;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status.good {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status.low {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status.high {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .status.unknown {
+      background: #e5e7eb;
+      color: #6b7280;
+    }
+
+    .chart-container {
+      height: 400px;
+      margin-top: 25px;
+      position: relative;
+      padding: 20px;
+      background: linear-gradient(135deg, #fdfcfb 0%, #f8f9ff 100%);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+    }
+
+    .chart-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, #8b5cf6, #6366f1, #10b981);
+      border-radius: 15px 15px 0 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-card.purple { border-color: #8b5cf6; }
+    .stat-card.green { border-color: #10b981; }
+    .stat-card.blue { border-color: #3b82f6; }
+    .stat-card.orange { border-color: #f59e0b; }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #6b7280;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 5px;
+    }
+
+    .stat-sublabel {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    .stat-icon {
+      float: right;
+      font-size: 2rem;
+      opacity: 0.15;
+      margin-top: -10px;
+    }
+
+    .info-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      background: #f8fafc;
+    }
+
+    .info-box {
+      text-align: center;
+      padding: 25px;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-box h3 {
+      color: #7e3af2;
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .info-box ul {
+      text-align: left;
+      padding-left: 20px;
+    }
+
+    .info-box li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #f8fafc;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .highlight {
+      background: linear-gradient(120deg, #f0abfc 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      margin: 0 4px;
+      width: auto;
+    }
+
+    .delete-btn {
+      background: #ef4444;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background: #dc2626;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: #9ca3af;
+    }
+
+    .alert {
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin: 20px 30px 0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="header">
+      <div class="nav-container">
+          <a href="/pregnancy" class="logo">
+              <div class="logo-icon">
+                  <i class="fas fa-weight"></i>
+              </div>
+              <span>Weight Tracker</span>
+          </a>
+          <nav class="nav-menu">
+              <a href="/" class="nav-link">
+                  <i class="fas fa-home"></i> Home
+              </a>
+              <a href="/pregnancy" class="nav-link">
+                  <i class="fas fa-heart"></i> Maternal Care
+              </a>
+              <a href="/pregnancy/weight-tracker" class="nav-link active">
+                  <i class="fas fa-weight"></i> Weight Tracker
+              </a>
+              <a href="/pregnancy/nutrition" class="nav-link">
+                  <i class="fas fa-utensils"></i> Nutrition
+              </a>
+              <a href="/pregnancy/exercise" class="nav-link">
+                  <i class="fas fa-dumbbell"></i> Exercise
+              </a>
+              <a href="/pregnancy/appointments" class="nav-link">
+                  <i class="fas fa-calendar-alt"></i> Appointments
+              </a>
+              <a href="/pregnancy/reports" class="nav-link">
+                  <i class="fas fa-chart-line"></i> Reports
+              </a>
+              <a href="/babycare" class="nav-link">
+                  <i class="fas fa-baby"></i> Baby Care
+              </a>
+              <a href="/auth/logout" class="nav-link">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+          </nav>
+      </div>
+  </header>
+
+  <div class="main-content">
+    <div class="container">
+      <header>
+        <h1>Pregnancy Weight Tracker</h1>
+        <p class="subtitle">Track your weight gain and get personalized recommendations throughout your pregnancy journey</p>
+      </header>
+
+    <div id="alertContainer"></div>
+
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <i class="fas fa-user-circle"></i>
+            <h2>Add Weight Entry</h2>
+          </div>
+        </div>
+
+        <form id="weightForm">
+          <div class="input-group">
+            <label for="preWeight">Pre-pregnancy Weight (kg) *</label>
+            <input type="number" id="preWeight" placeholder="Enter your weight before pregnancy" step="0.1" required>
+          </div>
+
+          <div class="input-group">
+            <label for="height">Height (cm) *</label>
+            <input type="number" id="height" placeholder="Enter your height" step="0.1" required>
+          </div>
+
+          <div class="input-group">
+            <label for="currentWeek">Current Pregnancy Week *</label>
+            <input type="number" id="currentWeek" placeholder="Enter current week (4-40)" min="4" max="40" required>
+          </div>
+
+          <div class="input-group">
+            <label for="currentWeight">Current Weight (kg) *</label>
+            <input type="number" id="currentWeight" placeholder="Enter your current weight" step="0.1" required>
+          </div>
+
+          <div class="input-group">
+            <label for="notes">Notes (optional)</label>
+            <textarea id="notes" placeholder="Add any notes about how you're feeling, diet changes, etc."></textarea>
+          </div>
+
+          <button type="submit" id="saveBtn">
+            <i class="fas fa-save"></i> Save Weight Entry
+          </button>
+        </form>
+
+        <div class="recommendation" id="recommendationBox">
+          <i class="fas fa-lightbulb"></i>
+          <p>Enter your information above and save to get personalized weight gain recommendations based on medical guidelines.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <i class="fas fa-chart-line"></i>
+            <h2>Weight Analysis</h2>
+          </div>
+          <button class="export-btn" onclick="exportCSV()">
+            <i class="fas fa-download"></i> Export CSV
+          </button>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid" id="statsGrid" style="display: none;">
+          <div class="stat-card purple">
+            <i class="fas fa-weight stat-icon"></i>
+            <div class="stat-label">Current Weight</div>
+            <div class="stat-value" id="statCurrentWeight">--</div>
+            <div class="stat-sublabel">Week <span id="statWeek">--</span></div>
+          </div>
+          
+          <div class="stat-card green">
+            <i class="fas fa-arrow-up stat-icon"></i>
+            <div class="stat-label">Total Gain</div>
+            <div class="stat-value" id="statTotalGain">--</div>
+            <div class="stat-sublabel">From pre-pregnancy</div>
+          </div>
+          
+          <div class="stat-card blue">
+            <i class="fas fa-heartbeat stat-icon"></i>
+            <div class="stat-label">BMI Status</div>
+            <div class="stat-value" id="statBMI" style="font-size: 1.6rem;">--</div>
+            <div class="stat-sublabel" id="statBMICategory">--</div>
+          </div>
+          
+          <div class="stat-card orange">
+            <i class="fas fa-chart-pie stat-icon"></i>
+            <div class="stat-label">Progress</div>
+            <div class="stat-value" id="statStatus" style="font-size: 1.4rem;">--</div>
+            <div class="stat-sublabel">Weight gain status</div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="weightChart"></canvas>
+        </div>
+
+        <div id="historyTableContainer">
+          <h3 style="margin-top: 30px; color: #7e3af2;">Weight History</h3>
+          <div id="loadingHistory" class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Loading your weight history...
+          </div>
+          <div id="noDataHistory" class="no-data" style="display: none;">
+            <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.3;"></i>
+            <p>No weight entries yet. Add your first entry to start tracking!</p>
+          </div>
+          <table id="historyTable" style="display: none;">
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Weight</th>
+                <th>Gain</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="historyBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <div class="info-box">
+        <h3>Weight Gain Guidelines</h3>
+        <ul>
+          <li><span class="highlight">Underweight</span> (BMI &lt;18.5): 12.7-18.1 kg</li>
+          <li><span class="highlight">Normal weight</span> (BMI 18.5-24.9): 11.3-15.9 kg</li>
+          <li><span class="highlight">Overweight</span> (BMI 25-29.9): 6.8-11.3 kg</li>
+          <li><span class="highlight">Obese</span> (BMI ≥30): 5.0-9.1 kg</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>Healthy Weight Gain Tips</h3>
+        <ul>
+          <li>Eat frequent, small meals throughout the day</li>
+          <li>Focus on nutrient-dense foods</li>
+          <li>Include lean proteins in every meal</li>
+          <li>Stay hydrated with water and milk</li>
+          <li>Listen to your hunger cues</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>When to Seek Help</h3>
+        <ul>
+          <li>Gaining less than 1kg/month after 1st trimester</li>
+          <li>Gaining more than 3kg/month consistently</li>
+          <li>Sudden weight changes (+2kg/week)</li>
+          <li>Concerns about nutrition or appetite</li>
+          <li>Any rapid swelling or bloating</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 Maternal Health Care System. Consult your healthcare provider for personalized medical advice.</p>
+    </footer>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let weightChart;
+    let weightEntries = [];
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeChart();
+      loadWeightHistory();
+      setupFormHandler();
+    });
+
+    // Initialize empty chart
+    function initializeChart() {
+      const ctx = document.getElementById('weightChart').getContext('2d');
+      
+      // Create gradient for the line
+      const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, 'rgba(139, 92, 246, 0.4)');
+      gradient.addColorStop(0.5, 'rgba(167, 139, 250, 0.2)');
+      gradient.addColorStop(1, 'rgba(196, 181, 253, 0.05)');
+      
+      weightChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Your Weight',
+              data: [],
+              borderColor: '#8b5cf6',
+              backgroundColor: gradient,
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true,
+              pointRadius: 6,
+              pointHoverRadius: 10,
+              pointBackgroundColor: '#8b5cf6',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 3,
+              pointHoverBackgroundColor: '#7c3aed',
+              pointHoverBorderColor: '#fff',
+              pointHoverBorderWidth: 3
+            },
+            {
+              label: 'Pre-pregnancy Weight',
+              data: [],
+              borderColor: '#94a3b8',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              tension: 0,
+              fill: false,
+              pointRadius: 0,
+              pointHoverRadius: 0
+            },
+            {
+              label: 'Recommended Range (Max)',
+              data: [],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              borderWidth: 2,
+              borderDash: [3, 3],
+              tension: 0.3,
+              fill: '+1',
+              pointRadius: 0,
+              pointHoverRadius: 0
+            },
+            {
+              label: 'Recommended Range (Min)',
+              data: [],
+              borderColor: '#10b981',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [3, 3],
+              tension: 0.3,
+              fill: false,
+              pointRadius: 0,
+              pointHoverRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              align: 'center',
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'circle',
+                padding: 15,
+                font: {
+                  size: 13,
+                  weight: '600',
+                  family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                },
+                color: '#4b5563',
+                boxWidth: 8,
+                boxHeight: 8
+              }
+            },
+            tooltip: {
+              enabled: true,
+              mode: 'index',
+              intersect: false,
+              backgroundColor: 'rgba(0, 0, 0, 0.85)',
+              padding: 16,
+              cornerRadius: 8,
+              titleFont: {
+                size: 15,
+                weight: 'bold'
+              },
+              bodyFont: {
+                size: 13
+              },
+              bodySpacing: 6,
+              borderColor: '#8b5cf6',
+              borderWidth: 2,
+              displayColors: true,
+              callbacks: {
+                title: function(context) {
+                  return context[0].label;
+                },
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += context.parsed.y.toFixed(1) + ' kg';
+                  }
+                  return label;
+                },
+                afterBody: function(context) {
+                  const dataIndex = context[0].dataIndex;
+                  const weight = context[0].parsed.y;
+                  const preWeight = weightChart.data.datasets[1].data[dataIndex];
+                  
+                  if (preWeight && weight) {
+                    const gain = weight - preWeight;
+                    return [
+                      '',
+                      '━━━━━━━━━━━━━━━━━',
+                      'Weight Gain: ' + gain.toFixed(1) + ' kg'
+                    ];
+                  }
+                  return [];
+                }
+              }
+            },
+            annotation: {
+              annotations: {}
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Weight (kg)',
+                font: {
+                  size: 15,
+                  weight: '700',
+                  family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                },
+                color: '#6366f1',
+                padding: { top: 10, bottom: 10 }
+              },
+              ticks: {
+                font: {
+                  size: 12,
+                  weight: '500'
+                },
+                color: '#6b7280',
+                padding: 8,
+                callback: function(value) {
+                  return value.toFixed(1) + ' kg';
+                }
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.06)',
+                lineWidth: 1,
+                drawBorder: false
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Pregnancy Week',
+                font: {
+                  size: 15,
+                  weight: '700',
+                  family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                },
+                color: '#6366f1',
+                padding: { top: 10, bottom: 5 }
+              },
+              ticks: {
+                font: {
+                  size: 12,
+                  weight: '500'
+                },
+                color: '#6b7280',
+                padding: 8
+              },
+              grid: {
+                display: true,
+                color: 'rgba(0, 0, 0, 0.03)',
+                lineWidth: 1,
+                drawBorder: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Load weight history from API
+    async function loadWeightHistory() {
+      try {
+        const response = await fetch('/pregnancy/api/weight-entries');
+        const data = await response.json();
+
+        if (data.success) {
+          weightEntries = data.entries;
+          updateHistoryTable();
+          updateChart();
+          updateStatistics();
+          
+          if (weightEntries.length > 0) {
+            document.getElementById('loadingHistory').style.display = 'none';
+            document.getElementById('historyTable').style.display = 'table';
+            document.getElementById('noDataHistory').style.display = 'none';
+            document.getElementById('statsGrid').style.display = 'grid';
+            
+            // Load latest entry into form for reference
+            const latest = weightEntries[0];
+            if (latest.pre_pregnancy_weight) {
+              document.getElementById('preWeight').value = latest.pre_pregnancy_weight;
+            }
+            if (latest.height) {
+              document.getElementById('height').value = latest.height;
+            }
+          } else {
+            document.getElementById('loadingHistory').style.display = 'none';
+            document.getElementById('noDataHistory').style.display = 'block';
+          }
+        } else {
+          showAlert('Error loading weight history', 'error');
+          document.getElementById('loadingHistory').style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error loading weight history:', error);
+        showAlert('Failed to load weight history', 'error');
+        document.getElementById('loadingHistory').style.display = 'none';
+      }
+    }
+
+    // Update history table
+    function updateHistoryTable() {
+      const tbody = document.getElementById('historyBody');
+      tbody.innerHTML = '';
+
+      weightEntries.forEach(entry => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td><strong>Week ${entry.pregnancy_week}</strong></td>
+          <td>${entry.weight.toFixed(1)} kg</td>
+          <td>${entry.weight_gain ? entry.weight_gain.toFixed(1) + ' kg' : 'N/A'}</td>
+          <td><span class="status ${entry.status}">${entry.status.charAt(0).toUpperCase() + entry.status.slice(1)}</span></td>
+          <td>${new Date(entry.date).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</td>
+          <td>
+            <button class="action-btn delete-btn" onclick="deleteEntry(${entry.id})" title="Delete entry">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+      });
+    }
+
+    // Update statistics cards
+    function updateStatistics() {
+      if (weightEntries.length === 0) {
+        return;
+      }
+
+      const latest = weightEntries[0]; // Already sorted by week DESC
+      
+      // Current Weight
+      document.getElementById('statCurrentWeight').textContent = latest.weight.toFixed(1) + ' kg';
+      document.getElementById('statWeek').textContent = latest.pregnancy_week;
+      
+      // Total Gain
+      const totalGain = latest.weight_gain || 0;
+      const gainElement = document.getElementById('statTotalGain');
+      gainElement.textContent = (totalGain >= 0 ? '+' : '') + totalGain.toFixed(1) + ' kg';
+      gainElement.style.color = totalGain >= 0 ? '#10b981' : '#ef4444';
+      
+      // BMI Status
+      if (latest.bmi) {
+        document.getElementById('statBMI').textContent = latest.bmi.toFixed(1);
+        document.getElementById('statBMICategory').textContent = latest.bmi_category.charAt(0).toUpperCase() + latest.bmi_category.slice(1);
+      }
+      
+      // Progress Status
+      const statusElement = document.getElementById('statStatus');
+      const statusText = latest.status.charAt(0).toUpperCase() + latest.status.slice(1);
+      statusElement.textContent = statusText;
+      
+      // Color code status
+      if (latest.status === 'good') {
+        statusElement.style.color = '#10b981';
+      } else if (latest.status === 'low') {
+        statusElement.style.color = '#f59e0b';
+      } else if (latest.status === 'high') {
+        statusElement.style.color = '#ef4444';
+      } else {
+        statusElement.style.color = '#6b7280';
+      }
+    }
+
+    // Update chart with real data
+    function updateChart() {
+      if (weightEntries.length === 0) {
+        return;
+      }
+
+      // Sort by pregnancy week
+      const sortedEntries = [...weightEntries].sort((a, b) => a.pregnancy_week - b.pregnancy_week);
+
+      const labels = sortedEntries.map(e => `Week ${e.pregnancy_week}`);
+      const weights = sortedEntries.map(e => e.weight);
+      
+      // Get pre-pregnancy weight (should be consistent)
+      const preWeight = sortedEntries[0].pre_pregnancy_weight;
+      const preWeightLine = sortedEntries.map(() => preWeight);
+      
+      // Calculate recommended weight range based on BMI category
+      const bmiCategory = sortedEntries[0].bmi_category;
+      const recommendedRanges = calculateRecommendedRange(preWeight, bmiCategory, sortedEntries);
+
+      // Update chart data
+      weightChart.data.labels = labels;
+      weightChart.data.datasets[0].data = weights;
+      weightChart.data.datasets[1].data = preWeightLine;
+      weightChart.data.datasets[2].data = recommendedRanges.max;
+      weightChart.data.datasets[3].data = recommendedRanges.min;
+      
+      // Update chart with animation
+      weightChart.update('active');
+    }
+
+    // Calculate recommended weight range for chart
+    function calculateRecommendedRange(preWeight, bmiCategory, entries) {
+      // Weekly gain rates by BMI category (kg/week for 2nd & 3rd trimester)
+      const weeklyGainRates = {
+        'underweight': { min: 0.45, max: 0.55 },
+        'normal': { min: 0.35, max: 0.45 },
+        'overweight': { min: 0.25, max: 0.35 },
+        'obese': { min: 0.15, max: 0.25 }
+      };
+      
+      const rates = weeklyGainRates[bmiCategory] || weeklyGainRates['normal'];
+      
+      const maxRange = [];
+      const minRange = [];
+      
+      entries.forEach(entry => {
+        const week = entry.pregnancy_week;
+        let expectedGain = 0;
+        
+        if (week <= 13) {
+          // First trimester: minimal gain (1-2 kg)
+          expectedGain = (week / 13) * 2;
+        } else {
+          // Second and third trimester: steady weekly gain
+          const weeksOfGain = week - 13;
+          expectedGain = 2 + (weeksOfGain * rates.min); // Start with 2kg from 1st trimester
+        }
+        
+        const maxGain = week <= 13 ? 2 : 2 + ((week - 13) * rates.max);
+        
+        minRange.push(preWeight + expectedGain);
+        maxRange.push(preWeight + maxGain);
+      });
+      
+      return { min: minRange, max: maxRange };
+    }
+
+    // Setup form submission
+    function setupFormHandler() {
+      const form = document.getElementById('weightForm');
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const formData = {
+          weight: parseFloat(document.getElementById('currentWeight').value),
+          pregnancy_week: parseInt(document.getElementById('currentWeek').value),
+          pre_pregnancy_weight: parseFloat(document.getElementById('preWeight').value),
+          height: parseFloat(document.getElementById('height').value),
+          notes: document.getElementById('notes').value
+        };
+
+        try {
+          const response = await fetch('/pregnancy/api/weight-entries', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            showAlert('Weight entry saved successfully!', 'success');
+            showRecommendation(data.entry);
+            
+            // Reset only current weight, week, and notes
+            document.getElementById('currentWeight').value = '';
+            document.getElementById('currentWeek').value = '';
+            document.getElementById('notes').value = '';
+            
+            // Reload history
+            await loadWeightHistory();
+          } else {
+            showAlert(data.error || 'Failed to save weight entry', 'error');
+          }
+        } catch (error) {
+          console.error('Error saving weight entry:', error);
+          showAlert('Failed to save weight entry', 'error');
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Weight Entry';
+        }
+      });
+    }
+
+    // Show recommendation
+    function showRecommendation(entry) {
+      const box = document.getElementById('recommendationBox');
+      const icon = box.querySelector('i');
+      const text = box.querySelector('p');
+
+      let message = '';
+      let iconClass = 'fas fa-lightbulb';
+      let borderColor = '#60a5fa';
+      let bgColor = '#f0f9ff';
+      let iconColor = '#3b82f6';
+
+      if (entry.status === 'good') {
+        iconClass = 'fas fa-check-circle';
+        borderColor = '#10b981';
+        bgColor = '#ecfdf5';
+        iconColor = '#10b981';
+        message = `Excellent! Your weight gain is on track for your ${entry.bmi_category} BMI category. `;
+      } else if (entry.status === 'low') {
+        iconClass = 'fas fa-arrow-up';
+        borderColor = '#f59e0b';
+        bgColor = '#fffbeb';
+        iconColor = '#f59e0b';
+        message = `Your weight gain is below the recommended range for your ${entry.bmi_category} BMI. Consider increasing nutrient intake. `;
+      } else if (entry.status === 'high') {
+        iconClass = 'fas fa-arrow-down';
+        borderColor = '#ef4444';
+        bgColor = '#fef2f2';
+        iconColor = '#ef4444';
+        message = `Your weight gain is above the recommended range for your ${entry.bmi_category} BMI. Focus on nutrient-dense foods. `;
+      }
+
+      message += `Total recommended gain: ${entry.recommended_gain.total}. Weekly rate: ${entry.recommended_gain.weekly}.`;
+      
+      if (entry.bmi) {
+        message += ` Your pre-pregnancy BMI: ${entry.bmi} (${entry.bmi_category}).`;
+      }
+
+      icon.className = iconClass;
+      icon.style.color = iconColor;
+      box.style.borderLeftColor = borderColor;
+      box.style.background = bgColor;
+      text.textContent = message;
+    }
+
+    // Delete entry
+    async function deleteEntry(entryId) {
+      if (!confirm('Are you sure you want to delete this weight entry?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/pregnancy/api/weight-entries/${entryId}`, {
+          method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('Weight entry deleted successfully', 'success');
+          await loadWeightHistory();
+        } else {
+          showAlert(data.error || 'Failed to delete entry', 'error');
+        }
+      } catch (error) {
+        console.error('Error deleting entry:', error);
+        showAlert('Failed to delete entry', 'error');
+      }
+    }
+
+    // Export to CSV
+    function exportCSV() {
+      if (weightEntries.length === 0) {
+        showAlert('No data to export', 'error');
+        return;
+      }
+      window.location.href = '/pregnancy/api/weight-entries/export-csv';
+    }
+
+    // Show alert
+    function showAlert(message, type) {
+      const container = document.getElementById('alertContainer');
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <span>${message}</span>
+      `;
+      
+      container.innerHTML = '';
+      container.appendChild(alert);
+
+      // Scroll to top to see alert
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      setTimeout(() => {
+        alert.remove();
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

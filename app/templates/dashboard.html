@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Maternal and Child Health Monitoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ec407a;
+            --primary-dark: #d81b60;
+            --secondary: #f48fb1;
+            --accent: #ff80ab;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --light: #fce4ec;
+            --dark: #372d32;
+            --gray: #7d5a6a;
+            --light-gray: #fde8f0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .role-admin {
+            background: var(--danger);
+            color: white;
+        }
+
+        .role-doctor {
+            background: var(--success);
+            color: white;
+        }
+
+        .role-user {
+            background: var(--primary);
+            color: white;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .card-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-content {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <i class="fas fa-heart"></i>
+                <span>Maternal Care</span>
+            </div>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                {% if user.role == 'admin' %}
+                    <a href="/admin"><i class="fas fa-crown"></i> Admin Panel</a>
+                {% elif user.role == 'doctor' %}
+                    <a href="/doctor"><i class="fas fa-stethoscope"></i> Doctor Panel</a>
+                    <a href="/my-appointments"><i class="fas fa-calendar-check"></i> My Appointments</a>
+                {% endif %}
+                <a href="/baby-care"><i class="fas fa-baby"></i> Baby Care</a>
+                <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome, {{ user.full_name }}!</h1>
+            <p class="welcome-subtitle">Your personalized maternal and child health dashboard</p>
+            
+            {% if user.role == 'admin' %}
+                <span class="role-badge role-admin">
+                    <i class="fas fa-crown"></i> Administrator
+                </span>
+            {% elif user.role == 'doctor' %}
+                <span class="role-badge role-doctor">
+                    <i class="fas fa-stethoscope"></i> Medical Professional
+                </span>
+            {% else %}
+                <span class="role-badge role-user">
+                    <i class="fas fa-user"></i> User
+                </span>
+            {% endif %}
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+            {% if user.role == 'admin' %}
+                <!-- Admin Dashboard Cards -->
+                <div class="dashboard-card">
+                    <i class="fas fa-crown card-icon" style="color: var(--danger);"></i>
+                    <h3 class="card-title">Admin Panel</h3>
+                    <p class="card-description">Manage users, content, and system settings</p>
+                    <a href="/admin" class="btn btn-danger">
+                        <i class="fas fa-cog"></i> Access Admin Panel
+                    </a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <i class="fas fa-users card-icon" style="color: var(--primary);"></i>
+                    <h3 class="card-title">User Management</h3>
+                    <p class="card-description">Manage user accounts and permissions</p>
+                    <a href="/admin/manage-users" class="btn btn-primary">
+                        <i class="fas fa-users"></i> Manage Users
+                    </a>
+                </div>
+            {% elif user.role == 'doctor' %}
+                <!-- Doctor Dashboard Cards -->
+                <div class="dashboard-card">
+                    <i class="fas fa-stethoscope card-icon" style="color: var(--success);"></i>
+                    <h3 class="card-title">Doctor Panel</h3>
+                    <p class="card-description">Access patient records and medical tools</p>
+                    <a href="/doctor" class="btn btn-success">
+                        <i class="fas fa-stethoscope"></i> Access Doctor Panel
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Common Cards for All Users -->
+            <div class="dashboard-card">
+                <i class="fas fa-baby card-icon" style="color: var(--primary);"></i>
+                <h3 class="card-title">Baby Care</h3>
+                <p class="card-description">Track your baby's growth and development</p>
+                <a href="/baby-care" class="btn btn-primary">
+                    <i class="fas fa-baby"></i> Baby Care
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <i class="fas fa-pregnant-woman card-icon" style="color: var(--secondary);"></i>
+                <h3 class="card-title">Pregnancy Care</h3>
+                <p class="card-description">Monitor pregnancy health and milestones</p>
+                <a href="/pregnancy-care" class="btn btn-primary">
+                    <i class="fas fa-pregnant-woman"></i> Pregnancy Care
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <i class="fas fa-apple-alt card-icon" style="color: var(--success);"></i>
+                <h3 class="card-title">Nutrition</h3>
+                <p class="card-description">Get nutrition guidance and meal plans</p>
+                <a href="/nutrition" class="btn btn-primary">
+                    <i class="fas fa-apple-alt"></i> Nutrition Guide
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <i class="fas fa-syringe card-icon" style="color: var(--warning);"></i>
+                <h3 class="card-title">Vaccinations</h3>
+                <p class="card-description">Track vaccination schedules and reminders</p>
+                <a href="/vaccinations" class="btn btn-primary">
+                    <i class="fas fa-syringe"></i> Vaccination Schedule
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

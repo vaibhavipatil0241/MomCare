@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nutrition Plans - Maternal Health and Child Health</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Arial", sans-serif;
+    }
+
+    body {
+      color: #333;
+      background-color: #fff5f7;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #d63384;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .nav-links a {
+      margin: 0 1rem;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #d63384;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #d63384;
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .book-now {
+      background-color: #d63384;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .book-now:hover {
+      background-color: #b52a6f;
+      transform: translateY(-2px);
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=1470&q=80")
+          no-repeat center center/cover;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-top: 70px;
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-section {
+      padding: 5rem 2rem;
+      background-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #d63384;
+      font-size: 2.5rem;
+    }
+
+    .nutrition-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background-color: #f8f9fa;
+      border: none;
+      margin: 0 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background-color: #d63384;
+      color: white;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .meal-plan {
+      margin-bottom: 3rem;
+    }
+
+    .meal-plan h3 {
+      color: #d63384;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .meal-card {
+      background-color: #fff9fb;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .meal-card h4 {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .meal-card h4 i {
+      margin-right: 10px;
+      color: #d63384;
+    }
+
+    .meal-card ul {
+      list-style-type: none;
+      margin-left: 2rem;
+    }
+
+    .meal-card li {
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .meal-card li:before {
+      content: "•";
+      color: #d63384;
+      position: absolute;
+      left: -1rem;
+    }
+
+    .admin-panel {
+      background: rgba(214, 51, 132, 0.1);
+      border: 2px solid #d63384;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 32px rgba(214, 51, 132, 0.1);
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #d63384;
+    }
+
+    .admin-header i {
+      margin-right: 10px;
+      color: #ffd700;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-admin {
+      background: #d63384;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-admin:hover {
+      background: #b52a6f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+    }
+
+    .btn-admin i {
+      font-size: 0.9rem;
+    }
+
+    .footer {
+      background-color: #2c3e50;
+      color: white;
+      padding: 3rem 2rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .footer-column {
+      flex: 1 1 300px;
+      margin-bottom: 2rem;
+    }
+
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-logo i {
+      margin-right: 10px;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+      color: #ecf0f1;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #d63384;
+    }
+
+    .social-icons {
+      display: flex;
+      margin-top: 1rem;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #34495e;
+      color: white;
+      margin-right: 1rem;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background-color: #d63384;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      width: 100%;
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid #34495e;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #333;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-150%);
+        transition: transform 0.3s;
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+      }
+
+      .nav-links a {
+        margin: 1rem 0;
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #666;
+    }
+
+    .empty-state h4 {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .empty-state p {
+      color: #999;
+      font-style: italic;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    .loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Simple back header -->
+  <div style="position: fixed; top: 0; left: 0; right: 0; background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; display: flex; align-items: center; gap: 1rem;">
+    <a href="/admin/" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #d63384; font-weight: 500; transition: color 0.3s;">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back to Admin Dashboard</span>
+    </a>
+  </div>
+
+  <section class="page-header" style="margin-top: 70px;">
+    <div>
+      <h1>Nutrition Plans</h1>
+      <p>Healthy eating guidelines for a nourishing pregnancy journey</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <!-- Admin Panel for Nutrition -->
+      <div id="nutrition-admin-panel" class="admin-panel" style="display: none;">
+        <div class="admin-header">
+          <i class="fas fa-crown"></i>
+          <span>Nutrition Admin Panel</span>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-admin" onclick="addNutritionItem()">
+            <i class="fas fa-plus"></i> Add Meal Plan
+          </button>
+          <button class="btn btn-admin" onclick="manageNutritionContent()">
+            <i class="fas fa-edit"></i> Manage Content
+          </button>
+          <button class="btn btn-admin" onclick="addNutritionTip()">
+            <i class="fas fa-lightbulb"></i> Add Nutrition Tip
+          </button>
+        </div>
+      </div>
+
+      <h2 class="section-title">Trimester-Specific Nutrition</h2>
+      
+      <div class="nutrition-tabs">
+        <button class="tab-btn active" data-tab="first">First Trimester</button>
+        <button class="tab-btn" data-tab="second">Second Trimester</button>
+        <button class="tab-btn" data-tab="third">Third Trimester</button>
+      </div>
+
+      <div id="first" class="tab-content active">
+        <div class="meal-plan">
+          <h3>First Trimester Meal Plan</h3>
+
+          <div id="first-trimester-content" class="trimester-content">
+            <!-- Content will be loaded dynamically from admin-added data -->
+            <div class="empty-state">
+              <i class="fas fa-utensils" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No meal plans available</h4>
+              <p>Meal plans for the first trimester will be added by our nutrition experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="second" class="tab-content">
+        <div class="meal-plan">
+          <h3>Second Trimester Meal Plan</h3>
+
+          <div id="second-trimester-content" class="trimester-content">
+            <!-- Content will be loaded dynamically from admin-added data -->
+            <div class="empty-state">
+              <i class="fas fa-utensils" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No meal plans available</h4>
+              <p>Meal plans for the second trimester will be added by our nutrition experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="third" class="tab-content">
+        <div class="meal-plan">
+          <h3>Third Trimester Meal Plan</h3>
+
+          <div id="third-trimester-content" class="trimester-content">
+            <!-- Content will be loaded dynamically from admin-added data -->
+            <div class="empty-state">
+              <i class="fas fa-utensils" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No meal plans available</h4>
+              <p>Meal plans for the third trimester will be added by our nutrition experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <div class="footer-logo">
+          <i class="fas fa-baby-carriage"></i>
+          Maternal Health & Child Health
+        </div>
+        <p>
+          Your trusted companion for pregnancy and baby care, providing expert
+          guidance and support every step of the way.
+        </p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="/pages/Preg/pregcare.html">Pregnancy Care</a></li>
+          <li><a href="/pages/baby/baby-care.html">Baby Care</a></li>
+          <li><a href="/pages/doctor/dashboard.html">Consult Doctor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Services</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/Preg/nutrition.html">Nutrition Plans</a></li>
+          <li><a href="/pages/Preg/schemes.html">Government Schemes</a></li>
+          <li><a href="/pages/contact.html">Contact Us</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-phone"></i> 9876543210</p>
+        <p><i class="fas fa-envelope"></i> pregnanacy2523@gmail.com</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 Maternal Health and Child Health. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Add active class to clicked button and corresponding content
+          this.classList.add('active');
+          document.getElementById(targetTab).classList.add('active');
+        });
+      });
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', function() {
+          navLinks.classList.toggle('active');
+        });
+      }
+
+      // Get Started button functionality
+      const getStartedBtn = document.querySelector('.book-now');
+      if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', function() {
+          window.location.href = '/signup';
+        });
+      }
+
+      // Check if user is admin and show admin panel
+      checkNutritionAdminStatus();
+      
+      // Load sample data for demonstration
+      loadSampleNutritionData();
+    });
+
+    // Check admin status for nutrition page
+    function checkNutritionAdminStatus() {
+      // In a real application, this would check the user's role from the backend
+      // For demo purposes, we'll check if admin mode is enabled in localStorage
+      const isAdmin = localStorage.getItem('nutrition_admin_mode') === 'true';
+      if (isAdmin) {
+        document.getElementById('nutrition-admin-panel').style.display = 'block';
+      }
+    }
+
+    // Add Nutrition Item
+    function addNutritionItem() {
+      const modal = createModal('Add Nutrition Plan', `
+        <form id="add-nutrition-form">
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title:</label>
+            <input type="text" id="nutrition-title" required
+                   style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                   placeholder="e.g., Healthy First Trimester Breakfast">
+          </div>
+
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+            <textarea id="nutrition-description" required rows="3"
+                      style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                      placeholder="Describe the nutritional benefits and purpose of this meal plan"></textarea>
+          </div>
+
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Category:</label>
+            <select id="nutrition-category" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+              <option value="snack">Snack</option>
+              <option value="pregnancy">General Pregnancy</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Trimester:</label>
+            <select id="nutrition-trimester" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+              <option value="first">First Trimester</option>
+              <option value="second">Second Trimester</option>
+              <option value="third">Third Trimester</option>
+              <option value="all">All Trimesters</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Foods (one per line):</label>
+            <textarea id="nutrition-foods" required rows="4"
+                      style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                      placeholder="Enter each food item on a new line:&#10;Whole grain toast&#10;Avocado&#10;Greek yogurt&#10;Mixed berries"></textarea>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Tips:</label>
+            <textarea id="nutrition-tips" rows="3"
+                      style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                      placeholder="Enter helpful tips and advice for this meal plan"></textarea>
+          </div>
+
+          <div style="text-align: right;">
+            <button type="button" onclick="this.closest('.modal').remove()"
+                    style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+              Cancel
+            </button>
+            <button type="submit"
+                    style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+              Add Plan
+            </button>
+          </div>
+        </form>
+      `);
+
+      document.getElementById('add-nutrition-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = {
+          title: document.getElementById('nutrition-title').value,
+          description: document.getElementById('nutrition-description').value,
+          category: document.getElementById('nutrition-category').value,
+          trimester: document.getElementById('nutrition-trimester').value,
+          foods: document.getElementById('nutrition-foods').value.split('\n').filter(food => food.trim()),
+          tips: document.getElementById('nutrition-tips').value
+        };
+
+        try {
+          const response = await fetch('/admin/api/content/nutrition', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showNotification('Nutrition plan added successfully!', 'success');
+            modal.remove();
+            // Refresh the content if manage modal is open
+            if (document.getElementById('nutrition-content-list')) {
+              loadNutritionContent();
+            }
+            // Also refresh the main page content
+            loadNutritionData();
+          } else {
+            showNotification(result.error || 'Failed to add nutrition plan', 'error');
+          }
+        } catch (error) {
+          showNotification('Error adding nutrition plan: ' + error.message, 'error');
+        }
+      });
+    }
+
+    // Manage Nutrition Content
+    function manageNutritionContent() {
+      const modal = createModal('Manage Nutrition Content', `
+        <div style="max-height: 500px; overflow-y: auto;">
+          <h4>Existing Meal Plans</h4>
+          <div id="nutrition-content-list">
+            <div style="margin: 1rem 0;">
+              <h5>First Trimester</h5>
+              <div id="first-trimester-list">Loading...</div>
+            </div>
+            <div style="margin: 1rem 0;">
+              <h5>Second Trimester</h5>
+              <div id="second-trimester-list">Loading...</div>
+            </div>
+            <div style="margin: 1rem 0;">
+              <h5>Third Trimester</h5>
+              <div id="third-trimester-list">Loading...</div>
+            </div>
+          </div>
+        </div>
+      `);
+      loadNutritionContent();
+    }
+
+    // Add Nutrition Tip
+    function addNutritionTip() {
+      const modal = createModal('Add Nutrition Tip', `
+        <form id="add-tip-form">
+          <div style="margin: 10px 0;">
+            <label>Tip Title:</label>
+            <input type="text" id="tip-title" required style="width: 100%; padding: 8px; margin: 5px 0;" placeholder="e.g., Stay Hydrated">
+          </div>
+          <div style="margin: 10px 0;">
+            <label>Tip Content:</label>
+            <textarea id="tip-content" required style="width: 100%; padding: 8px; margin: 5px 0; height: 80px;" placeholder="Detailed nutrition tip..."></textarea>
+          </div>
+          <button type="submit" style="background: #d63384; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Add Tip</button>
+        </form>
+      `);
+
+      document.getElementById('add-tip-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const tipData = {
+          title: document.getElementById('tip-title').value,
+          content: document.getElementById('tip-content').value
+        };
+        saveNutritionTip(tipData);
+        modal.remove();
+      });
+    }
+
+    // Save Nutrition Item
+    function saveNutritionItem(data) {
+      // In a real application, this would send data to the backend
+      // For demo purposes, we'll store in localStorage
+      try {
+        const existingData = JSON.parse(localStorage.getItem('nutrition_data') || '[]');
+        const newItem = {
+          id: Date.now(),
+          ...data,
+          dateAdded: new Date().toISOString()
+        };
+        existingData.push(newItem);
+        localStorage.setItem('nutrition_data', JSON.stringify(existingData));
+        
+        // Update the UI with the new item
+        addNutritionItemToDOM(newItem);
+        
+        showNotification('Meal plan item added successfully!', 'success');
+      } catch (error) {
+        console.error('Error saving nutrition item:', error);
+        showNotification('Error saving nutrition item', 'error');
+      }
+    }
+
+    // Save Nutrition Tip
+    function saveNutritionTip(data) {
+      // In a real application, this would send data to the backend
+      // For demo purposes, we'll just show a notification
+      showNotification('Nutrition tip added successfully!', 'success');
+    }
+
+    // Add nutrition item to DOM
+    function addNutritionItemToDOM(data) {
+      const trimesterContent = document.getElementById(`${data.trimester}-trimester-content`);
+      if (trimesterContent) {
+        // Remove empty state if it exists
+        const emptyState = trimesterContent.querySelector('.empty-state');
+        if (emptyState) {
+          emptyState.remove();
+        }
+        
+        // Create meal card if it doesn't exist
+        let mealCard = trimesterContent.querySelector(`.meal-card[data-meal-type="${data.mealType}"]`);
+        if (!mealCard) {
+          mealCard = document.createElement('div');
+          mealCard.className = 'meal-card';
+          mealCard.setAttribute('data-meal-type', data.mealType);
+          
+          const mealTypeHeading = document.createElement('h4');
+          mealTypeHeading.innerHTML = `<i class="fas fa-utensils"></i> ${data.mealType.charAt(0).toUpperCase() + data.mealType.slice(1)}`;
+          
+          const mealList = document.createElement('ul');
+          mealList.id = `${data.trimester}-${data.mealType}-list`;
+          
+          mealCard.appendChild(mealTypeHeading);
+          mealCard.appendChild(mealList);
+          trimesterContent.appendChild(mealCard);
+        }
+        
+        // Add the new food item to the list
+        const mealList = mealCard.querySelector('ul');
+        const listItem = document.createElement('li');
+        listItem.textContent = `${data.food} - ${data.benefits}`;
+        mealList.appendChild(listItem);
+      }
+    }
+
+    // Create modal helper function
+    function createModal(title, content) {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 10000; display: flex;
+        align-items: center; justify-content: center;
+      `;
+
+      modal.innerHTML = `
+        <div style="background: white; padding: 20px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80%; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; color: #d63384;">${title}</h3>
+            <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+          </div>
+          ${content}
+        </div>
+      `;
+
+      modal.className = 'modal';
+      document.body.appendChild(modal);
+      return modal;
+    }
+
+    // Show notification
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed; top: 20px; right: 20px; z-index: 10001;
+        padding: 15px 20px; border-radius: 5px; color: white; font-weight: bold;
+        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // Load sample nutrition data for demonstration
+    function loadSampleNutritionData() {
+      // No demo data - nutrition will be managed through admin interface
+      // Show empty state for all trimesters
+      const trimesters = ['first', 'second', 'third'];
+      trimesters.forEach(trimester => {
+        const container = document.getElementById(`${trimester}-trimester-list`);
+        if (container) {
+          container.innerHTML = `<div class="empty-state">
+            <i class="fas fa-apple-alt"></i>
+            <h4>No nutrition content available.</h4>
+            <p>Nutrition guidelines for this trimester will be added by our experts through the admin panel.</p>
+          </div>`;
+        }
+      });
+    }
+
+    // Load nutrition content for management
+    async function loadNutritionContent() {
+      try {
+        // Fetch data from the admin API
+        const response = await fetch('/admin/api/content/nutrition');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to load nutrition data');
+        }
+
+        const nutritionData = result.data || [];
+
+        // Group by trimester
+        const firstTrimester = nutritionData.filter(item => item.trimester === 'first');
+        const secondTrimester = nutritionData.filter(item => item.trimester === 'second');
+        const thirdTrimester = nutritionData.filter(item => item.trimester === 'third');
+
+        // Render each list
+        renderNutritionList('first-trimester-list', firstTrimester);
+        renderNutritionList('second-trimester-list', secondTrimester);
+        renderNutritionList('third-trimester-list', thirdTrimester);
+
+      } catch (error) {
+        console.error('Error loading nutrition content:', error);
+        // Show error in all lists
+        ['first-trimester-list', 'second-trimester-list', 'third-trimester-list'].forEach(id => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.innerHTML = '<p style="color: red;">Error loading content. Please try again.</p>';
+          }
+        });
+      }
+    }
+
+    // Render nutrition list for management
+    function renderNutritionList(elementId, items) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      if (items.length === 0) {
+        element.innerHTML = '<p style="color: #666; font-style: italic;">No meal plans found</p>';
+        return;
+      }
+
+      let html = '<div style="margin-top: 10px;">';
+      items.forEach(item => {
+        // Format foods array for display
+        const foodsDisplay = Array.isArray(item.foods) ? item.foods.join(', ') : (item.foods || 'No foods listed');
+
+        html += `
+          <div style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div style="flex: 1;">
+                <div style="margin-bottom: 8px;">
+                  <strong style="color: #333; font-size: 16px;">${item.category || 'meal'}</strong>:
+                  <span style="color: #555;">${item.title || 'Untitled'}</span>
+                </div>
+                <div style="color: #666; font-size: 14px; margin-bottom: 5px;">
+                  ${item.description || 'No description available'}
+                </div>
+                <div style="color: #777; font-size: 13px; margin-bottom: 8px;">
+                  <strong>Foods:</strong> ${foodsDisplay}
+                </div>
+                ${item.tips ? `<div style="color: #777; font-size: 13px; font-style: italic;">
+                  <strong>Tips:</strong> ${item.tips}
+                </div>` : ''}
+              </div>
+              <div style="margin-left: 15px; display: flex; gap: 5px;">
+                <button onclick="editNutritionItem(${item.id})"
+                        style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                  Edit
+                </button>
+                <button onclick="deleteNutritionItem(${item.id})"
+                        style="background: #f44336; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+
+      element.innerHTML = html;
+    }
+
+    // Edit nutrition item
+    async function editNutritionItem(id) {
+      try {
+        // First, get the current item data
+        const response = await fetch('/admin/api/content/nutrition');
+        if (!response.ok) throw new Error('Failed to fetch nutrition data');
+
+        const result = await response.json();
+        const item = result.data.find(item => item.id === id);
+
+        if (!item) {
+          showNotification('Nutrition item not found', 'error');
+          return;
+        }
+
+        // Create edit modal with current data
+        const modal = createModal('Edit Nutrition Plan', `
+          <form id="edit-nutrition-form">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Title:</label>
+              <input type="text" id="edit-title" value="${item.title || ''}"
+                     style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+              <textarea id="edit-description" rows="3"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>${item.description || ''}</textarea>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Category:</label>
+              <select id="edit-category" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                <option value="breakfast" ${item.category === 'breakfast' ? 'selected' : ''}>Breakfast</option>
+                <option value="lunch" ${item.category === 'lunch' ? 'selected' : ''}>Lunch</option>
+                <option value="dinner" ${item.category === 'dinner' ? 'selected' : ''}>Dinner</option>
+                <option value="snack" ${item.category === 'snack' ? 'selected' : ''}>Snack</option>
+                <option value="pregnancy" ${item.category === 'pregnancy' ? 'selected' : ''}>General Pregnancy</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Trimester:</label>
+              <select id="edit-trimester" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                <option value="first" ${item.trimester === 'first' ? 'selected' : ''}>First Trimester</option>
+                <option value="second" ${item.trimester === 'second' ? 'selected' : ''}>Second Trimester</option>
+                <option value="third" ${item.trimester === 'third' ? 'selected' : ''}>Third Trimester</option>
+                <option value="all" ${item.trimester === 'all' ? 'selected' : ''}>All Trimesters</option>
+              </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Foods (one per line):</label>
+              <textarea id="edit-foods" rows="4"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                        placeholder="Enter each food item on a new line">${Array.isArray(item.foods) ? item.foods.join('\n') : ''}</textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: bold;">Tips:</label>
+              <textarea id="edit-tips" rows="3"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                        placeholder="Enter helpful tips and advice">${item.tips || ''}</textarea>
+            </div>
+
+            <div style="text-align: right;">
+              <button type="button" onclick="this.closest('.modal').remove()"
+                      style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                Cancel
+              </button>
+              <button type="submit"
+                      style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                Update Plan
+              </button>
+            </div>
+          </form>
+        `);
+
+        // Handle form submission
+        document.getElementById('edit-nutrition-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const formData = {
+            id: id,
+            title: document.getElementById('edit-title').value,
+            description: document.getElementById('edit-description').value,
+            category: document.getElementById('edit-category').value,
+            trimester: document.getElementById('edit-trimester').value,
+            foods: document.getElementById('edit-foods').value.split('\n').filter(food => food.trim()),
+            tips: document.getElementById('edit-tips').value
+          };
+
+          try {
+            const updateResponse = await fetch('/admin/api/content/nutrition', {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formData)
+            });
+
+            const updateResult = await updateResponse.json();
+
+            if (updateResult.success) {
+              showNotification('Nutrition plan updated successfully!', 'success');
+              modal.remove();
+              loadNutritionContent(); // Refresh the list
+            } else {
+              showNotification(updateResult.error || 'Failed to update nutrition plan', 'error');
+            }
+          } catch (error) {
+            showNotification('Error updating nutrition plan: ' + error.message, 'error');
+          }
+        });
+
+      } catch (error) {
+        showNotification('Error loading nutrition item: ' + error.message, 'error');
+      }
+    }
+
+    // Delete nutrition item
+    async function deleteNutritionItem(id) {
+      if (!confirm('Are you sure you want to delete this nutrition plan? This action cannot be undone.')) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/admin/api/content/nutrition', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: id })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showNotification('Nutrition plan deleted successfully!', 'success');
+          loadNutritionContent(); // Refresh the list
+        } else {
+          showNotification(result.error || 'Failed to delete nutrition plan', 'error');
+        }
+      } catch (error) {
+        showNotification('Error deleting nutrition plan: ' + error.message, 'error');
+      }
+    }
+
+    // Load nutrition data for main page display
+    async function loadNutritionData() {
+      try {
+        const response = await fetch('/api/nutrition-data');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to load nutrition data');
+        }
+
+        const nutritionData = result.data || [];
+
+        // Group by trimester and update the main page content
+        const trimesters = ['first', 'second', 'third'];
+
+        trimesters.forEach(trimester => {
+          const trimesterData = nutritionData.filter(item => item.trimester === trimester || item.trimester === 'all');
+          const contentElement = document.getElementById(`${trimester}-trimester-content`);
+
+          if (contentElement) {
+            if (trimesterData.length === 0) {
+              // Show empty state
+              contentElement.innerHTML = `
+                <div class="empty-state">
+                  <i class="fas fa-utensils" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                  <h4>No meal plans available</h4>
+                  <p>Meal plans for the ${trimester} trimester will be added by our nutrition experts.</p>
+                </div>
+              `;
+            } else {
+              // Show nutrition plans
+              let html = '';
+              trimesterData.forEach(item => {
+                const foodsList = Array.isArray(item.foods) ? item.foods : [];
+                html += `
+                  <div class="meal-item" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;">
+                    <h4 style="color: #d63384; margin-bottom: 10px;">${item.title}</h4>
+                    <p style="color: #666; margin-bottom: 10px;">${item.description}</p>
+                    <div style="margin-bottom: 10px;">
+                      <strong>Category:</strong> ${item.category}
+                    </div>
+                    ${foodsList.length > 0 ? `
+                      <div style="margin-bottom: 10px;">
+                        <strong>Foods:</strong>
+                        <ul style="margin: 5px 0; padding-left: 20px;">
+                          ${foodsList.map(food => `<li>${food}</li>`).join('')}
+                        </ul>
+                      </div>
+                    ` : ''}
+                    ${item.tips ? `
+                      <div style="background: #e8f5e8; padding: 10px; border-radius: 4px; border-left: 4px solid #4caf50;">
+                        <strong>💡 Tips:</strong> ${item.tips}
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              });
+              contentElement.innerHTML = html;
+            }
+          }
+        });
+
+      } catch (error) {
+        console.error('Error loading nutrition data:', error);
+        // Show error in all trimester sections
+        ['first', 'second', 'third'].forEach(trimester => {
+          const contentElement = document.getElementById(`${trimester}-trimester-content`);
+          if (contentElement) {
+            contentElement.innerHTML = `
+              <div style="color: red; text-align: center; padding: 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p>Error loading nutrition data. Please try again later.</p>
+              </div>
+            `;
+          }
+        });
+      }
+    }
+
+    // Load nutrition data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadNutritionData();
+      checkNutritionAdminStatus();
+    });
+
+    // Enable admin mode for demonstration
+    // In a real application, this would be controlled by user authentication
+    localStorage.setItem('nutrition_admin_mode', 'true');
+  </script>
+</body>
+</html>

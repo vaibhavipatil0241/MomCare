@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Guide - Pregnancy & Baby Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .exercise-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card.active {
+            border: 2px solid #667eea;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .category-card h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .exercises-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .exercises-container.active {
+            display: block;
+        }
+
+        .exercise-item {
+            border: 1px solid #e0e6ff;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .exercise-header {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercise-header h4 {
+            color: #333;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .exercise-duration {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .exercise-content {
+            padding: 1.5rem;
+        }
+
+        .exercise-steps {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-steps li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .exercise-steps .step-number {
+            background: #667eea;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .safety-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .safety-note strong {
+            color: #856404;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .exercise-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="header">
+            <h1>
+                <i class="fas fa-dumbbell"></i>
+                Exercise Guide
+            </h1>
+            <p>Safe and effective exercises for pregnancy and postpartum</p>
+        </div>
+
+        <div class="exercise-categories" id="exercise-categories">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading exercise categories...</p>
+            </div>
+        </div>
+
+        <div class="exercises-container" id="exercises-container">
+            <h2 id="selected-category-title">Select a category to view exercises</h2>
+            <div id="exercises-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentCategory = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExerciseCategories();
+        });
+
+        function loadExerciseCategories() {
+            const categories = [
+                {
+                    id: 'pregnancy',
+                    title: 'Pregnancy Exercises',
+                    description: 'Safe exercises during pregnancy to maintain fitness and prepare for delivery',
+                    icon: 'fas fa-baby'
+                },
+                {
+                    id: 'postpartum',
+                    title: 'Postpartum Recovery',
+                    description: 'Gentle exercises to help recover after childbirth and regain strength',
+                    icon: 'fas fa-heart'
+                },
+                {
+                    id: 'breathing',
+                    title: 'Breathing Exercises',
+                    description: 'Breathing techniques for relaxation and labor preparation',
+                    icon: 'fas fa-wind'
+                },
+                {
+                    id: 'pelvic',
+                    title: 'Pelvic Floor Exercises',
+                    description: 'Strengthen pelvic floor muscles for better support and recovery',
+                    icon: 'fas fa-circle'
+                }
+            ];
+
+            displayCategories(categories);
+        }
+
+        function displayCategories(categories) {
+            const container = document.getElementById('exercise-categories');
+            
+            container.innerHTML = categories.map(category => `
+                <div class="category-card" onclick="selectCategory('${category.id}', '${category.title}')">
+                    <div class="category-icon">
+                        <i class="${category.icon}"></i>
+                    </div>
+                    <h3>${category.title}</h3>
+                    <p>${category.description}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectCategory(categoryId, categoryTitle) {
+            // Update active category
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Show exercises container
+            const container = document.getElementById('exercises-container');
+            container.classList.add('active');
+
+            // Update title
+            document.getElementById('selected-category-title').textContent = categoryTitle;
+
+            // Load exercises for this category
+            loadExercises(categoryId);
+        }
+
+        function loadExercises(categoryId) {
+            const exercisesData = {
+                pregnancy: [
+                    {
+                        name: 'Walking',
+                        duration: '20-30 minutes',
+                        steps: [
+                            'Start with a 5-minute warm-up at a slow pace',
+                            'Maintain a moderate pace where you can still hold a conversation',
+                            'Keep your posture upright and shoulders relaxed',
+                            'Wear comfortable, supportive shoes',
+                            'Stay hydrated and avoid overheating'
+                        ],
+                        safety: 'Stop if you experience dizziness, chest pain, or shortness of breath.'
+                    },
+                    {
+                        name: 'Prenatal Yoga',
+                        duration: '15-45 minutes',
+                        steps: [
+                            'Start with gentle stretching and breathing',
+                            'Focus on poses that open the hips and strengthen the back',
+                            'Avoid lying flat on your back after the first trimester',
+                            'Use props like blocks and bolsters for support',
+                            'End with relaxation and meditation'
+                        ],
+                        safety: 'Avoid hot yoga and poses that involve twisting or lying on your belly.'
+                    },
+                    {
+                        name: 'Swimming',
+                        duration: '20-30 minutes',
+                        steps: [
+                            'Start with gentle water walking',
+                            'Use freestyle or backstroke for low-impact cardio',
+                            'Focus on maintaining good form rather than speed',
+                            'Take breaks as needed',
+                            'Cool down with gentle stretching in the water'
+                        ],
+                        safety: 'Avoid diving and ensure pool water is properly chlorinated.'
+                    }
+                ],
+                postpartum: [
+                    {
+                        name: 'Gentle Walking',
+                        duration: '10-20 minutes',
+                        steps: [
+                            'Start with short 5-10 minute walks',
+                            'Gradually increase duration as you feel stronger',
+                            'Listen to your body and rest when needed',
+                            'Wear supportive shoes and comfortable clothing',
+                            'Consider bringing baby in a stroller for fresh air'
+                        ],
+                        safety: 'Wait for doctor clearance before starting any exercise program.'
+                    },
+                    {
+                        name: 'Core Breathing',
+                        duration: '5-10 minutes',
+                        steps: [
+                            'Lie on your back with knees bent',
+                            'Place one hand on chest, one on belly',
+                            'Breathe in slowly, expanding your ribcage',
+                            'Exhale slowly, gently drawing belly button toward spine',
+                            'Repeat 10-15 times'
+                        ],
+                        safety: 'Start gently and progress slowly to avoid strain.'
+                    }
+                ],
+                breathing: [
+                    {
+                        name: 'Deep Belly Breathing',
+                        duration: '5-10 minutes',
+                        steps: [
+                            'Sit comfortably or lie on your side',
+                            'Place one hand on your chest, one on your belly',
+                            'Breathe in slowly through your nose, expanding your belly',
+                            'Exhale slowly through your mouth',
+                            'Focus on making the exhale longer than the inhale'
+                        ],
+                        safety: 'Stop if you feel dizzy and breathe normally.'
+                    },
+                    {
+                        name: 'Labor Breathing',
+                        duration: '10-15 minutes',
+                        steps: [
+                            'Practice slow, rhythmic breathing',
+                            'Inhale for 4 counts, exhale for 6 counts',
+                            'Focus on relaxing your body with each exhale',
+                            'Practice visualization of your baby moving down',
+                            'Use this technique during practice contractions'
+                        ],
+                        safety: 'Practice regularly to make it natural during labor.'
+                    }
+                ],
+                pelvic: [
+                    {
+                        name: 'Kegel Exercises',
+                        duration: '5-10 minutes',
+                        steps: [
+                            'Identify your pelvic floor muscles (stop urination midstream)',
+                            'Contract these muscles for 3-5 seconds',
+                            'Relax for 3-5 seconds',
+                            'Repeat 10-15 times, 3 times per day',
+                            'Gradually increase hold time to 10 seconds'
+                        ],
+                        safety: 'Don\'t hold your breath or tighten other muscles.'
+                    },
+                    {
+                        name: 'Pelvic Tilts',
+                        duration: '5-10 minutes',
+                        steps: [
+                            'Lie on your back with knees bent (or stand against wall)',
+                            'Tighten your abdominal muscles',
+                            'Tilt your pelvis slightly upward',
+                            'Hold for 5 seconds, then relax',
+                            'Repeat 10-15 times'
+                        ],
+                        safety: 'Avoid this exercise if lying on your back causes dizziness.'
+                    }
+                ]
+            };
+
+            displayExercises(exercisesData[categoryId] || []);
+        }
+
+        function displayExercises(exercises) {
+            const container = document.getElementById('exercises-list');
+            
+            if (exercises.length === 0) {
+                container.innerHTML = '<p>No exercises available for this category.</p>';
+                return;
+            }
+
+            container.innerHTML = exercises.map(exercise => `
+                <div class="exercise-item">
+                    <div class="exercise-header">
+                        <h4>${exercise.name}</h4>
+                        <div class="exercise-duration">${exercise.duration}</div>
+                    </div>
+                    <div class="exercise-content">
+                        <ol class="exercise-steps">
+                            ${exercise.steps.map((step, index) => `
+                                <li>
+                                    <div class="step-number">${index + 1}</div>
+                                    <div>${step}</div>
+                                </li>
+                            `).join('')}
+                        </ol>
+                        ${exercise.safety ? `
+                            <div class="safety-note">
+                                <strong>Safety Note:</strong> ${exercise.safety}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

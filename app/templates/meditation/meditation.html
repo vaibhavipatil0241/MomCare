@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Guide - Pregnancy & Baby Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .meditation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .meditation-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .meditation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .meditation-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .meditation-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .meditation-card h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .meditation-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .duration-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .meditation-player {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .meditation-player.active {
+            display: block;
+        }
+
+        .player-title {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            color: #667eea;
+            margin: 2rem 0;
+            font-weight: bold;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: #5a6fd8;
+            transform: scale(1.1);
+        }
+
+        .meditation-steps {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .meditation-steps h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .meditation-steps ol {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .meditation-steps li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .meditation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .timer-display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="header">
+            <h1>
+                <i class="fas fa-om"></i>
+                Meditation Guide
+            </h1>
+            <p>Mindfulness and relaxation techniques for pregnancy and motherhood</p>
+        </div>
+
+        <div class="meditation-grid" id="meditation-grid">
+            <!-- Meditation options will be loaded here -->
+        </div>
+
+        <div class="meditation-player" id="meditation-player">
+            <h2 class="player-title" id="player-title">Meditation Session</h2>
+            <div class="timer-display" id="timer-display">05:00</div>
+            
+            <div class="player-controls">
+                <button class="control-button" id="play-pause-btn" onclick="togglePlayPause()">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-button" onclick="stopMeditation()">
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+
+            <div class="meditation-steps" id="meditation-steps">
+                <h4>Meditation Steps:</h4>
+                <ol id="steps-list">
+                    <!-- Steps will be loaded here -->
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let meditationTimer = null;
+        let currentTime = 0;
+        let totalTime = 0;
+        let isPlaying = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMeditationOptions();
+        });
+
+        async function loadMeditationOptions() {
+            try {
+                // Fetch meditation content from admin-managed database
+                const response = await fetch('/api/meditation-data');
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        displayMeditationOptions(result.data);
+                        console.log(`✅ Loaded ${result.count} meditation sessions`);
+                    } else {
+                        console.log('No meditation content available yet - admin needs to add content');
+                        displayMeditationOptions([]);
+                    }
+                } else {
+                    console.log('No meditation content available yet - admin needs to add content');
+                    displayMeditationOptions([]);
+                }
+            } catch (error) {
+                console.error('Error loading meditation content:', error);
+                displayMeditationOptions([]);
+            }
+        }
+
+        function displayMeditationOptions(meditations) {
+            const container = document.getElementById('meditation-grid');
+
+            if (meditations.length === 0) {
+                container.innerHTML = `
+                    <div class="meditation-card">
+                        <div class="meditation-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>No Meditation Sessions Available</h3>
+                        <p>Meditation content will be added by admin soon.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = meditations.map(meditation => {
+                // Convert admin content structure to display format
+                const icon = meditation.category === 'relaxation' ? 'fas fa-leaf' :
+                           meditation.category === 'energy' ? 'fas fa-sun' :
+                           meditation.category === 'sleep' ? 'fas fa-moon' :
+                           'fas fa-heart';
+
+                // Convert instructions to steps array
+                const steps = meditation.instructions ?
+                    meditation.instructions.split('.').filter(step => step.trim()).map(step => step.trim()) :
+                    ['Follow the guided meditation'];
+
+                return `
+                    <div class="meditation-card">
+                        <div class="meditation-icon">
+                            <i class="${icon}"></i>
+                        </div>
+                        <h3>${meditation.title}</h3>
+                        <p>${meditation.description}</p>
+                        <div class="duration-badge">${meditation.duration} minutes</div>
+                        <div class="difficulty-badge">${meditation.difficulty || 'beginner'}</div>
+                        ${meditation.benefits ? `<div class="benefits-text"><i class="fas fa-star"></i> ${meditation.benefits}</div>` : ''}
+                        <button class="start-button" onclick="startMeditation('${meditation.id}', '${meditation.title}', ${meditation.duration}, ${JSON.stringify(steps).replace(/"/g, '&quot;')})">
+                            Start Meditation
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startMeditation(id, title, duration, steps) {
+            // Show player
+            document.getElementById('meditation-player').classList.add('active');
+            document.getElementById('player-title').textContent = title;
+            
+            // Set up timer
+            totalTime = duration * 60; // Convert to seconds
+            currentTime = totalTime;
+            updateTimerDisplay();
+            
+            // Load steps
+            const stepsList = document.getElementById('steps-list');
+            stepsList.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
+            
+            // Scroll to player
+            document.getElementById('meditation-player').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function togglePlayPause() {
+            const button = document.getElementById('play-pause-btn');
+            const icon = button.querySelector('i');
+            
+            if (isPlaying) {
+                // Pause
+                clearInterval(meditationTimer);
+                icon.className = 'fas fa-play';
+                isPlaying = false;
+            } else {
+                // Play
+                meditationTimer = setInterval(() => {
+                    currentTime--;
+                    updateTimerDisplay();
+                    
+                    if (currentTime <= 0) {
+                        stopMeditation();
+                        alert('Meditation session complete! 🧘‍♀️');
+                    }
+                }, 1000);
+                
+                icon.className = 'fas fa-pause';
+                isPlaying = true;
+            }
+        }
+
+        function stopMeditation() {
+            clearInterval(meditationTimer);
+            document.getElementById('meditation-player').classList.remove('active');
+            document.getElementById('play-pause-btn').querySelector('i').className = 'fas fa-play';
+            isPlaying = false;
+            currentTime = 0;
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = currentTime % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer-display').textContent = display;
+        }
+    </script>
+</body>
+</html>

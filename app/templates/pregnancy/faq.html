@@ -1,0 +1,905 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Preg & Baby Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e91e63;
+            --secondary: #2196f3;
+            --accent: #ff9800;
+            --success: #4caf50;
+            --warning: #ff5722;
+            --light-gray: #f5f5f5;
+            --gray: #9e9e9e;
+            --dark: #333;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn {
+            background: var(--light-gray);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--gray);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Box */
+        .search-container {
+            background: white;
+            border-radius: 25px;
+            padding: 1rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+
+        .search-input::placeholder {
+            color: var(--gray);
+        }
+
+        .search-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* FAQ Categories */
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .category-tab {
+            background: white;
+            border: 2px solid var(--light-gray);
+            color: var(--dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .category-tab:hover {
+            border-color: var(--primary);
+        }
+
+        /* FAQ Items */
+        .faq-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-icon {
+            transition: var(--transition);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 1rem;
+        }
+
+        /* Emergency Notice */
+        .emergency-notice {
+            background: linear-gradient(135deg, var(--warning), #ff7043);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .emergency-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .emergency-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .category-tabs {
+                flex-direction: column;
+            }
+
+            .category-tab {
+                text-align: center;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="../../home.html" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-baby"></i>
+                </div>
+                <span>Maternal and Child Health Monitoring</span>
+            </a>
+            <a href="pregcare.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Maternal Care
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-question-circle"></i>
+                Frequently Asked Questions
+            </h1>
+            <p class="page-subtitle">
+                Find answers to common pregnancy questions and concerns
+            </p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Search for questions..."
+                id="searchInput"
+                oninput="searchFAQs()"
+            >
+        </div>
+
+        <!-- Emergency Notice -->
+        <div class="emergency-notice">
+            <div class="emergency-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                Emergency Situations
+            </div>
+            <div class="emergency-text">
+                If you experience severe bleeding, intense pain, or other emergency symptoms, contact your healthcare provider immediately or call emergency services.
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="showCategory('general')">General</button>
+            <button class="category-tab" onclick="showCategory('nutrition')">Nutrition</button>
+            <button class="category-tab" onclick="showCategory('exercise')">Exercise</button>
+            <button class="category-tab" onclick="showCategory('symptoms')">Symptoms</button>
+            <button class="category-tab" onclick="showCategory('appointments')">Appointments</button>
+            <button class="category-tab" onclick="showCategory('baby-care')">Baby Care</button>
+            <button class="category-tab" onclick="showCategory('app-features')">App Features</button>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section" id="faqSection">
+            <!-- General FAQs -->
+            <div class="faq-category" id="general">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How often should I visit my doctor during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Typically, you'll have monthly visits until 28 weeks, bi-weekly visits from 28-36 weeks, and weekly visits from 36 weeks until delivery. Your doctor may recommend more frequent visits based on your specific needs.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What prenatal vitamins should I take?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Most pregnant women should take a prenatal vitamin containing folic acid (400-800 mcg), iron (27 mg), calcium (1000 mg), and DHA. Consult your healthcare provider for personalized recommendations.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Is it safe to travel during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Generally, travel is safe during the second trimester (14-28 weeks). Avoid travel after 36 weeks and consult your doctor before any trip, especially international travel or if you have pregnancy complications.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How can I use the weight tracker feature effectively?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Our weight tracker calculates your BMI and provides personalized recommendations. Enter your pre-pregnancy weight, height, current week, and current weight. The system will show if you're on track and provide specific guidance based on medical guidelines.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What government schemes are available for pregnant women?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Several schemes are available including Pradhan Mantri Matru Vandana Yojana (₹5,000 maternity benefit), Janani Suraksha Yojana (safe delivery support), and ICDS (nutrition support). Check our Government Schemes section for detailed information and application processes.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I schedule appointments through the app?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Use our appointment booking feature to schedule visits with healthcare providers. Select your preferred doctor, choose available time slots, and receive confirmation. You can also set reminders and view your appointment history.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Is my personal health data secure in this app?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, we follow strict privacy protocols and healthcare data protection standards. Your information is encrypted and only accessible to you and authorized healthcare providers with your consent.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition FAQs -->
+            <div class="faq-category" id="nutrition" style="display: none;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How much weight should I gain during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Weight gain depends on your pre-pregnancy BMI. Normal weight: 25-35 lbs, Underweight: 28-40 lbs, Overweight: 15-25 lbs, Obese: 11-20 lbs. Discuss your target with your healthcare provider.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I drink coffee during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Limit caffeine to less than 200mg per day (about one 12-oz cup of coffee). High caffeine intake may increase risk of miscarriage and low birth weight.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What foods should I avoid during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Avoid raw or undercooked meats, fish high in mercury (shark, swordfish), unpasteurized dairy products, raw eggs, unwashed fruits and vegetables, and alcohol. Our nutrition guide provides a comprehensive list of safe foods.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How can I manage morning sickness through diet?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Eat small, frequent meals, choose bland foods like crackers and toast, stay hydrated with small sips of water, try ginger tea, and avoid spicy or fatty foods. If severe, consult your healthcare provider.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Do I need to eat for two during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        No, you only need about 300 extra calories per day in the second and third trimesters. Focus on nutrient-dense foods rather than eating twice as much. Quality matters more than quantity.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I be vegetarian or vegan during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, with proper planning. Ensure adequate protein, iron, vitamin B12, calcium, and omega-3 fatty acids. Consider supplements and work with a nutritionist to create a balanced meal plan.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise FAQs -->
+            <div class="faq-category" id="exercise" style="display: none;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What exercises should I avoid during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Avoid contact sports, exercises lying flat on your back after the first trimester, activities with fall risk, scuba diving, and exercises in hot, humid conditions.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How can I use the exercise and meditation features in the app?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Our app provides pregnancy-safe exercise routines and guided meditation sessions. Follow the step-by-step instructions, watch demonstration videos, and track your progress. All exercises are designed specifically for pregnant women.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How much exercise should I do during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Aim for at least 150 minutes of moderate-intensity exercise per week, as recommended by health authorities. This can be broken down into 30 minutes, 5 days a week. Always consult your healthcare provider before starting any exercise program.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I start exercising if I wasn't active before pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, but start slowly with low-impact activities like walking or prenatal yoga. Our app provides beginner-friendly routines. Always get clearance from your healthcare provider first.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What are the benefits of meditation during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Meditation can reduce stress, improve sleep, lower blood pressure, and help prepare for labor. Our guided meditation sessions are specifically designed for pregnancy and can help with anxiety and emotional well-being.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Symptoms FAQs -->
+            <div class="faq-category" id="symptoms" style="display: none;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        When should I call my doctor about symptoms?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Call immediately for severe bleeding, intense abdominal pain, severe headaches, vision changes, decreased fetal movement, signs of preterm labor, or persistent vomiting.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What are normal pregnancy symptoms in each trimester?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        First trimester: nausea, fatigue, breast tenderness, frequent urination. Second trimester: increased energy, visible belly, fetal movement. Third trimester: back pain, shortness of breath, frequent urination returns, Braxton Hicks contractions.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How can I manage pregnancy-related back pain?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Use proper posture, wear supportive shoes, sleep with a pregnancy pillow, do gentle stretches, apply warm compresses, and consider prenatal massage. Our exercise section includes back pain relief routines.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Is it normal to have mood swings during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, hormonal changes can cause mood swings, especially in the first and third trimesters. Practice stress management, get adequate sleep, exercise regularly, and talk to your healthcare provider if feelings persist or worsen.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        When should I feel my baby move?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        First-time mothers typically feel movement between 18-25 weeks, while experienced mothers may feel it as early as 16 weeks. Movement should become regular by 28 weeks. Contact your doctor if you notice decreased movement.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments FAQs -->
+            <div class="faq-category" id="appointments" style="display: none;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What happens during prenatal appointments?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Appointments typically include weight and blood pressure checks, urine tests, measuring your belly, listening to baby's heartbeat, and discussing any concerns or questions you have.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I prepare for my first prenatal appointment?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Bring your medical history, list of current medications, insurance information, and a list of questions. Know your last menstrual period date and be prepared to discuss your health habits and family medical history.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What vaccinations do I need during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        The Tdap vaccine (whooping cough) is recommended between 27-36 weeks. The flu vaccine is recommended during flu season. Our vaccination schedule feature helps track recommended immunizations for you and your baby.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I bring my partner to appointments?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, most healthcare providers encourage partner involvement. They can provide support, ask questions, and be part of important decisions. Check with your provider about any current visitor policies.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What tests are done during pregnancy?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Common tests include blood work, urine tests, ultrasounds, glucose screening, Group B strep test, and genetic screening if desired. Your healthcare provider will explain each test and its purpose.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Baby Care FAQs -->
+            <div class="faq-category" id="baby-care" style="display: none;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        When should I start preparing for baby's arrival?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Start preparing during the second trimester. Create a baby registry, set up the nursery, pack your hospital bag by 36 weeks, and take childbirth and newborn care classes. Our app provides checklists to help you prepare.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What should I pack in my hospital bag?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Pack comfortable clothes, nursing bras, toiletries, phone charger, insurance cards, birth plan copies, going-home outfits for you and baby, car seat, and any comfort items. Pack by 36 weeks in case of early labor.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I know when labor is starting?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Signs include regular contractions that get stronger and closer together, water breaking, bloody show, and back pain. Use the 5-1-1 rule: contractions 5 minutes apart, lasting 1 minute, for 1 hour. Contact your healthcare provider when these signs occur.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What are the basics of newborn care?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Key basics include feeding every 2-3 hours, diaper changes 8-12 times daily, safe sleep practices (back sleeping), umbilical cord care, and recognizing hunger and sleep cues. Take newborn care classes before delivery.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How often should my newborn eat?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Newborns typically eat every 2-3 hours, or 8-12 times per day. Breastfed babies may eat more frequently. Watch for hunger cues like rooting, sucking motions, and fussiness rather than strictly following a schedule.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        When should I call the pediatrician about my newborn?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Call for fever over 100.4°F (38°C), difficulty breathing, excessive crying, poor feeding, fewer than 6 wet diapers per day after day 5, yellowing of skin or eyes, or any concerns about your baby's health or behavior.
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Features FAQs -->
+            <div class="faq-category" id="app-features" style="display: none;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I use the AI chatbot for pregnancy questions?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Our AI chatbot provides 24/7 support for pregnancy-related questions. Simply type your question in natural language, and the chatbot will provide evidence-based answers. For urgent medical concerns, always contact your healthcare provider directly.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How accurate is the weight tracker's BMI calculation?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Our weight tracker uses standard medical formulas and guidelines from health organizations. It provides personalized recommendations based on your pre-pregnancy BMI, but always discuss your weight gain goals with your healthcare provider for personalized advice.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I sync my data with other health apps?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Currently, the app stores data locally for privacy. We're working on secure integration options with popular health platforms. You can export your data for sharing with healthcare providers.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I set up appointment reminders?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        In the appointments section, you can set custom reminders for prenatal visits, tests, and vaccinations. Choose how far in advance you want to be notified, and the app will send you timely alerts.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What should I do if the app isn't working properly?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Try refreshing the page or clearing your browser cache. Ensure you have a stable internet connection. If problems persist, contact our support team through the contact information provided in the app.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Is the app available in multiple languages?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Currently, the app is available in English. We're working on adding support for multiple regional languages to make pregnancy care accessible to more families.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How do I access government scheme information and applications?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Visit the Government Schemes section to view available programs, eligibility criteria, and benefits. Each scheme includes detailed information and direct links to official application portals. We regularly update this information to ensure accuracy.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h3 class="contact-title">Still Have Questions?</h3>
+            <p>Don't hesitate to reach out to our healthcare team</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>24/7 Helpline</div>
+                    <div>+1 (555) 123-4567</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>Email Support</div>
+                    <div>support@pregcare.com</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div>Live Chat</div>
+                    <div>Available 9 AM - 6 PM</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        function showCategory(category) {
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show selected category
+            document.querySelectorAll('.faq-category').forEach(cat => {
+                cat.style.display = 'none';
+            });
+            document.getElementById(category).style.display = 'block';
+            
+            // Close all open FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+
+        function searchFAQs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+            
+            // Show all categories when searching
+            if (searchTerm) {
+                document.querySelectorAll('.faq-category').forEach(cat => {
+                    cat.style.display = 'block';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

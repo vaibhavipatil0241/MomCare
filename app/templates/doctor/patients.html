@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management - Doctor Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .doctor-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .doctor-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .patients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .patient-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .patient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .patient-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .patient-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .patient-info h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .patient-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .patient-details {
+            margin-bottom: 1rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        .patient-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e0e6ff;
+            color: #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .doctor-container {
+                padding: 1rem;
+            }
+
+            .patients-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="doctor-nav">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <i class="fas fa-user-md"></i>
+                <span>Doctor Portal</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('doctor.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{ url_for('doctor.patients') }}" class="active"><i class="fas fa-users"></i> Patients</a>
+                <a href="{{ url_for('doctor.appointments') }}"><i class="fas fa-calendar-check"></i> Appointments</a>
+                <a href="{{ url_for('doctor.consultations') }}"><i class="fas fa-stethoscope"></i> Consultations</a>
+                <a href="{{ url_for('doctor.reports') }}"><i class="fas fa-file-medical"></i> Reports</a>
+                <a href="{{ url_for('doctor.generate_id') }}"><i class="fas fa-id-card"></i> Generate ID</a>
+                <a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="doctor-container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-users"></i>
+                Patient Management
+            </h1>
+            <p>Manage your patients' medical records and treatment plans</p>
+        </div>
+
+        <!-- Patients Grid -->
+        <div class="patients-grid" id="patients-grid">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading patients...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPatients();
+        });
+
+        async function loadPatients() {
+            try {
+                const response = await fetch('/doctor/api/patients');
+                const data = await response.json();
+
+                if (data.success) {
+                    displayPatients(data.patients);
+                } else {
+                    showError('Failed to load patients: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error loading patients:', error);
+                showError('Error loading patients');
+            }
+        }
+
+        function displayPatients(patients) {
+            const container = document.getElementById('patients-grid');
+            
+            if (patients.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No Patients Found</h3>
+                        <p>No patients are currently registered in the system.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = patients.map(patient => {
+                const initials = getInitials(patient.full_name);
+                const joinDate = new Date(patient.created_at).toLocaleDateString();
+                
+                return `
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <div class="patient-avatar">${initials}</div>
+                            <div class="patient-info">
+                                <h3>${patient.full_name}</h3>
+                                <p>${patient.email}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Patient ID:</span>
+                                <span class="detail-value">#${patient.id.toString().padStart(4, '0')}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Phone:</span>
+                                <span class="detail-value">${patient.phone || 'Not provided'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Joined:</span>
+                                <span class="detail-value">${joinDate}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">${patient.is_active ? 'Active' : 'Inactive'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="patient-actions">
+                            <button class="btn btn-primary" onclick="viewPatientDetails(${patient.id})">
+                                <i class="fas fa-eye"></i> View Details
+                            </button>
+                            <button class="btn btn-secondary" onclick="scheduleAppointment(${patient.id})">
+                                <i class="fas fa-calendar-plus"></i> Schedule
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewMedicalHistory(${patient.id})">
+                                <i class="fas fa-history"></i> History
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        function viewPatientDetails(patientId) {
+            alert(`Viewing details for patient ID: ${patientId}\n\nThis would open a detailed patient profile with medical history, current treatments, and care plans.`);
+        }
+
+        function scheduleAppointment(patientId) {
+            alert(`Scheduling appointment for patient ID: ${patientId}\n\nThis would open the appointment scheduling interface.`);
+        }
+
+        function viewMedicalHistory(patientId) {
+            alert(`Viewing medical history for patient ID: ${patientId}\n\nThis would show complete medical records, past treatments, and progress notes.`);
+        }
+
+        function showError(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10001;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                background: #f44336;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

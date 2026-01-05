@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Baby Unique ID - Child Health Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .verification-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .verification-header {
+            margin-bottom: 2rem;
+        }
+
+        .verification-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .verification-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .verification-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .input-group {
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .verify-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .verify-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result-success {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            color: #2e7d32;
+        }
+
+        .result-error {
+            background: #ffeaea;
+            border: 2px solid #f44336;
+            color: #c62828;
+        }
+
+        .result-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .baby-info {
+            text-align: left;
+            margin-top: 1rem;
+        }
+
+        .baby-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .baby-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .baby-info-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .baby-info-value {
+            color: #333;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #5a6fd8;
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .verification-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .verification-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="verification-header">
+            <div class="verification-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1 class="verification-title">Verify Baby ID</h1>
+            <p class="verification-subtitle">Enter a unique baby ID to verify its authenticity</p>
+        </div>
+
+        <form id="verification-form">
+            <div class="input-group">
+                <label for="unique-id" class="input-label">Baby Unique ID</label>
+                <input 
+                    type="text" 
+                    id="unique-id" 
+                    class="input-field" 
+                    placeholder="BABY-2024-XXXXXXXX"
+                    required
+                    autocomplete="off"
+                >
+            </div>
+
+            <button type="submit" class="verify-btn" id="verify-btn">
+                <i class="fas fa-search"></i> Verify ID
+            </button>
+        </form>
+
+        <div id="result-container" class="result-container">
+            <div id="result-content"></div>
+        </div>
+
+        <a href="/babycare" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Child Health Care
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('verification-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const uniqueId = document.getElementById('unique-id').value.trim();
+            const verifyBtn = document.getElementById('verify-btn');
+            const resultContainer = document.getElementById('result-container');
+            const resultContent = document.getElementById('result-content');
+
+            if (!uniqueId) {
+                showResult('Please enter a unique ID', 'error');
+                return;
+            }
+
+            // Show loading state
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            resultContainer.style.display = 'none';
+
+            try {
+                const response = await fetch('/babycare/api/verify-id', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ unique_id: uniqueId })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.valid) {
+                    showResult('ID Verified Successfully!', 'success', data.baby);
+                } else {
+                    showResult(data.message || 'Invalid unique ID', 'error');
+                }
+
+            } catch (error) {
+                console.error('Verification error:', error);
+                showResult('Error verifying ID. Please try again.', 'error');
+            } finally {
+                // Reset button
+                verifyBtn.disabled = false;
+                verifyBtn.innerHTML = '<i class="fas fa-search"></i> Verify ID';
+            }
+        });
+
+        function showResult(message, type, babyInfo = null) {
+            const resultContainer = document.getElementById('result-container');
+            const resultContent = document.getElementById('result-content');
+
+            resultContainer.className = `result-container result-${type}`;
+            
+            let content = `
+                <div class="result-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                </div>
+                <h3>${message}</h3>
+            `;
+
+            if (babyInfo) {
+                content += `
+                    <div class="baby-info">
+                        <div class="baby-info-item">
+                            <span class="baby-info-label">Baby Name:</span>
+                            <span class="baby-info-value">${babyInfo.baby_name}</span>
+                        </div>
+                        <div class="baby-info-item">
+                            <span class="baby-info-label">Birth Date:</span>
+                            <span class="baby-info-value">${babyInfo.birth_date}</span>
+                        </div>
+                        <div class="baby-info-item">
+                            <span class="baby-info-label">Gender:</span>
+                            <span class="baby-info-value">${babyInfo.gender.charAt(0).toUpperCase() + babyInfo.gender.slice(1)}</span>
+                        </div>
+                        <div class="baby-info-item">
+                            <span class="baby-info-label">Unique ID:</span>
+                            <span class="baby-info-value">${babyInfo.unique_id}</span>
+                        </div>
+                        <div class="baby-info-item">
+                            <span class="baby-info-label">Registered:</span>
+                            <span class="baby-info-value">${new Date(babyInfo.created_at).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultContent.innerHTML = content;
+            resultContainer.style.display = 'block';
+        }
+
+        // Auto-format input
+        document.getElementById('unique-id').addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

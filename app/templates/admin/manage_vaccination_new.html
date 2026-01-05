@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccination Management - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .add-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .content-list {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e6ff;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e6ff;
+            color: #667eea;
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+
+        .content-item {
+            border: 1px solid #e0e6ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .content-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .content-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .content-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-tag {
+            background: #e0e6ff;
+            color: #667eea;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .content-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="/admin" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-syringe"></i> Vaccination Management</h1>
+            <p>Manage vaccination schedules and immunization guidelines - Updates will be visible to all users immediately</p>
+        </div>
+
+        <div class="management-grid">
+            <!-- Add/Edit Form -->
+            <div class="add-form">
+                <h2 id="form-title">Add New Vaccination Schedule</h2>
+                <form id="vaccination-form">
+                    <input type="hidden" id="vaccination-id" value="">
+                    
+                    <div class="form-group">
+                        <label for="vaccine-name">Vaccine Name</label>
+                        <input type="text" id="vaccine-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age-months">Age (Months)</label>
+                        <input type="number" id="age-months" min="0" max="240" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="side-effects">Side Effects</label>
+                        <textarea id="side-effects" rows="2" placeholder="Common side effects..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="precautions">Precautions</label>
+                        <textarea id="precautions" rows="2" placeholder="Important precautions..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Vaccination Schedule
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </form>
+            </div>
+
+            <!-- Content List -->
+            <div class="content-list">
+                <h2>Existing Vaccination Schedules</h2>
+                <div id="vaccination-list">
+                    <div class="loading">Loading vaccination schedules...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let vaccinationData = [];
+
+        // Load vaccination content on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVaccinationContent();
+        });
+
+        async function loadVaccinationContent() {
+            try {
+                const response = await fetch('/admin/api/content/vaccination');
+                const data = await response.json();
+
+                if (data.success) {
+                    vaccinationData = data.data;
+                    displayVaccinationContent(vaccinationData);
+                } else {
+                    showError('Failed to load vaccination content');
+                }
+            } catch (error) {
+                console.error('Error loading vaccination content:', error);
+                showError('Error loading vaccination content');
+            }
+        }
+
+        function displayVaccinationContent(data) {
+            const listContainer = document.getElementById('vaccination-list');
+
+            if (data.length === 0) {
+                listContainer.innerHTML = '<div class="loading">No vaccination schedules found</div>';
+                return;
+            }
+
+            listContainer.innerHTML = data.map(item => `
+                <div class="content-item">
+                    <div class="content-header">
+                        <div class="content-title">${item.vaccine_name}</div>
+                        <div class="content-actions">
+                            <button class="btn btn-secondary" onclick="editVaccination(${item.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteVaccination(${item.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="content-meta">
+                        <span class="meta-tag">${item.age_months} months</span>
+                    </div>
+
+                    <div class="content-description">${item.description}</div>
+
+                    ${item.side_effects ? `<div class="content-side-effects"><strong>Side Effects:</strong> ${item.side_effects}</div>` : ''}
+                    ${item.precautions ? `<div class="content-precautions"><strong>Precautions:</strong> ${item.precautions}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Form submission
+        document.getElementById('vaccination-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                vaccine_name: document.getElementById('vaccine-name').value,
+                age_months: parseInt(document.getElementById('age-months').value),
+                description: document.getElementById('description').value,
+                side_effects: document.getElementById('side-effects').value,
+                precautions: document.getElementById('precautions').value
+            };
+
+            const vaccinationId = document.getElementById('vaccination-id').value;
+
+            try {
+                let response;
+                if (vaccinationId) {
+                    // Update existing
+                    formData.id = vaccinationId;
+                    response = await fetch('/admin/api/content/vaccination', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                } else {
+                    // Create new
+                    response = await fetch('/admin/api/content/vaccination', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showSuccess(result.message);
+                    resetForm();
+                    loadVaccinationContent();
+                } else {
+                    showError(result.error || 'Failed to save vaccination schedule');
+                }
+            } catch (error) {
+                console.error('Error saving vaccination schedule:', error);
+                showError('Error saving vaccination schedule');
+            }
+        });
+
+        function editVaccination(id) {
+            const item = vaccinationData.find(v => v.id === id);
+            if (!item) return;
+
+            document.getElementById('form-title').textContent = 'Edit Vaccination Schedule';
+            document.getElementById('vaccination-id').value = item.id;
+            document.getElementById('vaccine-name').value = item.vaccine_name;
+            document.getElementById('age-months').value = item.age_months;
+            document.getElementById('description').value = item.description;
+            document.getElementById('side-effects').value = item.side_effects || '';
+            document.getElementById('precautions').value = item.precautions || '';
+        }
+
+        async function deleteVaccination(id) {
+            if (!confirm('Are you sure you want to delete this vaccination schedule? This will remove it from all user views immediately.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/api/content/vaccination', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showSuccess(result.message);
+                    loadVaccinationContent();
+                } else {
+                    showError(result.error || 'Failed to delete vaccination schedule');
+                }
+            } catch (error) {
+                console.error('Error deleting vaccination schedule:', error);
+                showError('Error deleting vaccination schedule');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('form-title').textContent = 'Add New Vaccination Schedule';
+            document.getElementById('vaccination-form').reset();
+            document.getElementById('vaccination-id').value = '';
+        }
+
+        function showSuccess(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10001;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                background: #4caf50;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        function showError(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10001;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                background: #f44336;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

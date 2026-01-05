@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Government Schemes - Maternal & Child Health</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #d63384;
+      --secondary-color: #2c3e50;
+      --background-color: #f8f9fa;
+      --card-bg-color: #ffffff;
+      --text-color: #333;
+      --light-text-color: #666;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", "Arial", sans-serif;
+    }
+
+    body {
+      color: var(--text-color);
+      background-color: var(--background-color);
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.98);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .nav-links a {
+      margin: 0 1rem;
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-color);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .book-now {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(214, 51, 132, 0.25);
+    }
+
+    .book-now:hover {
+      background-color: #b52a6f;
+      transform: translateY(-2px);
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1620027933398-52b3bf85b546?auto=format&fit=crop&w=1470&q=80")
+        no-repeat center center/cover;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-top: 70px; /* Adjusted for fixed navbar */
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-section {
+      padding: 4rem 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .scheme-card {
+      background-color: var(--card-bg-color);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-left: 5px solid var(--primary-color);
+    }
+
+    .scheme-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .scheme-card h3 {
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .scheme-details h4 {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+     .scheme-details h4 i {
+        margin-right: 10px;
+     }
+
+    .scheme-details p, .scheme-details ul {
+        color: var(--light-text-color);
+        line-height: 1.6;
+    }
+
+    .scheme-details ul {
+        list-style-type: none;
+        padding-left: 1.5rem;
+    }
+
+     .scheme-details li {
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .scheme-details li:before {
+      content: "\f00c"; /* FontAwesome check icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: var(--primary-color);
+      position: absolute;
+      left: -1.5rem;
+    }
+
+    /* Admin Panel */
+    .admin-panel {
+      background: rgba(214, 51, 132, 0.05);
+      border: 1px solid rgba(214, 51, 132, 0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 0 auto 3rem auto;
+      max-width: 800px;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .admin-header i {
+      margin-right: 10px;
+      color: #ffd700;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-admin {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-admin:hover {
+      background: #b52a6f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 3rem 2rem;
+      margin-top: 2rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    
+    .footer-column { flex: 1 1 250px; margin-bottom: 2rem; }
+    .footer-logo { font-size: 1.8rem; font-weight: bold; margin-bottom: 1rem; display: flex; align-items: center; }
+    .footer-logo i { margin-right: 10px; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.5rem; }
+    .footer-links a { color: #ecf0f1; text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--primary-color); }
+    .social-icons { display: flex; margin-top: 1rem; }
+    .social-icons a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: #34495e; color: white; margin-right: 1rem; transition: all 0.3s; }
+    .social-icons a:hover { background-color: var(--primary-color); transform: translateY(-3px); }
+    .footer-bottom { text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid #34495e; }
+
+    /* Responsive & Utility */
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-color); cursor: pointer; }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: var(--card-bg-color);
+        border-radius: 15px;
+    }
+    .empty-state h4 { margin-bottom: 0.5rem; font-size: 1.5rem; color: var(--text-color); }
+    .empty-state p { color: var(--light-text-color); font-style: italic; }
+    .empty-state i { font-size: 3rem; color: #ddd; margin-bottom: 1rem; }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn { display: block; }
+      .nav-links { position: fixed; top: 70px; left: 0; width: 100%; background-color: white; flex-direction: column; align-items: center; padding: 2rem 0; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transform: translateY(-150%); transition: transform 0.3s; }
+      .nav-links.active { transform: translateY(0); }
+      .nav-links a { margin: 1rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Simple back header -->
+  <div style="position: fixed; top: 0; left: 0; right: 0; background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; display: flex; align-items: center; gap: 1rem;">
+    <a href="/admin/" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #d63384; font-weight: 500; transition: color 0.3s;">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back to Admin Dashboard</span>
+    </a>
+  </div>
+
+  <section class="page-header" style="margin-top: 70px;">
+    <div>
+      <h1>Government Schemes</h1>
+      <p>Empowering mothers and children with vital government support programs</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <!-- Admin Panel for Schemes -->
+      <div id="schemes-admin-panel" class="admin-panel" style="display: none;">
+        <div class="admin-header">
+          <i class="fas fa-crown"></i>
+          <span>Schemes Admin Panel</span>
+        </div>
+        <div class="admin-actions">
+          <button class="btn-admin" onclick="addScheme()">
+            <i class="fas fa-plus"></i> Add New Scheme
+          </button>
+          <button class="btn-admin" onclick="manageSchemes()">
+            <i class="fas fa-edit"></i> Manage Schemes
+          </button>
+        </div>
+      </div>
+
+      <h2 class="section-title">Key Health & Nutrition Schemes</h2>
+      
+      <div id="schemes-content-area">
+        <!-- Schemes will be loaded dynamically here -->
+        <div class="empty-state">
+          <i class="fas fa-landmark"></i>
+          <h4>No schemes available at the moment.</h4>
+          <p>Please check back later as our team updates the information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <div class="footer-logo"><i class="fas fa-baby-carriage"></i>Maternal & Child Health</div>
+        <p>Your trusted companion for pregnancy and baby care, providing expert guidance and support.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="/pages/Preg/pregcare.html">Pregnancy Care</a></li>
+          <li><a href="/pages/baby/baby-care.html">Baby Care</a></li>
+          <li><a href="/pages/doctor/dashboard.html">Consult Doctor</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Services</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/Preg/nutrition.html">Nutrition Plans</a></li>
+          <li><a href="/pages/Preg/schemes.html">Government Schemes</a></li>
+          <li><a href="/pages/contact.html">Contact Us</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+        <p><i class="fas fa-envelope"></i> info@maternalhealthindia.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Health Street, New Delhi, India</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Maternal & Child Health India. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+      }
+
+      // Get Started button functionality
+      const getStartedBtn = document.querySelector('.book-now');
+      if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', () => window.location.href = '/signup');
+      }
+
+      // Check admin status and load scheme data
+      checkAdminStatus();
+      loadSampleSchemesData();
+    });
+
+    function checkAdminStatus() {
+      // For demo, we'll use localStorage. In a real app, this would be based on user authentication.
+      const isAdmin = localStorage.getItem('schemes_admin_mode') === 'true';
+      if (isAdmin) {
+        document.getElementById('schemes-admin-panel').style.display = 'block';
+      }
+    }
+
+    function addScheme() {
+        const formHTML = `
+            <form id="add-scheme-form">
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Scheme Name:</label>
+                    <input type="text" id="scheme-name" required
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                           placeholder="e.g., Pradhan Mantri Matru Vandana Yojana">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+                    <textarea id="scheme-description" required rows="3"
+                              style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                              placeholder="Describe the purpose and goals of this scheme"></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Eligibility:</label>
+                    <textarea id="scheme-eligibility" required rows="3"
+                              style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                              placeholder="Who can apply for this scheme? What are the requirements?"></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Benefits:</label>
+                    <textarea id="scheme-benefits" required rows="3"
+                              style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                              placeholder="What benefits does this scheme provide?"></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">How to Apply:</label>
+                    <textarea id="scheme-apply" rows="3"
+                              style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                              placeholder="Steps to apply for this scheme (optional)"></textarea>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Application Link (URL):</label>
+                    <input type="url" id="scheme-link"
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                           placeholder="https://example.gov.in/scheme-application (optional)">
+                    <small style="color: #666; font-size: 0.85rem;">Official website or application portal URL</small>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: bold;">Image URL:</label>
+                    <input type="url" id="scheme-image"
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                           placeholder="https://example.com/scheme-image.jpg (optional)">
+                    <small style="color: #666; font-size: 0.85rem;">Image URL for the scheme card (e.g., from Unsplash, Pexels, or uploaded)</small>
+                </div>
+
+                <div style="text-align: right;">
+                    <button type="button" onclick="this.closest('.modal').remove()"
+                            style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                        Add Scheme
+                    </button>
+                </div>
+            </form>
+        `;
+        const modal = createModal('Add New Government Scheme', formHTML);
+
+        document.getElementById('add-scheme-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('scheme-name').value,
+                description: document.getElementById('scheme-description').value,
+                eligibility: document.getElementById('scheme-eligibility').value,
+                benefits: document.getElementById('scheme-benefits').value,
+                how_to_apply: document.getElementById('scheme-apply').value,
+                application_link: document.getElementById('scheme-link').value,
+                image_url: document.getElementById('scheme-image').value
+            };
+
+            try {
+                const response = await fetch('/admin/api/content/schemes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('Government scheme added successfully!', 'success');
+                    modal.remove();
+                    // Refresh the content if manage modal is open
+                    if (document.getElementById('schemes-list-admin')) {
+                        loadSchemesForManagement();
+                    }
+                    // Also refresh the main page content
+                    loadSampleSchemesData();
+                } else {
+                    showNotification(result.error || 'Failed to add scheme', 'error');
+                }
+            } catch (error) {
+                showNotification('Error adding scheme: ' + error.message, 'error');
+            }
+        });
+    }
+
+    function manageSchemes() {
+        const modal = createModal('Manage Existing Schemes', `<div id="schemes-list-admin" style="max-height: 500px; overflow-y: auto;">Loading...</div>`);
+        loadSchemesForManagement();
+    }
+    
+
+
+    function addSchemeToDOM(scheme) {
+        const container = document.getElementById('schemes-content-area');
+
+        // Remove empty state if it's the first item
+        const emptyState = container.querySelector('.empty-state');
+        if (emptyState) emptyState.remove();
+
+        const card = document.createElement('div');
+        card.className = 'scheme-card';
+        card.setAttribute('data-id', scheme.id);
+        card.innerHTML = `
+            <h3>${scheme.name}</h3>
+            <div class="scheme-details">
+                <h4><i class="fas fa-info-circle"></i>Description</h4>
+                <p>${scheme.description || 'No description available'}</p>
+
+                <h4><i class="fas fa-gift"></i>Benefits</h4>
+                <p>${scheme.benefits || 'No benefits listed'}</p>
+
+                <h4><i class="fas fa-check-circle"></i>Eligibility</h4>
+                <p>${scheme.eligibility || 'No eligibility criteria specified'}</p>
+
+                ${scheme.how_to_apply ? `
+                    <h4><i class="fas fa-clipboard-list"></i>How to Apply</h4>
+                    <p>${scheme.how_to_apply}</p>
+                ` : ''}
+            </div>
+        `;
+        container.appendChild(card);
+    }
+    
+    async function loadSampleSchemesData() {
+        const container = document.getElementById('schemes-content-area');
+
+        try {
+            // Fetch schemes from the public API
+            const response = await fetch('/api/schemes-data');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to load schemes data');
+            }
+
+            const schemes = result.data || [];
+
+            if (schemes.length === 0) {
+                // Show empty state
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-hands-helping" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <h4>No government schemes available.</h4>
+                        <p>Government schemes and benefits information will be added by our experts through the admin panel.</p>
+                    </div>
+                `;
+            } else {
+                // Show schemes
+                container.innerHTML = '';
+                schemes.forEach(scheme => {
+                    addSchemeToDOM(scheme);
+                });
+            }
+
+        } catch (error) {
+            console.error('Error loading schemes data:', error);
+            container.innerHTML = `
+                <div style="color: red; text-align: center; padding: 20px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <p>Error loading schemes data. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+
+    async function loadSchemesForManagement() {
+        const container = document.getElementById('schemes-list-admin');
+        if (!container) return;
+
+        try {
+            // Fetch schemes from the admin API
+            const response = await fetch('/admin/api/content/schemes');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to load schemes data');
+            }
+
+            const schemes = result.data || [];
+
+            if (schemes.length === 0) {
+                container.innerHTML = '<p style="color: #666; font-style: italic;">No schemes to manage.</p>';
+                return;
+            }
+
+            let html = '<div style="margin-top: 10px;">';
+            schemes.forEach(scheme => {
+                html += `
+                    <div style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; background: #fafafa;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div style="flex: 1;">
+                                <div style="margin-bottom: 8px;">
+                                    <strong style="color: #333; font-size: 16px;">${scheme.name}</strong>
+                                </div>
+                                <div style="color: #666; font-size: 14px; margin-bottom: 8px;">
+                                    ${scheme.description || 'No description available'}
+                                </div>
+                                <div style="color: #777; font-size: 13px; margin-bottom: 5px;">
+                                    <strong>Eligibility:</strong> ${scheme.eligibility || 'Not specified'}
+                                </div>
+                                <div style="color: #777; font-size: 13px; margin-bottom: 5px;">
+                                    <strong>Benefits:</strong> ${scheme.benefits || 'Not specified'}
+                                </div>
+                                ${scheme.how_to_apply ? `<div style="color: #777; font-size: 13px; font-style: italic;">
+                                    <strong>How to Apply:</strong> ${scheme.how_to_apply}
+                                </div>` : ''}
+                            </div>
+                            <div style="margin-left: 15px; display: flex; gap: 5px;">
+                                <button onclick="editScheme(${scheme.id})"
+                                        style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                    Edit
+                                </button>
+                                <button onclick="deleteScheme(${scheme.id})"
+                                        style="background: #f44336; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+
+        } catch (error) {
+            console.error('Error loading schemes for management:', error);
+            container.innerHTML = '<p style="color: red;">Error loading schemes. Please try again.</p>';
+        }
+    }
+
+    async function editScheme(id) {
+        try {
+            // First, get the current scheme data
+            const response = await fetch('/admin/api/content/schemes');
+            if (!response.ok) throw new Error('Failed to fetch schemes data');
+
+            const result = await response.json();
+            const scheme = result.data.find(item => item.id === id);
+
+            if (!scheme) {
+                showNotification('Scheme not found', 'error');
+                return;
+            }
+
+            // Create edit modal with current data
+            const modal = createModal('Edit Government Scheme', `
+                <form id="edit-scheme-form">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Scheme Name:</label>
+                        <input type="text" id="edit-scheme-name" value="${scheme.name || ''}"
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+                        <textarea id="edit-scheme-description" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>${scheme.description || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Eligibility:</label>
+                        <textarea id="edit-scheme-eligibility" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>${scheme.eligibility || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Benefits:</label>
+                        <textarea id="edit-scheme-benefits" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>${scheme.benefits || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">How to Apply:</label>
+                        <textarea id="edit-scheme-apply" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                                  placeholder="Steps to apply for this scheme">${scheme.how_to_apply || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Application Link (URL):</label>
+                        <input type="url" id="edit-scheme-link" value="${scheme.application_link || ''}"
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                               placeholder="https://example.gov.in/scheme-application (optional)">
+                        <small style="color: #666; font-size: 0.85rem;">Official website or application portal URL</small>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Image URL:</label>
+                        <input type="url" id="edit-scheme-image" value="${scheme.image_url || ''}"
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                               placeholder="https://example.com/scheme-image.jpg (optional)">
+                        <small style="color: #666; font-size: 0.85rem;">Image URL for the scheme card</small>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <button type="button" onclick="this.closest('.modal').remove()"
+                                style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                            Update Scheme
+                        </button>
+                    </div>
+                </form>
+            `);
+
+            // Handle form submission
+            document.getElementById('edit-scheme-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = {
+                    id: id,
+                    name: document.getElementById('edit-scheme-name').value,
+                    description: document.getElementById('edit-scheme-description').value,
+                    eligibility: document.getElementById('edit-scheme-eligibility').value,
+                    benefits: document.getElementById('edit-scheme-benefits').value,
+                    how_to_apply: document.getElementById('edit-scheme-apply').value,
+                    application_link: document.getElementById('edit-scheme-link').value,
+                    image_url: document.getElementById('edit-scheme-image').value
+                };
+
+                try {
+                    const updateResponse = await fetch('/admin/api/content/schemes', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const updateResult = await updateResponse.json();
+
+                    if (updateResult.success) {
+                        showNotification('Government scheme updated successfully!', 'success');
+                        modal.remove();
+                        loadSchemesForManagement(); // Refresh the list
+                        loadSampleSchemesData(); // Refresh main page
+                    } else {
+                        showNotification(updateResult.error || 'Failed to update scheme', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Error updating scheme: ' + error.message, 'error');
+                }
+            });
+
+        } catch (error) {
+            showNotification('Error loading scheme: ' + error.message, 'error');
+        }
+    }
+
+    async function deleteScheme(id) {
+        if (!confirm('Are you sure you want to delete this scheme? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/admin/api/content/schemes', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showNotification('Government scheme deleted successfully!', 'success');
+                loadSchemesForManagement(); // Refresh the management list
+                loadSampleSchemesData(); // Refresh main page
+            } else {
+                showNotification(result.error || 'Failed to delete scheme', 'error');
+            }
+        } catch (error) {
+            showNotification('Error deleting scheme: ' + error.message, 'error');
+        }
+    }
+
+    function createModal(title, content) {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); z-index: 10000; display: flex;
+        align-items: center; justify-content: center;
+      `;
+      modal.innerHTML = `
+        <div style="background: white; padding: 25px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 85%; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; color: #d63384;">${title}</h3>
+            <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+          </div>
+          ${content}
+        </div>
+      `;
+      modal.className = 'modal';
+      document.body.appendChild(modal);
+      return modal;
+    }
+
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed; top: 20px; right: 20px; z-index: 10001;
+        padding: 15px 20px; border-radius: 8px; color: white; font-weight: bold;
+        background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transform: translateX(120%); animation: slideIn 0.5s forwards;
+      `;
+      
+      const keyframes = `
+        @keyframes slideIn {
+            to { transform: translateX(0); }
+        }
+      `;
+      const styleSheet = document.createElement("style");
+      styleSheet.innerText = keyframes;
+      document.head.appendChild(styleSheet);
+
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
+    }
+
+    // Enable admin mode for demonstration purposes
+    localStorage.setItem('schemes_admin_mode', 'true');
+  </script>
+</body>
+</html>

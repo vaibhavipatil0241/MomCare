@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Health Care Center - Maternal and Child Health Care System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #f472b6; /* Main Pink */
+            --primary-dark: #ec4899;
+            --secondary: #c084fc; /* Soft Purple */
+            --secondary-dark: #a855f7;
+            --accent: #fde047; /* Sunny Yellow */
+            --accent-dark: #facc15;
+            --info: #7dd3fc; /* Soft Blue */
+            --light: #fdf2f8; /* Very light pink tint */
+            --dark: #581c87; /* Dark Purple */
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+            --border-radius: 20px;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--light);
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            padding-top: 80px; /* Account for fixed header */
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+             color: var(--primary);
+        }
+        
+        .nav-link.active {
+            color: white;
+            background: var(--primary);
+            box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .main-content {
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23fdf2f8' fill-opacity='1' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,202.7C960,203,1056,149,1152,117.3C1248,85,1344,75,1392,69.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom, linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            color: white;
+            padding: 5rem 0 8rem 0;
+            text-align: center;
+        }
+        
+        .welcome-header h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .welcome-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            animation: fadeInUp 1s ease-out 0.2s;
+            animation-fill-mode: both;
+        }
+        
+        .cta-button {
+             background: white;
+             color: var(--primary);
+             padding: 1rem 2.5rem;
+             border: none;
+             border-radius: 50px;
+             font-size: 1.1rem;
+             font-weight: 600;
+             text-decoration: none;
+             transition: var(--transition);
+             box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+             animation: fadeInUp 1s ease-out 0.4s;
+             animation-fill-mode: both;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 3rem 0;
+            background: var(--light);
+            margin-top: -5rem; /* Overlap with hero */
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .stat-info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 4rem 0;
+            background: #ffffff;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(192, 132, 252, 0.2);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px 0 rgba(192, 132, 252, 0.3);
+        }
+
+        .feature-card .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: var(--color-bg, var(--primary));
+            border-radius: 50%;
+            filter: blur(80px);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .feature-card:hover .glow {
+            opacity: 0.2;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .bg-gradient-primary { background: linear-gradient(135deg, var(--primary), #fb92c4); }
+        .bg-gradient-secondary { background: linear-gradient(135deg, var(--secondary), #d8b4fe); }
+        .bg-gradient-accent { background: linear-gradient(135deg, var(--accent), #ffe485); }
+        .bg-gradient-info { background: linear-gradient(135deg, var(--info), #a2e0f2); }
+        .bg-gradient-purple { background: linear-gradient(135deg, #c084fc, #d8b4fe); }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-action {
+            color: var(--dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-action i {
+            transition: var(--transition);
+            color: var(--color-bg, var(--primary));
+        }
+
+        .feature-card:hover .feature-action i {
+            transform: translateX(5px);
+        }
+        
+        /* Keyframe Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .features-grid {
+                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .welcome-header h1 {
+                font-size: 2.5rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-card {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .welcome-header h1 {
+                font-size: 2rem;
+            }
+            .nav-container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-baby"></i>
+                </div>
+                <span>Child Health Care</span>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/pregnancy" class="nav-link">
+                    <i class="fas fa-heart"></i> Pregnancy
+                </a>
+                <a href="/babycare" class="nav-link active">
+                    <i class="fas fa-baby"></i> Child Health Care
+                </a>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="container">
+                <div class="welcome-header">
+                    <h1>Your Baby's Journey Starts Here</h1>
+                    <p>Comprehensive care and monitoring for your little one's healthy development.</p>
+                     <a href="#features" class="cta-button">Explore Features <i class="fas fa-arrow-down"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-gradient-primary">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Growth Tracking</h3>
+                            <p>Monitor height & weight</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-gradient-secondary">
+                            <i class="fas fa-syringe"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Vaccinations</h3>
+                            <p>Immunization schedule</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-gradient-accent">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Nutrition</h3>
+                            <p>Feeding & dietary guidance</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Child Health Care Features -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <h2 class="section-title">All-in-One Child Health Care</h2>
+                <div class="features-grid">
+                    <div class="feature-card" style="--color-bg: var(--primary);" onclick="navigateTo('/babycare/growth-tracker')">
+                        <div class="glow"></div>
+                        <div class="feature-icon bg-gradient-primary">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Growth Tracker</h3>
+                        <p>Monitor your baby's physical development with detailed growth charts and milestone tracking.</p>
+                        <div class="feature-action">
+                            <span>Track Growth <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" style="--color-bg: var(--secondary);" onclick="navigateTo('/babycare/vaccination')">
+                         <div class="glow"></div>
+                        <div class="feature-icon bg-gradient-secondary">
+                            <i class="fas fa-syringe"></i>
+                        </div>
+                        <h3>Vaccination Schedule</h3>
+                        <p>Keep track of all immunizations with reminders and vaccination history.</p>
+                        <div class="feature-action">
+                            <span>View Schedule <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" style="--color-bg: var(--accent);" onclick="navigateTo('/babycare/nutrition')">
+                         <div class="glow"></div>
+                        <div class="feature-icon bg-gradient-accent">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3>Nutrition Tracking</h3>
+                        <p>Monitor feeding patterns, dietary intake, and nutritional milestones.</p>
+                        <div class="feature-action">
+                            <span>Track Nutrition <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="feature-card" style="--color-bg: var(--primary);" onclick="navigateTo('/babycare/schemes')">
+                        <div class="glow"></div>
+                        <div class="feature-icon bg-gradient-primary">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <h3>Government Schemes</h3>
+                        <p>Explore government schemes and benefits available for child health care and child development.</p>
+                        <div class="feature-action">
+                            <span>View Schemes <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" style="--color-bg: var(--secondary);" onclick="navigateTo('/babycare/chatbot')">
+                        <div class="glow"></div>
+                        <div class="feature-icon bg-gradient-secondary">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI Chatbot</h3>
+                        <p>Get instant answers to your child health care questions with our intelligent AI assistant.</p>
+                        <div class="feature-action">
+                            <span>Chat Now <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" style="--color-bg: var(--accent);" onclick="navigateTo('/babycare/unique_id')">
+                        <div class="glow"></div>
+                        <div class="feature-icon bg-gradient-accent">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h3>Unique ID</h3>
+                        <p>Generate and manage unique identification for your baby's health records and documentation.</p>
+                        <div class="feature-action">
+                            <span>Manage ID <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        // Navigation function
+        function navigateTo(url) {
+            console.log('Navigating to:', url);
+            window.location.href = url;
+        }
+
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+
+            if (mobileMenuBtn && navMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
+

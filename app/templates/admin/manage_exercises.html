@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exercise Plans - Maternal & Child Health</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #d63384;
+      --secondary-color: #2c3e50;
+      --background-color: #f8f9fa;
+      --card-bg-color: #ffffff;
+      --text-color: #333;
+      --light-text-color: #666;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", "Arial", sans-serif;
+    }
+
+    body {
+      color: var(--text-color);
+      background-color: var(--background-color);
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.98);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .nav-links a {
+      margin: 0 1rem;
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-color);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .book-now {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(214, 51, 132, 0.25);
+    }
+
+    .book-now:hover {
+      background-color: #b52a6f;
+      transform: translateY(-2px);
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1470&q=80")
+        no-repeat center center/cover;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-top: 70px; /* Adjusted for fixed navbar */
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-section {
+      padding: 4rem 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .exercise-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 0.8rem 1.8rem;
+      background-color: #e9ecef;
+      border: none;
+      margin: 0 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #495057;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 4px 12px rgba(214, 51, 132, 0.3);
+    }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .exercise-card {
+      background-color: var(--card-bg-color);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-left: 5px solid var(--primary-color);
+    }
+
+    .exercise-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .exercise-card h3 {
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .exercise-details h4 {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+     .exercise-details h4 i { margin-right: 10px; }
+     .exercise-details p, .exercise-details ul { color: var(--light-text-color); line-height: 1.6; }
+     .exercise-details ul { list-style-type: none; padding-left: 1.5rem; }
+     .exercise-details li { margin-bottom: 0.5rem; position: relative; }
+
+    .exercise-details li:before {
+      content: "\f00c"; /* FontAwesome check icon */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: var(--primary-color);
+      position: absolute;
+      left: -1.5rem;
+    }
+
+    /* Admin Panel */
+    .admin-panel { background: rgba(214, 51, 132, 0.05); border: 1px solid rgba(214, 51, 132, 0.2); border-radius: 15px; padding: 1.5rem; margin: 0 auto 3rem auto; max-width: 800px; }
+    .admin-header { display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; font-size: 1.2rem; font-weight: bold; color: var(--primary-color); }
+    .admin-header i { margin-right: 10px; color: #ffd700; }
+    .admin-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-admin { background: var(--primary-color); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: 500; transition: all 0.3s ease; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+    .btn-admin:hover { background: #b52a6f; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3); }
+
+    /* Footer */
+    .footer { background-color: var(--secondary-color); color: white; padding: 3rem 2rem; margin-top: 2rem; }
+    .footer-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; }
+    .footer-column { flex: 1 1 250px; margin-bottom: 2rem; }
+    .footer-logo { font-size: 1.8rem; font-weight: bold; margin-bottom: 1rem; display: flex; align-items: center; }
+    .footer-logo i { margin-right: 10px; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.5rem; }
+    .footer-links a { color: #ecf0f1; text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--primary-color); }
+    .social-icons { display: flex; margin-top: 1rem; }
+    .social-icons a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: #34495e; color: white; margin-right: 1rem; transition: all 0.3s; }
+    .social-icons a:hover { background-color: var(--primary-color); transform: translateY(-3px); }
+    .footer-bottom { text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid #34495e; }
+
+    /* Responsive & Utility */
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-color); cursor: pointer; }
+    .empty-state { text-align: center; padding: 4rem 2rem; background: var(--card-bg-color); border-radius: 15px; }
+    .empty-state h4 { margin-bottom: 0.5rem; font-size: 1.5rem; color: var(--text-color); }
+    .empty-state p { color: var(--light-text-color); font-style: italic; }
+    .empty-state i { font-size: 3rem; color: #ddd; margin-bottom: 1rem; }
+
+    @media (max-width: 768px) {
+      .mobile-menu-btn { display: block; }
+      .nav-links { position: fixed; top: 70px; left: 0; width: 100%; background-color: white; flex-direction: column; align-items: center; padding: 2rem 0; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transform: translateY(-150%); transition: transform 0.3s; }
+      .nav-links.active { transform: translateY(0); }
+      .nav-links a { margin: 1rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Simple back header -->
+  <div style="position: fixed; top: 0; left: 0; right: 0; background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; display: flex; align-items: center; gap: 1rem;">
+    <a href="/admin/" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #d63384; font-weight: 500; transition: color 0.3s;">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back to Admin Dashboard</span>
+    </a>
+  </div>
+
+  <section class="page-header" style="margin-top: 70px;">
+    <div>
+      <h1>Exercise Plans</h1>
+      <p>Safe and effective exercises for a healthy and active pregnancy</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <!-- Admin Panel for Exercises -->
+      <div id="exercise-admin-panel" class="admin-panel" style="display: none;">
+        <div class="admin-header">
+          <i class="fas fa-crown"></i>
+          <span>Exercise Admin Panel</span>
+        </div>
+        <div class="admin-actions">
+          <button class="btn-admin" onclick="addExercise()">
+            <i class="fas fa-plus"></i> Add New Exercise
+          </button>
+          <button class="btn-admin" onclick="manageExercises()">
+            <i class="fas fa-edit"></i> Manage Exercises
+          </button>
+        </div>
+      </div>
+
+      <h2 class="section-title">Trimester-Specific Exercises</h2>
+      
+      <div class="exercise-tabs">
+        <button class="tab-btn active" data-tab="first">First Trimester</button>
+        <button class="tab-btn" data-tab="second">Second Trimester</button>
+        <button class="tab-btn" data-tab="third">Third Trimester</button>
+      </div>
+
+      <div id="first" class="tab-content active">
+        <div id="first-trimester-content">
+          <!-- Exercises will be loaded here -->
+        </div>
+      </div>
+      <div id="second" class="tab-content">
+         <div id="second-trimester-content">
+          <!-- Exercises will be loaded here -->
+        </div>
+      </div>
+      <div id="third" class="tab-content">
+         <div id="third-trimester-content">
+          <!-- Exercises will be loaded here -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <!-- Footer content is identical to the schemes page, so it's kept for consistency -->
+     <div class="footer-container">
+      <div class="footer-column">
+        <div class="footer-logo"><i class="fas fa-baby-carriage"></i>Maternal & Child Health</div>
+        <p>Your trusted companion for pregnancy and baby care, providing expert guidance and support.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="/pages/Preg/pregcare.html">Pregnancy Care</a></li>
+          <li><a href="/pages/baby/baby-care.html">Baby Care</a></li>
+          <li><a href="/pages/doctor/dashboard.html">Consult Doctor</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Services</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/Preg/nutrition.html">Nutrition Plans</a></li>
+          <li><a href="/pages/Preg/schemes.html">Government Schemes</a></li>
+          <li><a href="/pages/contact.html">Contact Us</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+        <p><i class="fas fa-envelope"></i> info@maternalhealthindia.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Health Street, New Delhi, India</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Maternal & Child Health India. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById(targetTab).classList.add('active');
+        });
+      });
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+      }
+
+      // Check admin status and load exercise data
+      checkAdminStatus();
+      loadSampleExerciseData();
+    });
+
+    function checkAdminStatus() {
+      const isAdmin = localStorage.getItem('exercise_admin_mode') === 'true';
+      if (isAdmin) {
+        document.getElementById('exercise-admin-panel').style.display = 'block';
+      }
+    }
+
+    function addExercise() {
+      const formHTML = `
+        <form id="add-exercise-form">
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Exercise Name:</label>
+                <input type="text" id="exercise-name" required
+                       style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                       placeholder="e.g., Prenatal Yoga">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+                <textarea id="exercise-description" required rows="3"
+                          style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                          placeholder="Brief description of the exercise"></textarea>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Category:</label>
+                <select id="exercise-category" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="cardio">Cardio</option>
+                    <option value="strength">Strength</option>
+                    <option value="flexibility">Flexibility</option>
+                    <option value="yoga">Yoga</option>
+                    <option value="breathing">Breathing</option>
+                    <option value="pelvic">Pelvic Floor</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Trimester:</label>
+                <select id="exercise-trimester" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="first">First Trimester</option>
+                    <option value="second">Second Trimester</option>
+                    <option value="third">Third Trimester</option>
+                    <option value="all">All Trimesters</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Difficulty:</label>
+                <select id="exercise-difficulty" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Duration (minutes):</label>
+                <input type="number" id="exercise-duration"
+                       style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                       placeholder="e.g., 15">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Instructions:</label>
+                <textarea id="exercise-instructions" required rows="4"
+                          style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                          placeholder="Step-by-step instructions for the exercise"></textarea>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Benefits:</label>
+                <textarea id="exercise-benefits" rows="3"
+                          style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                          placeholder="Health benefits of this exercise"></textarea>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">Precautions:</label>
+                <textarea id="exercise-precautions" rows="3"
+                          style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                          placeholder="Safety precautions and warnings"></textarea>
+            </div>
+
+            <div style="text-align: right;">
+                <button type="button" onclick="this.closest('.modal').remove()"
+                        style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                    Cancel
+                </button>
+                <button type="submit"
+                        style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                    Add Exercise
+                </button>
+            </div>
+        </form>
+      `;
+      const modal = createModal('Add New Exercise', formHTML);
+
+      document.getElementById('add-exercise-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = {
+            name: document.getElementById('exercise-name').value,
+            description: document.getElementById('exercise-description').value,
+            category: document.getElementById('exercise-category').value,
+            trimester: document.getElementById('exercise-trimester').value,
+            difficulty: document.getElementById('exercise-difficulty').value,
+            duration: document.getElementById('exercise-duration').value ? parseInt(document.getElementById('exercise-duration').value) : null,
+            instructions: document.getElementById('exercise-instructions').value,
+            benefits: document.getElementById('exercise-benefits').value,
+            precautions: document.getElementById('exercise-precautions').value
+        };
+
+        try {
+            const response = await fetch('/admin/api/content/exercises', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showNotification('Exercise added successfully!', 'success');
+                modal.remove();
+                // Refresh the content if manage modal is open
+                if (document.getElementById('exercises-list-admin')) {
+                    loadExercisesForManagement();
+                }
+                // Also refresh the main page content
+                loadSampleExerciseData();
+            } else {
+                showNotification(result.error || 'Failed to add exercise', 'error');
+            }
+        } catch (error) {
+            showNotification('Error adding exercise: ' + error.message, 'error');
+        }
+      });
+    }
+
+    function manageExercises() {
+      const modal = createModal('Manage Existing Exercises', `<div id="exercises-list-admin" style="max-height: 500px; overflow-y: auto;">Loading...</div>`);
+      loadExercisesForManagement();
+    }
+
+
+
+    function addExerciseToDOM(exercise, container) {
+      const card = document.createElement('div');
+      card.className = 'exercise-card';
+      card.setAttribute('data-id', exercise.id);
+      card.innerHTML = `
+        <h3>${exercise.name}</h3>
+        <div class="exercise-details">
+            <h4><i class="fas fa-info-circle"></i>Description</h4>
+            <p>${exercise.description || 'No description available'}</p>
+
+            <div style="margin: 10px 0; color: #666; font-size: 14px;">
+                <strong>Category:</strong> ${exercise.category || 'Not specified'} |
+                <strong>Difficulty:</strong> ${exercise.difficulty || 'Not specified'}
+                ${exercise.duration ? ` | <strong>Duration:</strong> ${exercise.duration} minutes` : ''}
+            </div>
+
+            <h4><i class="fas fa-shoe-prints"></i>Instructions</h4>
+            <p>${exercise.instructions || 'No instructions available'}</p>
+
+            ${exercise.benefits ? `
+                <h4><i class="fas fa-heart-pulse"></i>Benefits</h4>
+                <p>${exercise.benefits}</p>
+            ` : ''}
+
+            ${exercise.precautions ? `
+                <h4><i class="fas fa-exclamation-triangle"></i>Precautions</h4>
+                <p style="color: #e74c3c;">${exercise.precautions}</p>
+            ` : ''}
+        </div>
+      `;
+      container.appendChild(card);
+    }
+    
+    async function loadSampleExerciseData() {
+        const trimesters = ['first', 'second', 'third'];
+
+        try {
+            // Fetch exercises from the public API
+            const response = await fetch('/api/exercises-data');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to load exercises data');
+            }
+
+            const exercises = result.data || [];
+
+            trimesters.forEach(trimester => {
+                const container = document.getElementById(`${trimester}-trimester-content`);
+                const trimesterExercises = exercises.filter(ex => ex.trimester === trimester || ex.trimester === 'all');
+
+                if (trimesterExercises.length === 0) {
+                    // Show empty state
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-dumbbell" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                            <h4>No exercises available.</h4>
+                            <p>Exercises for the ${trimester} trimester will be added by our experts through the admin panel.</p>
+                        </div>
+                    `;
+                } else {
+                    // Show exercises
+                    container.innerHTML = '';
+                    trimesterExercises.forEach(exercise => {
+                        addExerciseToDOM(exercise, container);
+                    });
+                }
+            });
+
+        } catch (error) {
+            console.error('Error loading exercises data:', error);
+            trimesters.forEach(trimester => {
+                const container = document.getElementById(`${trimester}-trimester-content`);
+                container.innerHTML = `
+                    <div style="color: red; text-align: center; padding: 20px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <p>Error loading exercises data. Please try again later.</p>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    async function loadExercisesForManagement() {
+      const container = document.getElementById('exercises-list-admin');
+      if (!container) return;
+
+      try {
+        // Fetch exercises from the admin API
+        const response = await fetch('/admin/api/content/exercises');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to load exercises data');
+        }
+
+        const exercises = result.data || [];
+
+        if (exercises.length === 0) {
+          container.innerHTML = '<p style="color: #666; font-style: italic;">No exercises to manage.</p>';
+          return;
+        }
+
+        let html = '<div style="margin-top: 10px;">';
+        exercises.forEach(exercise => {
+          html += `
+            <div style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="flex: 1;">
+                  <div style="margin-bottom: 8px;">
+                    <strong style="color: #333; font-size: 16px;">${exercise.name}</strong>
+                    <span style="color: #888; font-size: 12px; margin-left: 10px;">(${exercise.trimester} trimester)</span>
+                  </div>
+                  <div style="color: #666; font-size: 14px; margin-bottom: 8px;">
+                    ${exercise.description || 'No description available'}
+                  </div>
+                  <div style="color: #777; font-size: 13px; margin-bottom: 5px;">
+                    <strong>Category:</strong> ${exercise.category || 'Not specified'} |
+                    <strong>Difficulty:</strong> ${exercise.difficulty || 'Not specified'}
+                    ${exercise.duration ? ` | <strong>Duration:</strong> ${exercise.duration} minutes` : ''}
+                  </div>
+                  <div style="color: #777; font-size: 13px; margin-bottom: 5px;">
+                    <strong>Instructions:</strong> ${exercise.instructions ? exercise.instructions.substring(0, 100) + '...' : 'No instructions'}
+                  </div>
+                  ${exercise.benefits ? `<div style="color: #777; font-size: 13px; font-style: italic;">
+                    <strong>Benefits:</strong> ${exercise.benefits.substring(0, 80)}...
+                  </div>` : ''}
+                </div>
+                <div style="margin-left: 15px; display: flex; gap: 5px;">
+                  <button onclick="editExercise(${exercise.id})"
+                          style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                    Edit
+                  </button>
+                  <button onclick="deleteExercise(${exercise.id})"
+                          style="background: #f44336; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+
+      } catch (error) {
+        console.error('Error loading exercises for management:', error);
+        container.innerHTML = '<p style="color: red;">Error loading exercises. Please try again.</p>';
+      }
+    }
+
+    async function editExercise(id) {
+        try {
+            // First, get the current exercise data
+            const response = await fetch('/admin/api/content/exercises');
+            if (!response.ok) throw new Error('Failed to fetch exercises data');
+
+            const result = await response.json();
+            const exercise = result.data.find(item => item.id === id);
+
+            if (!exercise) {
+                showNotification('Exercise not found', 'error');
+                return;
+            }
+
+            // Create edit modal with current data
+            const modal = createModal('Edit Exercise', `
+                <form id="edit-exercise-form">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Exercise Name:</label>
+                        <input type="text" id="edit-exercise-name" value="${exercise.name || ''}"
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+                        <textarea id="edit-exercise-description" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>${exercise.description || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Category:</label>
+                        <select id="edit-exercise-category" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                            <option value="cardio" ${exercise.category === 'cardio' ? 'selected' : ''}>Cardio</option>
+                            <option value="strength" ${exercise.category === 'strength' ? 'selected' : ''}>Strength</option>
+                            <option value="flexibility" ${exercise.category === 'flexibility' ? 'selected' : ''}>Flexibility</option>
+                            <option value="yoga" ${exercise.category === 'yoga' ? 'selected' : ''}>Yoga</option>
+                            <option value="breathing" ${exercise.category === 'breathing' ? 'selected' : ''}>Breathing</option>
+                            <option value="pelvic" ${exercise.category === 'pelvic' ? 'selected' : ''}>Pelvic Floor</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Trimester:</label>
+                        <select id="edit-exercise-trimester" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                            <option value="first" ${exercise.trimester === 'first' ? 'selected' : ''}>First Trimester</option>
+                            <option value="second" ${exercise.trimester === 'second' ? 'selected' : ''}>Second Trimester</option>
+                            <option value="third" ${exercise.trimester === 'third' ? 'selected' : ''}>Third Trimester</option>
+                            <option value="all" ${exercise.trimester === 'all' ? 'selected' : ''}>All Trimesters</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Difficulty:</label>
+                        <select id="edit-exercise-difficulty" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" required>
+                            <option value="beginner" ${exercise.difficulty === 'beginner' ? 'selected' : ''}>Beginner</option>
+                            <option value="intermediate" ${exercise.difficulty === 'intermediate' ? 'selected' : ''}>Intermediate</option>
+                            <option value="advanced" ${exercise.difficulty === 'advanced' ? 'selected' : ''}>Advanced</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Duration (minutes):</label>
+                        <input type="number" id="edit-exercise-duration" value="${exercise.duration || ''}"
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                               placeholder="e.g., 15">
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Instructions:</label>
+                        <textarea id="edit-exercise-instructions" rows="4"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                                  placeholder="Step-by-step instructions" required>${exercise.instructions || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Benefits:</label>
+                        <textarea id="edit-exercise-benefits" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                                  placeholder="Health benefits of this exercise">${exercise.benefits || ''}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 5px; font-weight: bold;">Precautions:</label>
+                        <textarea id="edit-exercise-precautions" rows="3"
+                                  style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
+                                  placeholder="Safety precautions and warnings">${exercise.precautions || ''}</textarea>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <button type="button" onclick="this.closest('.modal').remove()"
+                                style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                            Update Exercise
+                        </button>
+                    </div>
+                </form>
+            `);
+
+            // Handle form submission
+            document.getElementById('edit-exercise-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const formData = {
+                    id: id,
+                    name: document.getElementById('edit-exercise-name').value,
+                    description: document.getElementById('edit-exercise-description').value,
+                    category: document.getElementById('edit-exercise-category').value,
+                    trimester: document.getElementById('edit-exercise-trimester').value,
+                    difficulty: document.getElementById('edit-exercise-difficulty').value,
+                    duration: document.getElementById('edit-exercise-duration').value ? parseInt(document.getElementById('edit-exercise-duration').value) : null,
+                    instructions: document.getElementById('edit-exercise-instructions').value,
+                    benefits: document.getElementById('edit-exercise-benefits').value,
+                    precautions: document.getElementById('edit-exercise-precautions').value
+                };
+
+                try {
+                    const updateResponse = await fetch('/admin/api/content/exercises', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const updateResult = await updateResponse.json();
+
+                    if (updateResult.success) {
+                        showNotification('Exercise updated successfully!', 'success');
+                        modal.remove();
+                        loadExercisesForManagement(); // Refresh the list
+                        loadSampleExerciseData(); // Refresh main page
+                    } else {
+                        showNotification(updateResult.error || 'Failed to update exercise', 'error');
+                    }
+                } catch (error) {
+                    showNotification('Error updating exercise: ' + error.message, 'error');
+                }
+            });
+
+        } catch (error) {
+            showNotification('Error loading exercise: ' + error.message, 'error');
+        }
+    }
+
+    async function deleteExercise(id) {
+        if (!confirm('Are you sure you want to delete this exercise? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/admin/api/content/exercises', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showNotification('Exercise deleted successfully!', 'success');
+                loadExercisesForManagement(); // Refresh the management list
+                loadSampleExerciseData(); // Refresh main page
+            } else {
+                showNotification(result.error || 'Failed to delete exercise', 'error');
+            }
+        } catch (error) {
+            showNotification('Error deleting exercise: ' + error.message, 'error');
+        }
+    }
+
+    function createModal(title, content) {
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; display: flex; align-items: center; justify-content: center;`;
+      modal.innerHTML = `
+        <div style="background: white; padding: 25px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 85%; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin: 0; color: #d63384;">${title}</h3>
+            <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+          </div>
+          ${content}
+        </div>
+      `;
+      document.body.appendChild(modal);
+      return modal;
+    }
+
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 10001; padding: 15px 20px; border-radius: 8px; color: white; font-weight: bold; background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'}; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transform: translateX(120%); animation: slideIn 0.5s forwards;`;
+      const keyframes = `@keyframes slideIn { to { transform: translateX(0); } }`;
+      const styleSheet = document.createElement("style");
+      styleSheet.innerText = keyframes;
+      document.head.appendChild(styleSheet);
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
+    }
+
+    // Enable admin mode for demonstration purposes
+    localStorage.setItem('exercise_admin_mode', 'true');
+  </script>
+</body>
+</html>

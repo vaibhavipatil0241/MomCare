@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Medical Reports - Maternal and Child Health Monitoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #f472b6;
+            --primary-dark: #ec4899;
+            --secondary: #c084fc;
+            --secondary-dark: #a855f7;
+            --purple: #a855f7;
+            --accent: #fde047;
+            --accent-dark: #facc15;
+            --info: #7dd3fc;
+            --success: #10b981;
+            --light: #fdf2f8;
+            --dark: #581c87;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+            --border-radius: 20px;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fae8ff 50%, #e0f2fe 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(244, 114, 182, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(192, 132, 252, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-dark);
+            background: var(--light);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            font-weight: 500;
+            animation: fadeIn 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(244, 114, 182, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .stat-icon::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 20px;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover .stat-icon::after {
+            opacity: 1;
+        }
+
+        .stat-icon.reports {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+        }
+
+        .stat-icon.doctors {
+            background: linear-gradient(135deg, #c084fc, #a855f7);
+        }
+
+        .stat-icon.recent {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Reports Section */
+        .reports-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, var(--primary), var(--secondary)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 800;
+        }
+
+        .section-header h2 i {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 15px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .filter-select:hover {
+            border-color: var(--primary);
+            box-shadow: 0 6px 15px rgba(244, 114, 182, 0.2);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.1);
+        }
+
+        /* Reports List */
+        .reports-list {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .report-card {
+            background: linear-gradient(135deg, rgba(253, 242, 248, 0.6) 0%, rgba(255, 255, 255, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 2rem;
+            border: 2px solid rgba(244, 114, 182, 0.1);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(244, 114, 182, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .report-card:hover::before {
+            left: 100%;
+        }
+
+        .report-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(244, 114, 182, 0.2);
+        }
+
+        .report-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .report-title {
+            flex: 1;
+        }
+
+        .report-type {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-type::before {
+            content: '📋';
+            font-size: 1.8rem;
+        }
+
+        .report-date {
+            color: var(--gray);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .report-badge {
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(244, 114, 182, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .report-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1.2rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .detail-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 15px rgba(244, 114, 182, 0.15);
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .report-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed var(--light-gray);
+        }
+
+        .report-section h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+        }
+
+        .report-section p {
+            color: #555;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 3px solid var(--info);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed var(--light-gray);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            text-decoration: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(244, 114, 182, 0.4);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary-dark);
+            border: 3px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(192, 132, 252, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .empty-icon {
+            font-size: 7rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .empty-state h3 {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .spinner {
+            border: 6px solid var(--light-gray);
+            border-top: 6px solid var(--primary);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.3);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(88, 28, 135, 0.6);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(253, 242, 248, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            margin: 3% auto;
+            padding: 3rem;
+            border-radius: 30px;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, var(--primary), var(--secondary)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .modal-header h3 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .close {
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .close:hover {
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transform: rotate(90deg);
+        }
+
+        /* Custom Scrollbar */
+        .modal-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(226, 232, 240, 0.3);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+        }
+
+        /* Floating Action Elements */
+        .filter-select {
+            position: relative;
+        }
+
+        .filter-select option {
+            padding: 0.5rem;
+        }
+
+        /* Report Type Icons */
+        .report-card[data-type="Checkup"] .report-type::before { content: '🩺'; }
+        .report-card[data-type="Ultrasound"] .report-type::before { content: '📷'; }
+        .report-card[data-type="Lab Test"] .report-type::before { content: '🔬'; }
+        .report-card[data-type="Prescription"] .report-type::before { content: '💊'; }
+        .report-card[data-type="Consultation"] .report-type::before { content: '👨‍⚕️'; }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+
+            .stat-value {
+                font-size: 2.5rem;
+            }
+
+            .reports-section {
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-select {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .report-card {
+                padding: 1.5rem;
+            }
+
+            .report-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .report-type {
+                font-size: 1.3rem;
+            }
+
+            .report-details {
+                grid-template-columns: 1fr;
+            }
+
+            .report-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .modal-content {
+                margin: 10% 1rem;
+                padding: 2rem 1.5rem;
+                max-width: calc(100% - 2rem);
+            }
+
+            .modal-header h3 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 70px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/pregnancy" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-file-medical"></i>
+                </div>
+                <span>Medical Reports</span>
+            </a>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/pregnancy" class="nav-link">
+                    <i class="fas fa-heart"></i> Pregnancy Care
+                </a>
+                <a href="/pregnancy/reports" class="nav-link active">
+                    <i class="fas fa-file-medical"></i> Reports
+                </a>
+                <a href="/babycare" class="nav-link">
+                    <i class="fas fa-baby"></i> Baby Care
+                </a>
+                <a href="/auth/logout" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-file-medical"></i> My Medical Reports</h1>
+            <p>View and download your medical reports from your healthcare providers</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon reports">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="total-reports">0</div>
+                <div class="stat-label">Total Reports</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon doctors">
+                        <i class="fas fa-user-doctor"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="total-doctors">0</div>
+                <div class="stat-label">Healthcare Providers</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon recent">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="recent-reports">0</div>
+                <div class="stat-label">Reports This Month</div>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div class="reports-section">
+            <div class="section-header">
+                <h2><i class="fas fa-list"></i> My Reports</h2>
+                <div class="filter-group">
+                    <select class="filter-select" id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="Checkup">Checkup</option>
+                        <option value="Ultrasound">Ultrasound</option>
+                        <option value="Lab Test">Lab Test</option>
+                        <option value="Prescription">Prescription</option>
+                        <option value="Consultation">Consultation</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select class="filter-select" id="sortFilter">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loading-state">
+                <div class="spinner"></div>
+                <p>Loading your medical reports...</p>
+            </div>
+
+            <!-- Reports List -->
+            <div class="reports-list" id="reports-list" style="display: none;">
+                <!-- Reports will be dynamically loaded here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <h3>No Medical Reports Found</h3>
+                <p>Your healthcare providers haven't uploaded any reports yet.</p>
+                <p style="margin-top: 1rem; color: var(--gray);">Reports will appear here once your doctor creates them.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Detail Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-medical"></i> Report Details</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modal-body">
+                <!-- Report details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allReports = [];
+
+        // Load reports on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReports();
+            
+            // Add filter event listeners
+            document.getElementById('typeFilter').addEventListener('change', filterReports);
+            document.getElementById('sortFilter').addEventListener('change', filterReports);
+        });
+
+        async function loadReports() {
+            try {
+                const response = await fetch('/pregnancy/api/medical-reports');
+                const data = await response.json();
+
+                if (data.success) {
+                    allReports = data.reports;
+                    updateStatistics(allReports);
+                    displayReports(allReports);
+                } else {
+                    showError(data.error || 'Failed to load reports');
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                showError('Failed to load reports. Please try again.');
+            }
+        }
+
+        function updateStatistics(reports) {
+            const totalReports = reports.length;
+            const uniqueDoctors = new Set(reports.map(r => r.doctor_id)).size;
+            
+            // Count reports from this month
+            const now = new Date();
+            const thisMonth = now.getMonth();
+            const thisYear = now.getFullYear();
+            const recentReports = reports.filter(r => {
+                const reportDate = new Date(r.report_date);
+                return reportDate.getMonth() === thisMonth && reportDate.getFullYear() === thisYear;
+            }).length;
+
+            document.getElementById('total-reports').textContent = totalReports;
+            document.getElementById('total-doctors').textContent = uniqueDoctors;
+            document.getElementById('recent-reports').textContent = recentReports;
+        }
+
+        function displayReports(reports) {
+            const loadingState = document.getElementById('loading-state');
+            const reportsList = document.getElementById('reports-list');
+            const emptyState = document.getElementById('empty-state');
+
+            loadingState.style.display = 'none';
+
+            if (reports.length === 0) {
+                reportsList.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            reportsList.style.display = 'grid';
+            reportsList.innerHTML = '';
+
+            reports.forEach(report => {
+                const reportCard = createReportCard(report);
+                reportsList.appendChild(reportCard);
+            });
+        }
+
+        function createReportCard(report) {
+            const card = document.createElement('div');
+            card.className = 'report-card';
+            card.setAttribute('data-type', report.report_type);
+            
+            const reportDate = formatDate(report.report_date);
+            const createdDate = formatDate(report.created_at);
+            
+            card.innerHTML = `
+                <div class="report-header">
+                    <div class="report-title">
+                        <div class="report-type">${escapeHtml(report.report_type)}</div>
+                        <div class="report-date">
+                            <i class="fas fa-calendar"></i> ${reportDate}
+                        </div>
+                    </div>
+                    <span class="report-badge">Medical Report</span>
+                </div>
+                
+                <div class="report-details">
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-user-doctor"></i> Doctor</div>
+                        <div class="detail-value">${escapeHtml(report.doctor_name)}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-clock"></i> Created</div>
+                        <div class="detail-value">${createdDate}</div>
+                    </div>
+                </div>
+                
+                ${report.diagnosis ? `
+                <div class="report-section">
+                    <h4><i class="fas fa-stethoscope"></i> Diagnosis</h4>
+                    <p>${escapeHtml(report.diagnosis)}</p>
+                </div>
+                ` : ''}
+                
+                <div class="report-section">
+                    <h4><i class="fas fa-clipboard-list"></i> Findings</h4>
+                    <p>${escapeHtml(report.findings).substring(0, 200)}${report.findings.length > 200 ? '...' : ''}</p>
+                </div>
+                
+                <div class="report-actions">
+                    <button class="btn btn-primary" onclick="viewReport(${report.id})">
+                        <i class="fas fa-eye"></i> View Full Report
+                    </button>
+                    <a href="/pregnancy/api/medical-reports/${report.id}/download" class="btn btn-outline">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function filterReports() {
+            const typeFilter = document.getElementById('typeFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+            
+            let filtered = [...allReports];
+            
+            // Filter by type
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(r => r.report_type === typeFilter);
+            }
+            
+            // Sort
+            if (sortFilter === 'newest') {
+                filtered.sort((a, b) => new Date(b.report_date) - new Date(a.report_date));
+            } else {
+                filtered.sort((a, b) => new Date(a.report_date) - new Date(b.report_date));
+            }
+            
+            displayReports(filtered);
+        }
+
+        async function viewReport(reportId) {
+            try {
+                const response = await fetch(`/pregnancy/api/medical-reports/${reportId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showReportModal(data.report);
+                } else {
+                    alert('Failed to load report details');
+                }
+            } catch (error) {
+                console.error('Error loading report:', error);
+                alert('Failed to load report details');
+            }
+        }
+
+        function showReportModal(report) {
+            const modal = document.getElementById('reportModal');
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = `
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-dark); margin-bottom: 1rem;">
+                        ${escapeHtml(report.report_type)}
+                    </h3>
+                    <div style="background: var(--light); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <div>
+                                <strong>Report Date:</strong><br>
+                                ${formatDate(report.report_date)}
+                            </div>
+                            <div>
+                                <strong>Doctor:</strong><br>
+                                ${escapeHtml(report.doctor_name)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${report.diagnosis ? `
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">
+                        <i class="fas fa-stethoscope"></i> Diagnosis
+                    </h4>
+                    <div style="background: #fff5f5; border-left: 4px solid var(--primary); padding: 1rem; border-radius: 5px;">
+                        ${escapeHtml(report.diagnosis)}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">
+                        <i class="fas fa-clipboard-list"></i> Findings
+                    </h4>
+                    <div style="background: var(--light); padding: 1rem; border-radius: 5px; white-space: pre-wrap;">
+                        ${escapeHtml(report.findings)}
+                    </div>
+                </div>
+                
+                ${report.recommendations ? `
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">
+                        <i class="fas fa-notes-medical"></i> Recommendations
+                    </h4>
+                    <div style="background: #f0fdf4; border-left: 4px solid var(--success); padding: 1rem; border-radius: 5px; white-space: pre-wrap;">
+                        ${escapeHtml(report.recommendations)}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${report.notes ? `
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">
+                        <i class="fas fa-sticky-note"></i> Additional Notes
+                    </h4>
+                    <div style="background: #fffbeb; border-left: 4px solid var(--accent-dark); padding: 1rem; border-radius: 5px; white-space: pre-wrap;">
+                        ${escapeHtml(report.notes)}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <a href="/pregnancy/api/medical-reports/${report.id}/download" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download Report
+                    </a>
+                    <button class="btn btn-outline" onclick="closeModal()">Close</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('reportModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('reportModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showError(message) {
+            const loadingState = document.getElementById('loading-state');
+            loadingState.innerHTML = `
+                <div style="color: var(--primary-dark); text-align: center;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>${message}</p>
+                    <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 1rem;">
+                        <i class="fas fa-redo"></i> Retry
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

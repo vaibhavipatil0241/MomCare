@@ -1,0 +1,935 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ask Assistant - MamaCare</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Arial", sans-serif;
+    }
+
+    body {
+      color: #333;
+      background-color: #fff5f7;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #d63384;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .nav-links a {
+      margin: 0 1rem;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #d63384;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #d63384;
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .book-now {
+      background-color: #d63384;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .book-now:hover {
+      background-color: #b52a6f;
+      transform: translateY(-2px);
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1470&q=80")
+          no-repeat center center/cover;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-top: 70px;
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-section {
+      padding: 5rem 2rem;
+      background-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #d63384;
+      font-size: 2.5rem;
+    }
+
+    .assistant-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background-color: #f8f9fa;
+      border: none;
+      margin: 0 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background-color: #d63384;
+      color: white;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .chat-container {
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #d63384, #b52a6f);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-title {
+      display: flex;
+      align-items: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .chat-title i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .chat-status {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #4ade80;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+      background-color: #fafafa;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message-content {
+      max-width: 70%;
+      padding: 1rem 1.5rem;
+      border-radius: 20px;
+      line-height: 1.5;
+    }
+
+    .message.user .message-content {
+      background-color: #d63384;
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .message.bot .message-content {
+      background-color: white;
+      color: #333;
+      border: 1px solid #e5e7eb;
+      border-bottom-left-radius: 5px;
+    }
+
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .message.user .message-avatar {
+      background-color: #d63384;
+      color: white;
+      order: 1;
+    }
+
+    .message.bot .message-avatar {
+      background-color: #f3f4f6;
+      color: #d63384;
+    }
+
+    .chat-input-area {
+      padding: 1.5rem;
+      background-color: white;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      background-color: #f9fafb;
+      border-radius: 25px;
+      padding: 0.5rem;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+
+    .input-container:focus-within {
+      border-color: #d63384;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .send-btn {
+      background-color: #d63384;
+      color: white;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .send-btn:hover {
+      background-color: #b52a6f;
+      transform: scale(1.05);
+    }
+
+    .quick-questions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .question-card {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .question-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      border-color: #d63384;
+    }
+
+    .question-card h4 {
+      color: #d63384;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .question-card h4 i {
+      margin-right: 10px;
+    }
+
+    .question-card p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .tips-section {
+      background-color: #f8f9fa;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-top: 3rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .tips-section h3 {
+      color: #d63384;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    .tips-section ul {
+      list-style-type: none;
+      padding-left: 1rem;
+    }
+
+    .tips-section li {
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 2rem;
+      line-height: 1.6;
+    }
+
+    .tips-section li:before {
+      content: "\f058";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      color: #d63384;
+      position: absolute;
+      left: 0;
+      top: 2px;
+    }
+
+    /* Footer Styles */
+    .footer {
+      background-color: #333;
+      color: #fff;
+      padding: 4rem 2rem 1rem;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    .footer-column {
+      flex: 1 1 250px;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d63384;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo i {
+      margin-right: 10px;
+    }
+
+    .footer-column p {
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: #fff;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background-color: #d63384;
+      transform: translateY(-3px);
+    }
+
+    .footer-column h3 {
+      color: #d63384;
+      margin-bottom: 1.2rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-links,
+    .contact-info {
+      list-style: none;
+    }
+
+    .footer-links li,
+    .contact-info li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #d63384;
+    }
+
+    .contact-info li {
+      display: flex;
+      align-items: flex-start;
+      color: #ccc;
+    }
+
+    .contact-info i {
+      margin-right: 10px;
+      color: #d63384;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      margin-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-bottom p {
+      color: #999;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-bottom-links a {
+      color: #999;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-bottom-links a:hover {
+      color: #d63384;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #d63384;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        flex-direction: column;
+        padding: 1rem 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .chat-container {
+        height: 500px;
+      }
+
+      .message-content {
+        max-width: 85%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <i class="fas fa-baby-carriage"></i>
+      MamaCare
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <a href="/">Home</a>
+      <a href="/pregnancy">Maternal Care</a>
+      <a href="/pregnancy/assistant" class="active">Ask Assistant</a>
+      <a href="/pregnancy/nutrition">Nutrition</a>
+      <a href="/pregnancy/exercise">Exercise</a>
+      <a href="/pregnancy/weight-tracker">Weight Tracker</a>
+      <a href="/pregnancy/meditation">Meditation</a>
+      <a href="/pregnancy/appointments">Appointments</a>
+      <a href="/pregnancy/reports">Reports</a>
+      <a href="/pregnancy/faq">FAQ</a>
+      <a href="/babycare">Baby Care</a>
+      <a href="/auth/logout">Logout</a>
+    </nav>
+    <button class="book-now">Get Started</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
+
+  <section class="page-header">
+    <div>
+      <h1>AI Pregnancy Assistant</h1>
+      <p>Get instant answers to your pregnancy questions with our intelligent assistant</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">Ask Your Questions</h2>
+
+      <div class="assistant-tabs">
+        <button class="tab-btn active" data-tab="chat">
+          Live Chat
+        </button>
+        <button class="tab-btn" data-tab="questions">Quick Questions</button>
+        <button class="tab-btn" data-tab="topics">Popular Topics</button>
+      </div>
+
+      <div id="chat" class="tab-content active">
+        <div class="chat-container">
+          <div class="chat-header">
+            <div class="chat-title">
+              <i class="fas fa-robot"></i>
+              Pregnancy Assistant
+            </div>
+            <div class="chat-status">
+              <div class="status-dot"></div>
+              Online
+            </div>
+          </div>
+
+          <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+              <div class="message-avatar">
+                <i class="fas fa-robot"></i>
+              </div>
+              <div class="message-content">
+                Hello! I'm your AI pregnancy assistant. I'm here to help answer your questions about pregnancy, health, nutrition, and baby care. What would you like to know today?
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <div class="input-container">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything about your pregnancy..." autocomplete="off">
+              <button class="send-btn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="questions" class="tab-content">
+        <div class="quick-questions">
+          <div class="question-card" onclick="askQuestion('What are the early signs of pregnancy?')">
+            <h4><i class="fas fa-search"></i> Early Signs</h4>
+            <p>What are the early signs and symptoms of pregnancy?</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('What foods should I avoid during pregnancy?')">
+            <h4><i class="fas fa-utensils"></i> Food Safety</h4>
+            <p>What foods should I avoid during pregnancy?</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('How much weight should I gain during pregnancy?')">
+            <h4><i class="fas fa-weight"></i> Weight Gain</h4>
+            <p>How much weight should I gain during pregnancy?</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('What exercises are safe during pregnancy?')">
+            <h4><i class="fas fa-dumbbell"></i> Exercise</h4>
+            <p>What exercises are safe during pregnancy?</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('When should I call my doctor?')">
+            <h4><i class="fas fa-phone-medical"></i> Medical Care</h4>
+            <p>When should I call my doctor during pregnancy?</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('What prenatal vitamins should I take?')">
+            <h4><i class="fas fa-pills"></i> Vitamins</h4>
+            <p>What prenatal vitamins should I take?</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="topics" class="tab-content">
+        <div class="quick-questions">
+          <div class="question-card" onclick="askQuestion('Tell me about first trimester changes')">
+            <h4><i class="fas fa-calendar-alt"></i> First Trimester</h4>
+            <p>Body changes and what to expect in the first trimester</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('How is my baby developing in the second trimester?')">
+            <h4><i class="fas fa-baby"></i> Second Trimester</h4>
+            <p>Baby development and maternal changes in second trimester</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('How should I prepare for labor and delivery?')">
+            <h4><i class="fas fa-hospital"></i> Third Trimester</h4>
+            <p>Preparing for labor, delivery, and final trimester</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('What should I know about breastfeeding?')">
+            <h4><i class="fas fa-heart"></i> Breastfeeding</h4>
+            <p>Breastfeeding tips, benefits, and common concerns</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('How can I manage pregnancy discomfort?')">
+            <h4><i class="fas fa-spa"></i> Comfort Tips</h4>
+            <p>Managing common pregnancy discomforts and symptoms</p>
+          </div>
+
+          <div class="question-card" onclick="askQuestion('What should I pack in my hospital bag?')">
+            <h4><i class="fas fa-suitcase"></i> Hospital Prep</h4>
+            <p>Essential items to pack for your hospital stay</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-section">
+        <h3>Using Your AI Assistant Effectively</h3>
+        <ul>
+          <li>Ask specific questions about your pregnancy symptoms, concerns, or experiences.</li>
+          <li>Provide context about your trimester, health conditions, or specific situations.</li>
+          <li>Use the quick question cards for common pregnancy topics and concerns.</li>
+          <li>Remember that this assistant provides general information, not personalized medical advice.</li>
+          <li>Always consult your healthcare provider for urgent concerns or medical decisions.</li>
+          <li>Feel free to ask follow-up questions to get more detailed information.</li>
+          <li>The assistant is available 24/7 to support you throughout your pregnancy journey.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <div class="footer-logo">
+          <i class="fas fa-baby-carriage"></i>
+          MamaCare
+        </div>
+        <p>
+          Your trusted companion for pregnancy and baby care, providing expert
+          guidance and support every step of the way.
+        </p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="/pages/Preg/pregcare.html">Maternal Care</a></li>
+          <li><a href="/pages/baby/baby-care.html">Baby Care</a></li>
+          <li><a href="/pages/doctor/dashboard.html">Consult Doctor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>AI Services</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/Preg/nutrition.html">Nutrition Plans</a></li>
+          <li><a href="/pages/Preg/exercise.html">Exercise Guides</a></li>
+          <li><a href="/pages/Preg/meditation.html">Meditation & Wellness</a></li>
+          <li><a href="/pages/Preg/chatbot.html">Ask Assistant</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <ul class="contact-info">
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-envelope"></i> info@mamacare.com</li>
+          <li><i class="fas fa-map-marker-alt"></i> 123 Health Street, Care City</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 MamaCare. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Add active class to clicked button and corresponding content
+          this.classList.add('active');
+          document.getElementById(targetTab).classList.add('active');
+        });
+      });
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', function() {
+          navLinks.classList.toggle('active');
+        });
+      }
+
+      // Get Started button functionality
+      const getStartedBtn = document.querySelector('.book-now');
+      if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', function() {
+          window.location.href = '/signup';
+        });
+      }
+
+      // Chat input enter key
+      const chatInput = document.getElementById('chatInput');
+      if (chatInput) {
+        chatInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            sendMessage();
+          }
+        });
+      }
+    });
+
+    // Chat functionality
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+
+      if (!message) return;
+
+      // Add user message
+      addMessage(message, 'user');
+      input.value = '';
+
+      // Simulate AI response (replace with actual AI integration)
+      setTimeout(() => {
+        const response = generateAIResponse(message);
+        addMessage(response, 'bot');
+      }, 1000);
+    }
+
+    function addMessage(text, sender) {
+      const messagesContainer = document.getElementById('chatMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+
+      messageDiv.innerHTML = `
+        <div class="message-avatar">
+          <i class="fas fa-${sender === 'user' ? 'user' : 'robot'}"></i>
+        </div>
+        <div class="message-content">
+          ${text}
+        </div>
+      `;
+
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function askQuestion(question) {
+      // Switch to chat tab
+      document.querySelector('[data-tab="chat"]').click();
+
+      // Set the question in input and send
+      const input = document.getElementById('chatInput');
+      input.value = question;
+      sendMessage();
+    }
+
+    function generateAIResponse(message) {
+      // Simple response generation (replace with actual AI integration)
+      const responses = {
+        'early signs': 'Common early signs of pregnancy include missed periods, nausea, breast tenderness, fatigue, and frequent urination. However, these symptoms can vary greatly between women.',
+        'food': 'During pregnancy, avoid raw or undercooked meats, fish high in mercury, unpasteurized dairy products, raw eggs, and excessive caffeine. Focus on a balanced diet with plenty of fruits, vegetables, and whole grains.',
+        'weight': 'Weight gain recommendations depend on your pre-pregnancy BMI. Generally, women with normal BMI should gain 25-35 pounds. Consult your healthcare provider for personalized guidance.',
+        'exercise': 'Safe exercises during pregnancy include walking, swimming, prenatal yoga, and low-impact aerobics. Avoid contact sports and activities with fall risks. Always consult your doctor before starting any exercise program.',
+        'doctor': 'Call your doctor for severe nausea/vomiting, bleeding, severe abdominal pain, persistent headaches, vision changes, or decreased fetal movement. Trust your instincts - when in doubt, call.',
+        'vitamins': 'Prenatal vitamins should contain folic acid (400-800 mcg), iron, calcium, and DHA. Start taking them before conception if possible. Your doctor can recommend the best option for you.'
+      };
+
+      const lowerMessage = message.toLowerCase();
+      for (const [key, response] of Object.entries(responses)) {
+        if (lowerMessage.includes(key)) {
+          return response;
+        }
+      }
+
+      return "Thank you for your question! While I can provide general pregnancy information, I recommend discussing specific concerns with your healthcare provider for personalized advice. Is there anything else I can help you with?";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,954 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Government Schemes - Maternal and Child Health Care</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Arial", sans-serif;
+    }
+
+    body {
+      color: #333;
+      background-color: #fff5f7;
+      padding-top: 80px; /* Account for fixed header */
+    }
+
+    /* Header Styles */
+    .header {
+        background: white;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 0.5rem 0;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #e91e63;
+        text-decoration: none;
+    }
+
+    .logo-icon {
+        background: linear-gradient(135deg, #e91e63, #ff6b9d);
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+    }
+
+    .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.8rem 1.2rem;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: white;
+        background: linear-gradient(135deg, #e91e63, #ff6b9d);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+    }
+
+    .logout-btn:hover {
+        background: linear-gradient(135deg, #f44336, #ff5722) !important;
+        box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3) !important;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #333;
+        cursor: pointer;
+    }
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #d63384;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .nav-links a {
+      margin: 0 1rem;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #d63384;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #d63384;
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .book-now {
+      background-color: #d63384;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .book-now:hover {
+      background-color: #b52a6f;
+      transform: translateY(-2px);
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=1470&q=80")
+          no-repeat center center/cover;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-top: 70px;
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .content-section {
+      padding: 5rem 2rem;
+      background-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #d63384;
+      font-size: 2.5rem;
+    }
+
+    .schemes-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background-color: #f8f9fa;
+      border: none;
+      margin: 0 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background-color: #d63384;
+      color: white;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .schemes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .scheme-card {
+      background-color: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .scheme-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .scheme-card:hover .card-img img {
+      transform: scale(1.1);
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .card-content h3 {
+      color: #d63384;
+      margin-bottom: 1rem;
+    }
+
+    .card-content p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .scheme-badge {
+      display: inline-block;
+      background-color: #f8f9fa;
+      color: #d63384;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .apply-btn {
+      display: inline-block;
+      color: #d63384;
+      font-weight: bold;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .apply-btn:hover {
+      color: #b52a6f;
+    }
+
+    .eligibility-section {
+      background-color: #f8f9fa;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-top: 3rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .eligibility-section h3 {
+      color: #d63384;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    .eligibility-section ul {
+      list-style-type: none;
+      padding-left: 1rem;
+    }
+
+    .eligibility-section li {
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 2rem;
+      line-height: 1.6;
+    }
+
+    .eligibility-section li:before {
+      content: "\f058";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      color: #d63384;
+      position: absolute;
+      left: 0;
+      top: 2px;
+    }
+
+    /* Chatbot Button */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #d63384;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(214, 51, 132, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+
+    .chatbot-btn:hover {
+      background-color: #b52a6f;
+      transform: scale(1.1);
+    }
+
+    .chatbot-btn i {
+      font-size: 1.5rem;
+    }
+
+    /* Footer Styles */
+    .footer {
+      background-color: #333;
+      color: #fff;
+      padding: 4rem 2rem 1rem;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    .footer-column {
+      flex: 1 1 250px;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d63384;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo i {
+      margin-right: 10px;
+    }
+
+    .footer-column p {
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: #fff;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background-color: #d63384;
+      transform: translateY(-3px);
+    }
+
+    .footer-column h3 {
+      color: #d63384;
+      margin-bottom: 1.2rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-links,
+    .contact-info {
+      list-style: none;
+    }
+
+    .footer-links li,
+    .contact-info li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: #d63384;
+    }
+
+    .contact-info li {
+      display: flex;
+      align-items: flex-start;
+      color: #ccc;
+    }
+
+    .contact-info i {
+      margin-right: 10px;
+      color: #d63384;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      margin-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-bottom p {
+      color: #999;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-bottom-links a {
+      color: #999;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-bottom-links a:hover {
+      color: #d63384;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #d63384;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        flex-direction: column;
+        padding: 1rem 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .footer-container {
+        flex-direction: column;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .footer-bottom-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+      <div class="nav-container">
+          <a href="/" class="logo">
+              <div class="logo-icon">
+                  <i class="fas fa-hands-helping"></i>
+              </div>
+              <span>Pregnancy Schemes</span>
+          </a>
+          <nav class="nav-menu">
+              <a href="/" class="nav-link">
+                  <i class="fas fa-home"></i> Home
+              </a>
+              <a href="/pregnancy" class="nav-link">
+                  <i class="fas fa-heart"></i> Maternal Care
+              </a>
+              <a href="/pregnancy/schemes" class="nav-link active">
+                  <i class="fas fa-hands-helping"></i> Schemes
+              </a>
+              <a href="/pregnancy/nutrition" class="nav-link">
+                  <i class="fas fa-utensils"></i> Nutrition
+              </a>
+              <a href="/pregnancy/exercise" class="nav-link">
+                  <i class="fas fa-dumbbell"></i> Exercise
+              </a>
+              <a href="/pregnancy/weight-tracker" class="nav-link">
+                  <i class="fas fa-weight"></i> Weight Tracker
+              </a>
+              <a href="/pregnancy/appointments" class="nav-link">
+                  <i class="fas fa-calendar-alt"></i> Appointments
+              </a>
+              <a href="/pregnancy/reports" class="nav-link">
+                  <i class="fas fa-chart-line"></i> Reports
+              </a>
+              <a href="/babycare" class="nav-link">
+                  <i class="fas fa-baby"></i> Baby Care
+              </a>
+              <a href="/auth/logout" class="nav-link logout-btn">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+          </nav>
+          <button class="mobile-menu-btn">
+              <i class="fas fa-bars"></i>
+          </button>
+      </div>
+  </header>
+
+  <section class="page-header">
+    <div>
+      <h1>Government Schemes & Benefits</h1>
+      <p>Comprehensive support programs for maternal and child health care</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">Schemes By Category</h2>
+
+      <div class="schemes-tabs">
+        <button class="tab-btn active" data-tab="maternal">
+          Maternal Health
+        </button>
+        <button class="tab-btn" data-tab="financial">Financial Support</button>
+        <button class="tab-btn" data-tab="nutrition">Nutrition Programs</button>
+      </div>
+
+      <div id="maternal" class="tab-content active">
+        <div id="maternal-schemes-content" class="schemes-grid">
+          <!-- Content will be loaded dynamically from admin-added data -->
+          <div class="empty-state">
+            <i class="fas fa-landmark" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+            <h4>No maternal schemes available</h4>
+            <p>Government schemes for maternal health will be added by our administrators.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="financial" class="tab-content">
+        <div id="financial-schemes-content" class="schemes-grid">
+          <!-- Content will be loaded dynamically from admin-added data -->
+          <div class="empty-state">
+            <i class="fas fa-money-bill-wave" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+            <h4>No financial schemes available</h4>
+            <p>Financial support schemes will be added by our administrators.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="nutrition" class="tab-content">
+        <div id="nutrition-schemes-content" class="schemes-grid">
+          <!-- Content will be loaded dynamically from admin-added data -->
+          <div class="empty-state">
+            <i class="fas fa-apple-alt" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+            <h4>No nutrition schemes available</h4>
+            <p>Nutrition support schemes will be added by our administrators.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="eligibility-section">
+        <h3>General Eligibility Guidelines</h3>
+        <ul>
+          <li>Indian citizenship is required for most government schemes and benefits.</li>
+          <li>Income criteria may apply - check specific scheme requirements for income limits.</li>
+          <li>Age restrictions may apply for certain schemes (typically 18+ for maternity benefits).</li>
+          <li>Valid identity documents (Aadhaar, PAN, Voter ID) are required for application.</li>
+          <li>Bank account details are necessary for direct benefit transfer (DBT) schemes.</li>
+          <li>Medical certificates may be required for health-related schemes and benefits.</li>
+          <li>Apply through official government portals or authorized centers to avoid fraud.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Chatbot Button -->
+  <div class="chatbot-btn" onclick="openChatbot()">
+    <i class="fas fa-comment-dots"></i>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <div class="footer-logo">
+          <i class="fas fa-baby-carriage"></i>
+          Maternal and Child Health Care
+        </div>
+        <p>
+          Your trusted companion for pregnancy and baby care, providing expert
+          guidance and support every step of the way.
+        </p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="/pages/Preg/pregcare.html">Maternal Care</a></li>
+          <li><a href="/pages/baby/baby-care.html">Baby Care</a></li>
+          <li><a href="/pages/doctor/dashboard.html">Consult Doctor</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Government Services</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/Preg/nutrition.html">Nutrition Plans</a></li>
+          <li><a href="/pages/Preg/exercise.html">Exercise Guides</a></li>
+          <li><a href="/pages/Preg/meditation.html">Meditation & Wellness</a></li>
+          <li><a href="/pages/Preg/government-schemes.html">Government Schemes</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <ul class="contact-info">
+          <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+          <li><i class="fas fa-envelope"></i> info@maternalchildhealthcare.com</li>
+          <li><i class="fas fa-map-marker-alt"></i> 123 Health Street, Care City</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 Maternal and Child Health Care. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Add active class to clicked button and corresponding content
+          this.classList.add('active');
+          document.getElementById(targetTab).classList.add('active');
+        });
+      });
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', function() {
+          navLinks.classList.toggle('active');
+        });
+      }
+
+      // Get Started button functionality
+      const getStartedBtn = document.querySelector('.book-now');
+      if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', function() {
+          window.location.href = '/signup';
+        });
+      }
+
+      // Load schemes data
+      loadSchemesData();
+    });
+
+    // Load schemes data from admin-managed database
+    async function loadSchemesData() {
+      try {
+        // Show loading state
+        showSchemesLoadingState();
+
+        // Fetch schemes data from backend
+        const response = await fetch('/api/schemes-data');
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            renderSchemesData(result.data);
+            console.log(`✅ Loaded ${result.count} schemes from admin`);
+          } else {
+            console.log('No schemes data available yet - admin needs to add content');
+            renderSchemesData([]); // Pass empty array to show empty state
+          }
+        } else {
+          console.log('No schemes data available yet - admin needs to add content');
+          renderSchemesData([]); // Pass empty array to show empty state
+        }
+      } catch (error) {
+        console.error('Error loading schemes data:', error);
+        renderSchemesData([]); // Pass empty array to show empty state
+      }
+    }
+
+    function showSchemesLoadingState() {
+      const categories = ['maternal', 'financial', 'nutrition'];
+      categories.forEach(category => {
+        const container = document.getElementById(`${category}-schemes-content`);
+        if (container) {
+          container.innerHTML = `
+            <div class="loading">
+              <i class="fas fa-spinner"></i>
+              <p>Loading schemes...</p>
+            </div>
+          `;
+        }
+      });
+    }
+
+    function renderSchemesData(data) {
+      const categories = ['maternal', 'financial', 'nutrition'];
+
+      categories.forEach(category => {
+        const container = document.getElementById(`${category}-schemes-content`);
+        if (!container) return;
+
+        // Ensure data is an array before filtering
+        const dataArray = Array.isArray(data) ? data : [];
+
+        // Filter data for this category
+        // Since admin schemes don't have categories, show all schemes in each category
+        // or filter by keywords in name/description
+        let categoryData = [];
+
+        if (category === 'maternal') {
+          categoryData = dataArray.filter(item =>
+            item.name?.toLowerCase().includes('maternal') ||
+            item.name?.toLowerCase().includes('matru') ||
+            item.name?.toLowerCase().includes('pregnancy') ||
+            item.description?.toLowerCase().includes('maternal') ||
+            item.description?.toLowerCase().includes('pregnancy') ||
+            item.description?.toLowerCase().includes('pregnant')
+          );
+        } else if (category === 'financial') {
+          categoryData = dataArray.filter(item =>
+            item.name?.toLowerCase().includes('financial') ||
+            item.name?.toLowerCase().includes('cash') ||
+            item.name?.toLowerCase().includes('money') ||
+            item.benefits?.toLowerCase().includes('cash') ||
+            item.benefits?.toLowerCase().includes('financial') ||
+            item.benefits?.toLowerCase().includes('₹') ||
+            item.benefits?.toLowerCase().includes('rs')
+          );
+        } else if (category === 'nutrition') {
+          categoryData = dataArray.filter(item =>
+            item.name?.toLowerCase().includes('nutrition') ||
+            item.name?.toLowerCase().includes('food') ||
+            item.name?.toLowerCase().includes('anganwadi') ||
+            item.description?.toLowerCase().includes('nutrition') ||
+            item.description?.toLowerCase().includes('food')
+          );
+        }
+
+        // If no specific matches, show all schemes in maternal category as fallback
+        if (categoryData.length === 0 && category === 'maternal' && dataArray.length > 0) {
+          categoryData = dataArray;
+        }
+
+        if (categoryData.length === 0) {
+          // Show empty state if no data
+          const emptyMessages = {
+            'maternal': 'Government schemes for maternal health will be added by our administrators.',
+            'financial': 'Financial support schemes will be added by our administrators.',
+            'nutrition': 'Nutrition support schemes will be added by our administrators.'
+          };
+
+          const emptyIcons = {
+            'maternal': 'fas fa-landmark',
+            'financial': 'fas fa-money-bill-wave',
+            'nutrition': 'fas fa-apple-alt'
+          };
+
+          container.innerHTML = `
+            <div class="empty-state">
+              <i class="${emptyIcons[category]}" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No ${category} schemes available</h4>
+              <p>${emptyMessages[category]}</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Render scheme cards
+        let html = '';
+        categoryData.forEach(scheme => {
+          const imageUrl = scheme.image_url || 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1470&q=80';
+          html += `
+            <div class="scheme-card">
+              <div class="card-img">
+                <img src="${imageUrl}" alt="${scheme.name || scheme.title}" />
+              </div>
+              <div class="card-content">
+                <div class="scheme-badge">${scheme.scheme_type || 'Government Scheme'}</div>
+                <h3>${scheme.name || scheme.title}</h3>
+                <p>${scheme.description}</p>
+                ${scheme.eligibility ? `<p><strong>Eligibility:</strong> ${scheme.eligibility}</p>` : ''}
+                ${scheme.benefits ? `<p><strong>Benefits:</strong> ${scheme.benefits}</p>` : ''}
+                <a href="${scheme.application_link || '#'}" class="apply-btn" ${scheme.application_link ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                  ${scheme.application_link ? 'Apply Now' : (scheme.how_to_apply ? 'How to Apply' : 'Learn more')} <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      });
+    }
+
+    // Chatbot functionality
+    function openChatbot() {
+      // Redirect to chat page or open chat modal
+      window.location.href = '/pages/chat.html';
+    }
+  </script>
+</body>
+</html>

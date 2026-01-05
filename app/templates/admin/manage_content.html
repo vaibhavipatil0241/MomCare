@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Management - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .admin-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .content-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .content-card h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #e8f5e8;
+            color: #4caf50;
+        }
+
+        .status-pending {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <a href="/admin" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+        
+        <div class="admin-header">
+            <h1><i class="fas fa-edit"></i> Content Management</h1>
+            <p>Manage all content types across the Pregnancy & Baby Care System</p>
+        </div>
+
+        <div class="content-grid">
+            <a href="/admin/manage-nutrition" class="content-card">
+                <div class="content-icon">
+                    <i class="fas fa-apple-alt"></i>
+                </div>
+                <h3>Nutrition Management</h3>
+                <p>Manage nutrition plans, guidelines, and dietary recommendations for pregnancy and baby care.</p>
+                <div class="content-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="nutrition-count">-</div>
+                        <div class="stat-label">Items</div>
+                    </div>
+                    <div class="status-badge status-active">Active</div>
+                </div>
+            </a>
+
+            <a href="/admin/manage-faq" class="content-card">
+                <div class="content-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h3>FAQ Management</h3>
+                <p>Manage frequently asked questions and expert answers for common pregnancy and baby care concerns.</p>
+                <div class="content-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="faq-count">-</div>
+                        <div class="stat-label">FAQs</div>
+                    </div>
+                    <div class="status-badge status-active">Active</div>
+                </div>
+            </a>
+
+            <a href="/admin/manage-schemes" class="content-card">
+                <div class="content-icon">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h3>Government Schemes</h3>
+                <p>Manage information about government schemes, benefits, and assistance programs for families.</p>
+                <div class="content-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="schemes-count">-</div>
+                        <div class="stat-label">Schemes</div>
+                    </div>
+                    <div class="status-badge status-active">Active</div>
+                </div>
+            </a>
+
+            <a href="/admin/manage-exercises" class="content-card">
+                <div class="content-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h3>Exercise Management</h3>
+                <p>Manage exercise routines, physical activity guides, and fitness recommendations for pregnancy.</p>
+                <div class="content-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="exercises-count">-</div>
+                        <div class="stat-label">Exercises</div>
+                    </div>
+                    <div class="status-badge status-active">Active</div>
+                </div>
+            </a>
+
+            <a href="/admin/manage-meditation" class="content-card">
+                <div class="content-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Meditation Management</h3>
+                <p>Manage meditation sessions, mindfulness content, and relaxation techniques for wellness.</p>
+                <div class="content-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="meditation-count">-</div>
+                        <div class="stat-label">Sessions</div>
+                    </div>
+                    <div class="status-badge status-active">Active</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load content statistics
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContentStats();
+        });
+
+        async function loadContentStats() {
+            try {
+                // Load nutrition count
+                const nutritionResponse = await fetch('/admin/api/content/nutrition');
+                if (nutritionResponse.ok) {
+                    const nutritionData = await nutritionResponse.json();
+                    if (nutritionData.success) {
+                        document.getElementById('nutrition-count').textContent = nutritionData.data.length;
+                    }
+                }
+
+                // Load FAQ count
+                const faqResponse = await fetch('/admin/api/content/faq');
+                if (faqResponse.ok) {
+                    const faqData = await faqResponse.json();
+                    if (faqData.success) {
+                        document.getElementById('faq-count').textContent = faqData.data.length;
+                    }
+                }
+
+                // Load schemes count
+                const schemesResponse = await fetch('/admin/api/content/schemes');
+                if (schemesResponse.ok) {
+                    const schemesData = await schemesResponse.json();
+                    if (schemesData.success) {
+                        document.getElementById('schemes-count').textContent = schemesData.data.length;
+                    }
+                }
+
+                // Load exercises count
+                const exercisesResponse = await fetch('/admin/api/content/exercises');
+                if (exercisesResponse.ok) {
+                    const exercisesData = await exercisesResponse.json();
+                    if (exercisesData.success) {
+                        document.getElementById('exercises-count').textContent = exercisesData.data.length;
+                    }
+                }
+
+                // Load meditation count
+                const meditationResponse = await fetch('/admin/api/content/meditation');
+                if (meditationResponse.ok) {
+                    const meditationData = await meditationResponse.json();
+                    if (meditationData.success) {
+                        document.getElementById('meditation-count').textContent = meditationData.data.length;
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error loading content stats:', error);
+            }
+        }
+    </script>
+</body>
+</html>

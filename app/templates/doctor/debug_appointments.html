@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Doctor Appointments</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Doctor Appointments Debug Page</h1>
+    
+    <div class="debug-section info">
+        <h3>Current User Info</h3>
+        <p><strong>User ID:</strong> <span id="user-id">{{ user.id if user else 'Not logged in' }}</span></p>
+        <p><strong>User Name:</strong> <span id="user-name">{{ user.full_name if user else 'Not logged in' }}</span></p>
+        <p><strong>User Role:</strong> <span id="user-role">{{ user.role if user else 'Not logged in' }}</span></p>
+        <p><strong>User Email:</strong> <span id="user-email">{{ user.email if user else 'Not logged in' }}</span></p>
+    </div>
+
+    <div class="debug-section">
+        <h3>API Test</h3>
+        <button onclick="testAppointmentsAPI()">Test Appointments API</button>
+        <button onclick="clearResults()">Clear Results</button>
+        <div id="api-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h3>Debug Log</h3>
+        <div id="debug-log"></div>
+    </div>
+
+    <script>
+        let debugLog = [];
+
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}`;
+            debugLog.push(logMessage);
+            console.log(logMessage);
+            updateDebugLog();
+        }
+
+        function updateDebugLog() {
+            const logDiv = document.getElementById('debug-log');
+            logDiv.innerHTML = '<pre>' + debugLog.join('\n') + '</pre>';
+        }
+
+        function clearResults() {
+            debugLog = [];
+            document.getElementById('api-results').innerHTML = '';
+            document.getElementById('debug-log').innerHTML = '';
+        }
+
+        async function testAppointmentsAPI() {
+            const resultsDiv = document.getElementById('api-results');
+            resultsDiv.innerHTML = '<p>Testing API...</p>';
+            
+            log('🔍 Starting appointments API test...');
+
+            try {
+                log('📞 Calling /doctor/api/appointments...');
+                const response = await fetch('/doctor/api/appointments');
+                log(`📡 Response status: ${response.status}`);
+                log(`📡 Response headers: ${JSON.stringify(Object.fromEntries(response.headers))}`);
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    log(`✅ API Response received`);
+                    log(`📊 Success: ${data.success}`);
+                    log(`📊 Appointments count: ${data.appointments ? data.appointments.length : 'undefined'}`);
+                    log(`📊 Doctor name: "${data.doctor_name}"`);
+                    log(`📊 Total count: ${data.total_count}`);
+
+                    resultsDiv.innerHTML = `
+                        <div class="success">
+                            <h4>✅ API Response Success</h4>
+                            <p><strong>Success:</strong> ${data.success}</p>
+                            <p><strong>Doctor Name:</strong> "${data.doctor_name}"</p>
+                            <p><strong>Appointments Count:</strong> ${data.appointments ? data.appointments.length : 0}</p>
+                            <p><strong>Total Count:</strong> ${data.total_count}</p>
+                            ${data.appointments && data.appointments.length > 0 ? 
+                                `<h5>First 3 Appointments:</h5>
+                                <ul>
+                                    ${data.appointments.slice(0, 3).map(app => 
+                                        `<li>ID: ${app.id}, Patient: ${app.patient_name}, Status: ${app.status}, Type: ${app.appointment_type}</li>`
+                                    ).join('')}
+                                </ul>` : 
+                                '<p><em>No appointments found</em></p>'
+                            }
+                        </div>
+                    `;
+
+                    if (data.appointments && data.appointments.length > 0) {
+                        log(`✅ Found ${data.appointments.length} appointments!`);
+                        data.appointments.slice(0, 3).forEach((app, index) => {
+                            log(`   ${index + 1}. ID: ${app.id}, Patient: ${app.patient_name}, Status: ${app.status}`);
+                        });
+                    } else {
+                        log(`❌ No appointments found in response`);
+                    }
+
+                } else if (response.status === 302) {
+                    log(`🔄 Redirected - likely not logged in`);
+                    resultsDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ Redirected (302)</h4>
+                            <p>You might not be logged in as a doctor. Please login first.</p>
+                        </div>
+                    `;
+                } else {
+                    log(`❌ API call failed with status ${response.status}`);
+                    const text = await response.text();
+                    log(`❌ Response text: ${text.substring(0, 200)}`);
+                    
+                    resultsDiv.innerHTML = `
+                        <div class="error">
+                            <h4>❌ API Error</h4>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <p><strong>Response:</strong> ${text.substring(0, 200)}...</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                log(`❌ Fetch error: ${error.message}`);
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Network Error</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-run test on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Debug page loaded');
+            log('👤 Current user info loaded from server');
+        });
+    </script>
+</body>
+</html>

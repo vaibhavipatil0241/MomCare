@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Doctor Portal</title>
+
+    <!-- This line imports the icons used on the page (like the calendar, ID card, etc.) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /* --- General Page Styling --- */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #eef7ff; /* A very light blue background */
+            color: #333;
+        }
+
+        /* --- Header and Navigation Bar --- */
+        .header {
+            background-color: #ffffff;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            height: 60px; /* Fixed height for the header */
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50; /* Dark blue-grey text */
+        }
+
+        .logo i {
+            color: #3498db; /* Blue icon */
+            margin-right: 8px;
+        }
+
+        .doctor-name {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 1.2rem; /* Vertical padding removed to use full height */
+            height: 100%;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out, color 0.2s;
+            border-bottom: 3px solid transparent; /* Placeholder for active indicator */
+        }
+
+        .nav-links a:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* The ".active" class highlights the current page in the navigation */
+        .nav-links a.active {
+            color: #3498db;
+            font-weight: 600;
+            border-bottom: 3px solid #3498db;
+        }
+
+        /* Logout button styling */
+        .nav-links a.logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            margin-left: 1rem;
+            border-radius: 4px;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-links a.logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* --- Main Content Area --- */
+        .main-container {
+            padding: 1.5rem 2rem;
+        }
+
+        /* --- "Dashboard" Banner --- */
+        .title-banner {
+            background-color: #ffffff;
+            border-left: 5px solid #3498db; /* Blue left border for emphasis */
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .title-banner .icon {
+            font-size: 2rem;
+            color: #3498db;
+        }
+
+        .title-banner h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        .title-banner p {
+            margin: 0.2rem 0 0 0;
+            color: #555;
+        }
+
+        /* --- Dashboard Grid --- */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* --- Dashboard Cards --- */
+        .dashboard-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .dashboard-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.4rem;
+        }
+
+        .dashboard-card p {
+            margin: 0;
+            color: #666;
+            flex-grow: 1; /* Pushes button to bottom */
+        }
+
+        .dashboard-card .go-to-btn {
+            margin-top: 1.5rem;
+            background-color: #3498db;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        /* Card-specific icon colors */
+        .card-appointments .icon { color: #3498db; } /* Blue */
+        .card-generate-id .icon { color: #2ecc71; } /* Green */
+        .card-reports .icon { color: #e74c3c; }    /* Red */
+
+    </style>
+</head>
+<body>
+    <!-- Header Section with Logo and Modified Navigation -->
+    <header class="header">
+        <div class="logo">
+            <i class="fa-solid fa-user-doctor"></i> Doctor Portal
+            {% if user %}
+            <span class="doctor-name">- Dr. {{ user.full_name }}</span>
+            {% endif %}
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <!-- Connected Flask routes -->
+                <li><a href="{{ url_for('doctor.appointments') }}"><i class="fa-solid fa-calendar-check"></i>Appointments</a></li>
+                <li><a href="{{ url_for('doctor.generate_id') }}"><i class="fa-solid fa-id-card"></i>Generate ID</a></li>
+                <li><a href="{{ url_for('doctor.reports') }}"><i class="fa-solid fa-file-lines"></i>Reports</a></li>
+                <li><a href="{{ url_for('auth.logout') }}" class="logout-btn"><i class="fa-solid fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content of the Page -->
+    <main class="main-container">
+
+        <!-- Top Banner, changed to "Dashboard" -->
+        <div class="title-banner">
+            <div class="icon">
+                <i class="fa-solid fa-house-chimney"></i>
+            </div>
+            <div>
+                <h1>Dashboard</h1>
+                <p>Quick access to all portal features</p>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+
+            <!-- Appointments Card -->
+            <a href="{{ url_for('doctor.appointments') }}" class="dashboard-card card-appointments">
+                <div class="icon">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <h3>Appointments</h3>
+                <p>View, schedule, and manage patient appointments.</p>
+                <div class="go-to-btn">Go to Appointments</div>
+            </a>
+
+            <!-- Generate ID Card -->
+            <a href="{{ url_for('doctor.generate_id') }}" class="dashboard-card card-generate-id">
+                <div class="icon">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <h3>Generate ID</h3>
+                <p>Create and print new patient identification cards.</p>
+                <div class="go-to-btn">Generate ID</div>
+            </a>
+
+            <!-- Reports Card -->
+            <a href="{{ url_for('doctor.reports') }}" class="dashboard-card card-reports">
+                <div class="icon">
+                    <i class="fa-solid fa-file-lines"></i>
+                </div>
+                <h3>Reports</h3>
+                <p>Generate and view patient or administrative reports.</p>
+                <div class="go-to-btn">View Reports</div>
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

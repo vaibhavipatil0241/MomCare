@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations - Doctor Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .doctor-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .doctor-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .consultation-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.7);
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .consultations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .consultation-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .consultation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .consultation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .consultation-type {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .consultation-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #e8f5e8;
+            color: #4caf50;
+        }
+
+        .status-scheduled {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-completed {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .patient-info {
+            margin-bottom: 1rem;
+        }
+
+        .patient-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .consultation-time {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .consultation-notes {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .notes-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .notes-content {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .consultation-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-info {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .doctor-container {
+                padding: 1rem;
+            }
+
+            .consultations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .consultation-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="doctor-nav">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <i class="fas fa-user-md"></i>
+                <span>Doctor Portal</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('doctor.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="{{ url_for('doctor.patients') }}"><i class="fas fa-users"></i> Patients</a>
+                <a href="{{ url_for('doctor.appointments') }}"><i class="fas fa-calendar-check"></i> Appointments</a>
+                <a href="{{ url_for('doctor.consultations') }}" class="active"><i class="fas fa-stethoscope"></i> Consultations</a>
+                <a href="{{ url_for('doctor.reports') }}"><i class="fas fa-file-medical"></i> Reports</a>
+                <a href="{{ url_for('doctor.generate_id') }}"><i class="fas fa-id-card"></i> Generate ID</a>
+                <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="doctor-container">
+        <!-- Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-stethoscope"></i>
+                Consultation Management
+            </h1>
+            <p>Manage patient consultations and medical advice</p>
+        </div>
+
+        <!-- Consultation Tabs -->
+        <div class="consultation-tabs">
+            <button class="tab-button active" onclick="showTab('active')">
+                <i class="fas fa-play-circle"></i> Active Consultations
+            </button>
+            <button class="tab-button" onclick="showTab('scheduled')">
+                <i class="fas fa-calendar"></i> Scheduled
+            </button>
+            <button class="tab-button" onclick="showTab('completed')">
+                <i class="fas fa-check-circle"></i> Completed
+            </button>
+        </div>
+
+        <!-- Consultations Grid -->
+        <div class="consultations-grid" id="consultations-grid">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading consultations...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'active';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConsultations();
+        });
+
+        function showTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadConsultations();
+        }
+
+        function loadConsultations() {
+            // Mock consultation data
+            const consultations = {
+                active: [
+                    {
+                        id: 1,
+                        patient: 'Priya Sharma',
+                        type: 'Prenatal Care',
+                        time: 'Started 15 minutes ago',
+                        status: 'active',
+                        notes: 'Patient experiencing mild morning sickness. Discussing nutrition and prenatal vitamins.'
+                    },
+                    {
+                        id: 2,
+                        patient: 'Anita Patel',
+                        type: 'Vaccination Consultation',
+                        time: 'Started 5 minutes ago',
+                        status: 'active',
+                        notes: 'Reviewing vaccination schedule for 6-month-old baby. Discussing side effects and precautions.'
+                    }
+                ],
+                scheduled: [
+                    {
+                        id: 3,
+                        patient: 'Meera Singh',
+                        type: 'Follow-up',
+                        time: 'Scheduled for 3:00 PM',
+                        status: 'scheduled',
+                        notes: 'Follow-up consultation for postpartum care. Review recovery progress.'
+                    },
+                    {
+                        id: 4,
+                        patient: 'Kavya Reddy',
+                        type: 'Emergency Consultation',
+                        time: 'Scheduled for 4:30 PM',
+                        status: 'scheduled',
+                        notes: 'Urgent consultation requested. Patient experiencing unusual symptoms.'
+                    }
+                ],
+                completed: [
+                    {
+                        id: 5,
+                        patient: 'Sunita Gupta',
+                        type: 'Routine Checkup',
+                        time: 'Completed 2 hours ago',
+                        status: 'completed',
+                        notes: 'Routine prenatal checkup completed. All vitals normal. Next appointment scheduled.'
+                    },
+                    {
+                        id: 6,
+                        patient: 'Ritu Sharma',
+                        type: 'Lab Results Review',
+                        time: 'Completed yesterday',
+                        status: 'completed',
+                        notes: 'Lab results reviewed. Iron levels slightly low. Prescribed iron supplements.'
+                    }
+                ]
+            };
+
+            displayConsultations(consultations[currentTab]);
+        }
+
+        function displayConsultations(consultations) {
+            const container = document.getElementById('consultations-grid');
+            
+            if (consultations.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-stethoscope"></i>
+                        <h3>No ${currentTab.charAt(0).toUpperCase() + currentTab.slice(1)} Consultations</h3>
+                        <p>No ${currentTab} consultations found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = consultations.map(consultation => {
+                const statusClass = `status-${consultation.status}`;
+                
+                return `
+                    <div class="consultation-card">
+                        <div class="consultation-header">
+                            <div class="consultation-type">${consultation.type}</div>
+                            <div class="consultation-status ${statusClass}">
+                                ${consultation.status.charAt(0).toUpperCase() + consultation.status.slice(1)}
+                            </div>
+                        </div>
+                        
+                        <div class="patient-info">
+                            <div class="patient-name">${consultation.patient}</div>
+                            <div class="consultation-time">
+                                <i class="fas fa-clock"></i> ${consultation.time}
+                            </div>
+                        </div>
+                        
+                        <div class="consultation-notes">
+                            <div class="notes-title">Consultation Notes:</div>
+                            <div class="notes-content">${consultation.notes}</div>
+                        </div>
+                        
+                        <div class="consultation-actions">
+                            ${consultation.status === 'active' ? `
+                                <button class="btn btn-success" onclick="completeConsultation(${consultation.id})">
+                                    <i class="fas fa-check"></i> Complete
+                                </button>
+                                <button class="btn btn-info" onclick="addNotes(${consultation.id})">
+                                    <i class="fas fa-notes-medical"></i> Add Notes
+                                </button>
+                            ` : consultation.status === 'scheduled' ? `
+                                <button class="btn btn-primary" onclick="startConsultation(${consultation.id})">
+                                    <i class="fas fa-play"></i> Start
+                                </button>
+                                <button class="btn btn-info" onclick="rescheduleConsultation(${consultation.id})">
+                                    <i class="fas fa-clock"></i> Reschedule
+                                </button>
+                            ` : `
+                                <button class="btn btn-info" onclick="viewConsultationDetails(${consultation.id})">
+                                    <i class="fas fa-eye"></i> View Details
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function startConsultation(consultationId) {
+            alert(`Starting consultation ${consultationId}.\n\nThis would open the consultation interface with video call, patient records, and note-taking tools.`);
+        }
+
+        function completeConsultation(consultationId) {
+            alert(`Completing consultation ${consultationId}.\n\nThis would save all notes, update patient records, and schedule follow-up if needed.`);
+            loadConsultations(); // Refresh the list
+        }
+
+        function addNotes(consultationId) {
+            const notes = prompt('Add consultation notes:');
+            if (notes) {
+                alert(`Notes added to consultation ${consultationId}:\n\n"${notes}"\n\nNotes have been saved to the patient's medical record.`);
+            }
+        }
+
+        function rescheduleConsultation(consultationId) {
+            alert(`Rescheduling consultation ${consultationId}.\n\nThis would open a calendar interface to select a new date and time.`);
+        }
+
+        function viewConsultationDetails(consultationId) {
+            alert(`Viewing details for consultation ${consultationId}.\n\nThis would show complete consultation history, notes, and patient responses.`);
+        }
+    </script>
+</body>
+</html>

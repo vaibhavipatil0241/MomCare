@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Pregnancy & Baby Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .faq-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid #e0e6ff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+
+        .faq-question h3 {
+            color: #333;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .faq-icon {
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer ul {
+            color: #666;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="header">
+            <h1>
+                <i class="fas fa-question-circle"></i>
+                Frequently Asked Questions
+            </h1>
+            <p>Common questions about pregnancy and baby care</p>
+        </div>
+
+        <div class="faq-container" id="faq-container">
+            <div class="loading">
+                <i class="fas fa-spinner"></i>
+                <p>Loading FAQ...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFAQData();
+        });
+
+        async function loadFAQData() {
+            try {
+                const response = await fetch('/api/faq-data');
+                const data = await response.json();
+
+                if (data.success) {
+                    displayFAQData(data.data);
+                } else {
+                    showError('Failed to load FAQ data');
+                }
+            } catch (error) {
+                console.error('Error loading FAQ data:', error);
+                showError('Error loading FAQ data');
+            }
+        }
+
+        function displayFAQData(faqData) {
+            const container = document.getElementById('faq-container');
+            
+            if (faqData.length === 0) {
+                container.innerHTML = `
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>No FAQ Available</h3>
+                            <i class="fas fa-info-circle faq-icon"></i>
+                        </div>
+                        <div class="faq-answer active">
+                            <p>FAQ content will be added by our experts soon.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = faqData.map((item, index) => `
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(${index})">
+                        <h3>${item.question}</h3>
+                        <i class="fas fa-chevron-down faq-icon" id="icon-${index}"></i>
+                    </div>
+                    <div class="faq-answer" id="answer-${index}">
+                        <p>${item.answer}</p>
+                        ${item.tips ? `
+                            <div style="background: #e3f2fd; padding: 1rem; border-radius: 8px; border-left: 4px solid #2196f3;">
+                                <strong>Tip:</strong> ${item.tips}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFAQ(index) {
+            const answer = document.getElementById(`answer-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all other FAQs
+                document.querySelectorAll('.faq-answer').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.faq-icon').forEach(el => el.style.transform = 'rotate(0deg)');
+                
+                // Open this FAQ
+                answer.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function showError(message) {
+            const container = document.getElementById('faq-container');
+            container.innerHTML = `
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Error</h3>
+                        <i class="fas fa-exclamation-triangle faq-icon"></i>
+                    </div>
+                    <div class="faq-answer active">
+                        <p>${message}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                z-index: 10000;
+                font-family: Arial, sans-serif;
+                max-width: 300px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Auto-remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+    </script>
+
+    <!-- Real-time Content Updates -->
+    <script src="{{ url_for('static', filename='js/real-time-content.js') }}"></script>
+    <script>
+        // Initialize real-time content updates for FAQ
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.contentManager) {
+                // Subscribe to FAQ content updates
+                window.contentManager.subscribe('faq', function(updateData) {
+                    console.log('📡 Real-time FAQ update received:', updateData);
+
+                    if (updateData && updateData.data && updateData.data.length > 0) {
+                        displayFAQData(updateData.data);
+                        showNotification(`📱 FAQ ${updateData.action}! (${updateData.count} items)`, 'success');
+                    } else if (updateData && updateData.action === 'deleted') {
+                        // Reload data after deletion
+                        loadFAQData();
+                        showNotification('📱 FAQ content updated!', 'info');
+                    }
+                });
+
+                // Start the content manager
+                window.contentManager.start();
+            }
+        });
+    </script>
+</body>
+</html>

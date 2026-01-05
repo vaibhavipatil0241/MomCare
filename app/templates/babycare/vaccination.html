@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Vaccination Timeline - Child Health Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        /* Header */
+        .vaccination-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .vaccination-header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .vaccination-header p {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Baby Profile Section */
+        .baby-profile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .baby-profile-card h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .profile-display {
+            display: none;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .profile-display.active {
+            display: block;
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Vaccination Timeline */
+        .timeline-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .timeline-section h2 {
+            color: #667eea;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.6rem;
+            top: 0.5rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #667eea;
+            box-shadow: 0 0 0 4px #f5f7fa;
+        }
+
+        .timeline-item.completed::before {
+            background: #28a745;
+            border-color: #28a745;
+        }
+
+        .timeline-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .timeline-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .timeline-card.completed {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+
+        .timeline-card.upcoming {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+
+        .age-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-card.completed .age-badge {
+            background: #28a745;
+        }
+
+        .timeline-card.upcoming .age-badge {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .vaccine-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+
+        .vaccine-list {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .vaccine-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vaccine-list li i {
+            color: #667eea;
+        }
+
+        .timeline-card.completed .vaccine-list li i {
+            color: #28a745;
+        }
+
+        .vaccine-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .vaccine-note {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #555;
+            border-left: 3px solid #667eea;
+        }
+
+        .vaccine-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .progress-section h3 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-bar-container {
+            background: #e9ecef;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            transition: width 0.5s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #667eea;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 2000;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification.active {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .notification.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .notification.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Upcoming Vaccines Section */
+        .upcoming-section {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe0b2 100%);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .upcoming-section h3 {
+            color: #ff9800;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upcoming-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .upcoming-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #ff9800;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .upcoming-card:hover {
+            transform: translateX(5px);
+        }
+
+        .upcoming-card h4 {
+            color: #ff9800;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .upcoming-badge {
+            background: #ff9800;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .upcoming-vaccines {
+            margin: 0.75rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .upcoming-vaccines li {
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .days-until {
+            color: #ff9800;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Next Due Alert */
+        .next-due-alert {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-content i {
+            font-size: 2rem;
+            animation: ring 2s infinite;
+        }
+
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30% { transform: rotate(-10deg); }
+            20%, 40% { transform: rotate(10deg); }
+        }
+
+        .alert-text {
+            flex: 1;
+        }
+
+        .alert-text strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .vaccination-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .profile-form {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+
+            .timeline-item {
+                padding-left: 1.5rem;
+            }
+
+            .vaccine-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .alert-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="vaccination-header">
+        <h1><i class="fas fa-syringe"></i> Baby Vaccination Timeline</h1>
+        <p>Track and manage your child's immunization schedule</p>
+    </header>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Baby Profile Section -->
+        <div class="baby-profile-card">
+            <h2><i class="fas fa-baby"></i> Baby Profile</h2>
+            
+            <div id="profileFormSection">
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label for="babySelect">Select Baby</label>
+                        <select id="babySelect" onchange="loadSelectedBaby()">
+                            <option value="">-- Select a baby --</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="loadBabyProfile()">
+                    <i class="fas fa-check"></i> Load Profile
+                </button>
+            </div>
+
+            <div class="profile-display" id="profileDisplay">
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">Name</span>
+                        <span class="info-value" id="displayName">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Date of Birth</span>
+                        <span class="info-value" id="displayDOB">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Gender</span>
+                        <span class="info-value" id="displayGender">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Age</span>
+                        <span class="info-value" id="displayAge">-</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="editProfile()" style="margin-top: 1rem;">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <h3><i class="fas fa-chart-line"></i> Vaccination Progress</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%;">0%</div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalVaccines">0</div>
+                    <div class="stat-label">Total Vaccines</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedVaccines" style="color: #28a745;">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="upcomingVaccines" style="color: #ffc107;">0</div>
+                    <div class="stat-label">Upcoming</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="progressPercent">0%</div>
+                    <div class="stat-label">Progress</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Vaccines Section -->
+        <div class="upcoming-section" id="upcomingSection" style="display: none;">
+            <h3><i class="fas fa-clock"></i> Upcoming Vaccinations</h3>
+            <div id="upcomingList" class="upcoming-list">
+                <!-- Upcoming vaccines will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Next Due Vaccine Alert -->
+        <div class="next-due-alert" id="nextDueAlert" style="display: none;">
+            <div class="alert-content">
+                <i class="fas fa-bell"></i>
+                <div class="alert-text">
+                    <strong>Next Vaccination Due:</strong>
+                    <span id="nextDueText"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vaccination Timeline -->
+        <div class="timeline-section">
+            <h2><i class="fas fa-calendar-check"></i> Vaccination Schedule</h2>
+            <div class="timeline" id="vaccinationTimeline">
+            </div>
+        </div>
+    </div>
+
+    <!-- Mark Complete Modal -->
+    <div class="modal" id="completeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Mark Vaccination as Complete</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="vaccineDate">Date Administered</label>
+                <input type="date" id="vaccineDate">
+            </div>
+            <div class="form-group">
+                <label for="vaccineNotes">Notes (Optional)</label>
+                <input type="text" id="vaccineNotes" placeholder="Any notes or side effects">
+            </div>
+            <button class="btn btn-primary" onclick="confirmComplete()">
+                <i class="fas fa-check"></i> Confirm
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <script>
+        // Tamil Nadu Vaccination Schedule (Universal Immunization Programme)
+        const vaccinationSchedule = [
+            {
+                age: "At Birth",
+                ageInDays: 0,
+                title: "Birth Vaccines",
+                vaccines: ["BCG", "OPV-0 (Birth Dose - Oral Drops)", "Hepatitis B-1 (Injection)"],
+                description: "BCG protects against tuberculosis. OPV-0 oral drops protect against polio. Hepatitis B injection protects liver disease.",
+                note: "BCG is given as injection in the left upper arm. OPV is given as oral drops (2 drops). Hepatitis B is given as injection in the right thigh."
+            },
+            {
+                age: "6 Weeks",
+                ageInDays: 42,
+                title: "6 Weeks Vaccines",
+                vaccines: ["DTwP-1 (DPT Injection)", "OPV-1 (Oral Drops)", "Hepatitis B-2 (Injection)", "Hib-1 (Injection)", "Rotavirus-1 (Oral Drops)", "PCV-1 (Injection)"],
+                description: "DPT protects against Diphtheria, Tetanus, Pertussis (Whooping Cough). OPV drops protect against polio. Hib protects against Haemophilus influenzae. Rotavirus oral drops prevent severe diarrhea.",
+                note: "OPV and Rotavirus are given as oral drops. Injections are given in the thigh. Total: 4 injections + 2 oral drops."
+            },
+            {
+                age: "10 Weeks",
+                ageInDays: 70,
+                title: "10 Weeks Vaccines",
+                vaccines: ["DTwP-2 (DPT Injection)", "OPV-2 (Oral Drops)", "Hib-2 (Injection)", "Rotavirus-2 (Oral Drops)", "PCV-2 (Injection)"],
+                description: "Second dose of DPT, OPV drops, Hib, Rotavirus drops, and PCV to strengthen immunity.",
+                note: "OPV and Rotavirus are oral drops. Injections in thigh. Total: 3 injections + 2 oral drops."
+            },
+            {
+                age: "14 Weeks",
+                ageInDays: 98,
+                title: "14 Weeks Vaccines",
+                vaccines: ["DTwP-3 (DPT Injection)", "OPV-3 (Oral Drops)", "Hib-3 (Injection)", "Hepatitis B-3 (Injection)", "Rotavirus-3 (Oral Drops)", "PCV-3 (Injection)", "IPV-1 (Injection)"],
+                description: "Third dose completes primary series. IPV (Inactivated Polio Vaccine) injection added for better polio protection.",
+                note: "OPV and Rotavirus are oral drops. IPV is injection. Total: 5 injections + 2 oral drops."
+            },
+            {
+                age: "6 Months",
+                ageInDays: 180,
+                title: "6 Months Vaccines",
+                vaccines: ["OPV-4 (Booster Oral Drops)", "Vitamin A (1st Dose - Oral Solution)"],
+                description: "OPV booster drops for continued polio protection. Vitamin A oral solution prevents blindness and boosts immunity.",
+                note: "Both are given orally. Vitamin A is given every 6 months until 5 years."
+            },
+            {
+                age: "9 Months",
+                ageInDays: 270,
+                title: "9 Months Vaccines",
+                vaccines: ["MR-1 (Measles-Rubella Injection)", "OPV-5 (Oral Drops)", "Vitamin A (2nd Dose - Oral Solution)"],
+                description: "MR injection protects against Measles and Rubella. OPV drops continue polio protection. Vitamin A oral solution.",
+                note: "MR injection in left upper arm. OPV drops orally. Total: 1 injection + 2 oral doses."
+            },
+            {
+                age: "12 Months",
+                ageInDays: 365,
+                title: "12 Months Vaccines",
+                vaccines: ["Hepatitis A-1 (Injection)", "Vitamin A (3rd Dose - Oral Solution)"],
+                description: "Hepatitis A protects liver from viral infection. Vitamin A oral solution for immunity.",
+                note: "Hepatitis A is optional but recommended. Total: 1 injection + 1 oral dose."
+            },
+            {
+                age: "15 Months",
+                ageInDays: 455,
+                title: "15 Months Vaccines",
+                vaccines: ["MMR (Injection)", "Varicella (Chickenpox Injection)", "PCV Booster (Injection)"],
+                description: "MMR protects against Measles, Mumps, Rubella. Varicella prevents chickenpox. PCV booster strengthens pneumonia protection.",
+                note: "All are injections. Total: 3 injections."
+            },
+            {
+                age: "16-18 Months",
+                ageInDays: 510,
+                title: "16-18 Months Boosters",
+                vaccines: ["DTwP Booster (DPT Injection)", "IPV-2 (Injection)", "Hib Booster (Injection)", "Hepatitis A-2 (Injection)"],
+                description: "Booster doses for DPT, IPV, Hib. Second dose of Hepatitis A completes the series.",
+                note: "All are injections in thigh. Total: 4 injections."
+            },
+            {
+                age: "2 Years",
+                ageInDays: 730,
+                title: "2 Years Vaccines",
+                vaccines: ["Typhoid Conjugate Vaccine (Injection)", "Vitamin A (Oral Solution)"],
+                description: "Typhoid protects against typhoid fever. Vitamin A oral solution continues.",
+                note: "1 injection + 1 oral dose. Vitamin A given every 6 months."
+            },
+            {
+                age: "4-6 Years",
+                ageInDays: 1460,
+                title: "School Entry Vaccines (Pre-School Boosters)",
+                vaccines: ["DTwP Booster (DPT Injection)", "OPV Booster (Oral Drops)", "MR-2 (Injection)", "Varicella Booster (if needed)"],
+                description: "DPT booster injection for continued protection. OPV oral drops for polio. MR-2 injection for measles-rubella.",
+                note: "Required for school entry. Total: 2-3 injections + 1 oral drops. Ensures protection in school environment."
+            },
+            {
+                age: "10 Years",
+                ageInDays: 3650,
+                title: "10 Years Booster",
+                vaccines: ["Td/Tdap Booster (Injection)", "HPV Vaccine (Girls - 2 doses)"],
+                description: "Tetanus-Diphtheria booster. HPV vaccine for girls to prevent cervical cancer (2 doses given 6 months apart).",
+                note: "School-based immunization program. HPV vaccine is given to girls aged 9-14 years in Tamil Nadu."
+            },
+            {
+                age: "16 Years",
+                ageInDays: 5840,
+                title: "16 Years Booster",
+                vaccines: ["Td Booster (Injection)"],
+                description: "Tetanus-Diphtheria booster for continued protection into adulthood.",
+                note: "Final booster before adulthood. Adult boosters needed every 10 years thereafter."
+            }
+        ];
+
+        let babyProfile = null;
+        let vaccinationStatus = {};
+        let currentVaccineIndex = null;
+
+        // Load saved data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchBabies();
+            loadSavedData();
+            renderTimeline();
+            updateProgress();
+        });
+
+        // Fetch babies from API
+        async function fetchBabies() {
+            try {
+                const response = await fetch('/babycare/api/babies/list');
+                const data = await response.json();
+                
+                const babySelect = document.getElementById('babySelect');
+                babySelect.innerHTML = '<option value="">-- Select a baby --</option>';
+                
+                if (data.babies && data.babies.length > 0) {
+                    data.babies.forEach(baby => {
+                        const option = document.createElement('option');
+                        option.value = baby.id;
+                        option.textContent = baby.name;
+                        option.dataset.dob = baby.date_of_birth;
+                        option.dataset.gender = baby.gender;
+                        babySelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching babies:', error);
+                showNotification('Failed to load babies', 'error');
+            }
+        }
+
+        // Load selected baby on change
+        function loadSelectedBaby() {
+            const babySelect = document.getElementById('babySelect');
+            const selectedOption = babySelect.options[babySelect.selectedIndex];
+            
+            if (selectedOption.value) {
+                babyProfile = {
+                    name: selectedOption.textContent,
+                    dob: selectedOption.dataset.dob,
+                    gender: selectedOption.dataset.gender
+                };
+                
+                displayProfile();
+                renderTimeline();
+                updateProgress();
+                showNotification('Baby profile loaded successfully!', 'success');
+            }
+        }
+
+        // Load baby profile (button click)
+        function loadBabyProfile() {
+            loadSelectedBaby();
+        }
+
+        // Display saved profile
+        function displayProfile() {
+            if (!babyProfile) return;
+
+            document.getElementById('displayName').textContent = babyProfile.name || '-';
+            document.getElementById('displayDOB').textContent = formatDate(babyProfile.dob || babyProfile.date_of_birth);
+            document.getElementById('displayGender').textContent = capitalizeFirst(babyProfile.gender);
+            document.getElementById('displayAge').textContent = calculateAge(babyProfile.dob || babyProfile.date_of_birth);
+
+            document.getElementById('profileFormSection').style.display = 'none';
+            document.getElementById('profileDisplay').classList.add('active');
+        }
+
+        // Edit profile
+        function editProfile() {
+            document.getElementById('profileFormSection').style.display = 'block';
+            document.getElementById('profileDisplay').classList.remove('active');
+        }
+
+        // Render vaccination timeline
+        function renderTimeline() {
+            const timeline = document.getElementById('vaccinationTimeline');
+            timeline.innerHTML = '';
+
+            const babyAgeInDays = babyProfile ? getDaysOld(babyProfile.dob || babyProfile.date_of_birth) : 0;
+
+            vaccinationSchedule.forEach((item, index) => {
+                const isCompleted = vaccinationStatus[index] === true;
+                const isUpcoming = !isCompleted && babyAgeInDays >= item.ageInDays;
+                const isFuture = babyAgeInDays < item.ageInDays;
+
+                let cardClass = '';
+                if (isCompleted) cardClass = 'completed';
+                else if (isUpcoming) cardClass = 'upcoming';
+
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item ${cardClass}`;
+                timelineItem.innerHTML = `
+                    <div class="timeline-card ${cardClass}">
+                        <span class="age-badge">${item.age}</span>
+                        <div class="vaccine-title">${item.title}</div>
+                        <ul class="vaccine-list">
+                            ${item.vaccines.map(v => `<li><i class="fas fa-${isCompleted ? 'check-circle' : 'syringe'}"></i> ${v}</li>`).join('')}
+                        </ul>
+                        <div class="vaccine-description">${item.description}</div>
+                        ${item.note ? `<div class="vaccine-note"><i class="fas fa-info-circle"></i> ${item.note}</div>` : ''}
+                        ${babyProfile && !isCompleted && !isFuture ? `
+                            <div class="vaccine-actions">
+                                <button class="btn btn-primary" onclick="markComplete(${index})">
+                                    <i class="fas fa-check"></i> Mark as Complete
+                                </button>
+                            </div>
+                        ` : ''}
+                        ${isCompleted ? `
+                            <div class="vaccine-actions">
+                                <button class="btn btn-secondary" onclick="markIncomplete(${index})">
+                                    <i class="fas fa-undo"></i> Mark as Incomplete
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+        }
+
+        // Mark vaccine as complete
+        function markComplete(index) {
+            currentVaccineIndex = index;
+            document.getElementById('vaccineDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('completeModal').classList.add('active');
+        }
+
+        // Confirm completion
+        function confirmComplete() {
+            if (currentVaccineIndex === null) return;
+
+            vaccinationStatus[currentVaccineIndex] = true;
+            localStorage.setItem('vaccinationStatus', JSON.stringify(vaccinationStatus));
+
+            closeModal();
+            renderTimeline();
+            updateProgress();
+            showNotification('Vaccination marked as complete!', 'success');
+        }
+
+        // Mark as incomplete
+        function markIncomplete(index) {
+            delete vaccinationStatus[index];
+            localStorage.setItem('vaccinationStatus', JSON.stringify(vaccinationStatus));
+            renderTimeline();
+            updateProgress();
+            showNotification('Vaccination marked as incomplete', 'success');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('completeModal').classList.remove('active');
+            currentVaccineIndex = null;
+        }
+
+        // Update progress
+        function updateProgress() {
+            const total = vaccinationSchedule.length;
+            const completed = Object.keys(vaccinationStatus).length;
+            const percentage = Math.round((completed / total) * 100);
+
+            const babyAgeInDays = babyProfile ? getDaysOld(babyProfile.dob || babyProfile.date_of_birth) : 0;
+            const upcoming = vaccinationSchedule.filter((item, index) => 
+                !vaccinationStatus[index] && babyAgeInDays >= item.ageInDays
+            ).length;
+
+            document.getElementById('totalVaccines').textContent = total;
+            document.getElementById('completedVaccines').textContent = completed;
+            document.getElementById('upcomingVaccines').textContent = upcoming;
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressBar').textContent = percentage + '%';
+
+            // Show upcoming vaccines
+            showUpcomingVaccines();
+        }
+
+        // Show upcoming vaccines
+        function showUpcomingVaccines() {
+            if (!babyProfile) {
+                document.getElementById('upcomingSection').style.display = 'none';
+                document.getElementById('nextDueAlert').style.display = 'none';
+                return;
+            }
+
+            const babyAgeInDays = getDaysOld(babyProfile.dob || babyProfile.date_of_birth);
+            const upcomingVaccines = [];
+            let nextDue = null;
+
+            vaccinationSchedule.forEach((item, index) => {
+                if (!vaccinationStatus[index]) {
+                    const daysUntil = item.ageInDays - babyAgeInDays;
+                    
+                    // Upcoming (due now or within next 60 days)
+                    if (daysUntil >= -7 && daysUntil <= 60) {
+                        upcomingVaccines.push({
+                            ...item,
+                            index,
+                            daysUntil
+                        });
+                    }
+
+                    // Find next due vaccine
+                    if (!nextDue && daysUntil >= -7) {
+                        nextDue = {
+                            ...item,
+                            daysUntil
+                        };
+                    }
+                }
+            });
+
+            // Display next due alert
+            if (nextDue) {
+                const nextDueAlert = document.getElementById('nextDueAlert');
+                const nextDueText = document.getElementById('nextDueText');
+                
+                if (nextDue.daysUntil <= 0) {
+                    nextDueText.innerHTML = `<strong>${nextDue.title}</strong> is due now! (${nextDue.age})`;
+                } else {
+                    nextDueText.innerHTML = `<strong>${nextDue.title}</strong> in ${nextDue.daysUntil} days (${nextDue.age})`;
+                }
+                nextDueAlert.style.display = 'block';
+            } else {
+                document.getElementById('nextDueAlert').style.display = 'none';
+            }
+
+            // Display upcoming vaccines list
+            if (upcomingVaccines.length > 0) {
+                const upcomingList = document.getElementById('upcomingList');
+                upcomingList.innerHTML = '';
+
+                upcomingVaccines.forEach(vaccine => {
+                    const card = document.createElement('div');
+                    card.className = 'upcoming-card';
+                    
+                    let statusText = '';
+                    if (vaccine.daysUntil <= 0) {
+                        statusText = '<span class="upcoming-badge">DUE NOW</span>';
+                    } else if (vaccine.daysUntil <= 7) {
+                        statusText = `<span class="upcoming-badge">Due in ${vaccine.daysUntil} days</span>`;
+                    } else {
+                        statusText = `<span class="upcoming-badge">Due in ${vaccine.daysUntil} days</span>`;
+                    }
+
+                    card.innerHTML = `
+                        <h4>
+                            ${vaccine.title} - ${vaccine.age}
+                            ${statusText}
+                        </h4>
+                        <p><strong>Vaccines:</strong></p>
+                        <ul class="upcoming-vaccines">
+                            ${vaccine.vaccines.map(v => `<li><i class="fas fa-syringe"></i> ${v}</li>`).join('')}
+                        </ul>
+                        <p style="color: #666; font-size: 0.95rem; margin-top: 0.5rem;">
+                            <i class="fas fa-info-circle"></i> ${vaccine.description}
+                        </p>
+                        ${vaccine.note ? `<p style="color: #ff9800; font-size: 0.9rem; margin-top: 0.5rem;">
+                            <i class="fas fa-exclamation-triangle"></i> ${vaccine.note}
+                        </p>` : ''}
+                        <div class="days-until">
+                            <i class="fas fa-calendar-alt"></i>
+                            ${vaccine.daysUntil <= 0 ? 'Overdue! Please schedule immediately' : `Coming up in ${vaccine.daysUntil} days`}
+                        </div>
+                    `;
+                    
+                    upcomingList.appendChild(card);
+                });
+
+                document.getElementById('upcomingSection').style.display = 'block';
+            } else {
+                document.getElementById('upcomingSection').style.display = 'none';
+            }
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedProfile = localStorage.getItem('babyProfile');
+            const savedStatus = localStorage.getItem('vaccinationStatus');
+
+            if (savedProfile) {
+                babyProfile = JSON.parse(savedProfile);
+                displayProfile();
+            }
+
+            if (savedStatus) {
+                vaccinationStatus = JSON.parse(savedStatus);
+            }
+        }
+
+        // Helper functions
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function capitalizeFirst(str) {
+            if (!str || typeof str !== 'string') return '-';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function calculateAge(dob) {
+            if (!dob) return '-';
+            const birthDate = new Date(dob);
+            const today = new Date();
+            const ageInMs = today - birthDate;
+            const ageInDays = Math.floor(ageInMs / (1000 * 60 * 60 * 24));
+
+            const years = Math.floor(ageInDays / 365);
+            const months = Math.floor((ageInDays % 365) / 30);
+            const days = (ageInDays % 365) % 30;
+
+            if (years > 0) {
+                return `${years} year${years > 1 ? 's' : ''} ${months} month${months !== 1 ? 's' : ''}`;
+            } else if (months > 0) {
+                return `${months} month${months > 1 ? 's' : ''} ${days} day${days !== 1 ? 's' : ''}`;
+            } else {
+                return `${days} day${days !== 1 ? 's' : ''}`;
+            }
+        }
+
+        function getDaysOld(dob) {
+            if (!dob) return 0;
+            const birthDate = new Date(dob);
+            const today = new Date();
+            const ageInMs = today - birthDate;
+            return Math.floor(ageInMs / (1000 * 60 * 60 * 24));
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+
+            notification.className = `notification ${type} active`;
+            messageEl.textContent = message;
+
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('completeModal').addEventListener('click', (e) => {
+            if (e.target.id === 'completeModal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Doctor Portal</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- General Page Styling --- */
+        :root {
+            --primary-blue: #1a75ff;
+            --primary-dark: #2c3e50;
+            --primary-light: #e6f0ff;
+            --secondary-gray: #7f8c8d;
+            --light-gray: #f4f7fa;
+            --white: #ffffff;
+            --success: #2ecc71;
+            --success-light: #e0f8f0;
+            --warning: #f39c12;
+            --warning-light: #fffae8;
+            --danger: #e74c3c;
+            --danger-light: #ffe6e6;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--primary-dark);
+            line-height: 1.6;
+        }
+
+        /* --- Header and Navigation Bar --- */
+        .header {
+            background-color: var(--white);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #dcdcdc;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            color: var(--primary-blue);
+            margin-right: 8px;
+        }
+
+        .doctor-name {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 1.2rem;
+            height: 100%;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background-color: #f0f4f8;
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-blue);
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-blue);
+        }
+
+        /* --- Main Content Area --- */
+        .main-container {
+            padding: 1.5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- Title Banner --- */
+        .title-banner {
+            background-color: var(--white);
+            border-left: 5px solid var(--primary-blue);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .title-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .title-banner .icon {
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+        }
+
+        .title-banner h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+        }
+
+        .title-banner p {
+            margin: 0.2rem 0 0 0;
+            color: var(--secondary-gray);
+        }
+
+
+
+        /* --- Reports Page Layout --- */
+        .reports-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        /* --- Report Form Card --- */
+        .report-form-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .report-form-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .form-group .required {
+            color: var(--danger);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 117, 255, 0.1);
+        }
+
+        .form-control textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #005ce6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 117, 255, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* --- Reports History Card --- */
+        .reports-history-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+        }
+
+        .reports-history-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .report-count {
+            background-color: var(--primary-light);
+            color: var(--primary-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* --- Individual Report Cards --- */
+        .report-item {
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-blue);
+            transition: var(--transition);
+        }
+
+        .report-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .report-patient {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .report-date {
+            background-color: var(--secondary-gray);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .report-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-doctor, .report-patient-id {
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .report-doctor {
+            background-color: var(--primary-light);
+            color: var(--primary-blue);
+        }
+
+        .report-patient-id {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .report-diagnosis {
+            background-color: var(--warning-light);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+
+        .report-diagnosis h4 {
+            margin-bottom: 0.5rem;
+            color: var(--warning);
+            font-weight: 700;
+        }
+
+        .report-notes {
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .report-notes h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .report-notes p {
+            color: var(--secondary-gray);
+            white-space: pre-wrap;
+        }
+
+        /* --- Empty State --- */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--secondary-gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        /* --- Loading and Error States --- */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(26, 117, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-blue);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background-color: var(--danger-light);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .success-message {
+            background-color: var(--success-light);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        /* --- Custom Message Box --- */
+        .message-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 1000;
+            font-size: 0.9rem;
+            max-width: 400px;
+        }
+
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .message-box.success {
+            background-color: var(--success);
+        }
+
+        .message-box.error {
+            background-color: var(--danger);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1024px) {
+            .reports-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .report-form-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 1rem;
+                height: auto;
+                flex-direction: column;
+                padding-bottom: 10px;
+            }
+
+            .nav-links {
+                justify-content: center;
+                width: 100%;
+                flex-wrap: wrap;
+                margin-top: 10px;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 0.8rem;
+                height: auto;
+                font-size: 0.85rem;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .title-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+                gap: 0.5rem;
+            }
+
+
+
+            .report-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <i class="fa-solid fa-user-doctor"></i> Doctor Portal
+            <span class="doctor-name" id="doctor-name-display">- Loading...</span>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <!-- Link to Dashboard -->
+                <li><a href="{{ url_for('doctor.dashboard') }}"><i class="fa-solid fa-house-chimney"></i>Dashboard</a></li>
+                <!-- Link to Appointments -->
+                <li><a href="{{ url_for('doctor.appointments') }}"><i class="fa-solid fa-calendar-check"></i>Appointments</a></li>
+                <li><a href="{{ url_for('doctor.patients') }}"><i class="fa-solid fa-users"></i>Patients</a></li>
+                <li><a href="{{ url_for('doctor.generate_id') }}"><i class="fa-solid fa-id-card"></i>Generate ID</a></li>
+                <!-- Active Link for Reports -->
+                <li><a href="{{ url_for('doctor.reports') }}" class="active"><i class="fa-solid fa-file-lines"></i>Reports</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content of the Page -->
+    <main class="main-container">
+
+        <!-- Top Banner, Dashboard Title and User Info -->
+        <div class="title-banner">
+            <div class="title-group">
+                <div class="icon">
+                    <i class="fa-solid fa-file-medical"></i>
+                </div>
+                <div>
+                    <h1>Clinical Report Manager</h1>
+                    <p>Generate and manage patient medical reports.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message Display -->
+        <div id="error-message" class="error-message" style="display: none;"></div>
+
+        <!-- Success Message Display -->
+        <div id="success-message" class="success-message" style="display: none;"></div>
+
+        <!-- Reports Content Grid -->
+        <div class="reports-content">
+
+            <!-- Report Creation Form (Left Column) -->
+            <div class="report-form-card">
+                <h2><i class="fa-solid fa-plus-circle"></i> New Report Entry</h2>
+                <form id="report-form">
+
+                    <!-- Patient Selection Dropdown -->
+                    <div class="form-group">
+                        <label for="patient-select">Select Patient <span class="required">*</span></label>
+                        <select id="patient-select" name="patient-id" class="form-control" required>
+                            <option value="">-- Select a Patient --</option>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                        <small>Select a registered patient from the database.</small>
+                    </div>
+
+                    <!-- Hidden field for patient name -->
+                    <input type="hidden" id="patient-name" name="patient-name">
+
+                    <!-- Report Type -->
+                    <div class="form-group">
+                        <label for="report-type">Report Type <span class="required">*</span></label>
+                        <select id="report-type" name="report-type" class="form-control" required>
+                            <option value="">-- Select Report Type --</option>
+                            <option value="consultation">General Consultation</option>
+                            <option value="checkup">Regular Checkup</option>
+                            <option value="prenatal">Prenatal Care</option>
+                            <option value="postnatal">Postnatal Care</option>
+                            <option value="emergency">Emergency Visit</option>
+                            <option value="follow-up">Follow-up Visit</option>
+                        </select>
+                    </div>
+
+                    <!-- Report Date -->
+                    <div class="form-group">
+                        <label for="report-date">Report Date <span class="required">*</span></label>
+                        <input
+                            type="date"
+                            id="report-date"
+                            name="report-date"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <!-- Findings -->
+                    <div class="form-group">
+                        <label for="findings">Clinical Findings <span class="required">*</span></label>
+                        <textarea
+                            id="findings"
+                            name="findings"
+                            class="form-control"
+                            rows="4"
+                            placeholder="Describe the clinical findings, symptoms, and observations..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="form-group">
+                        <label for="recommendations">Recommendations</label>
+                        <textarea
+                            id="recommendations"
+                            name="recommendations"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Treatment recommendations, follow-up instructions..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-btn" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Create Report
+                    </button>
+                </form>
+            </div>
+
+            <!-- Report History (Right Column) -->
+            <div class="reports-history-card">
+                <h2>
+                    <i class="fa-solid fa-history"></i> Published Report History
+                    <span class="report-count" id="report-count">0</span>
+                </h2>
+
+                <div id="reports-container">
+                    <!-- Reports will be rendered here -->
+                    <div class="empty-state">
+                        <i class="fa-solid fa-file-medical"></i>
+                        <p>Loading reports...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Custom Message Box -->
+    <div id="message-box" class="message-box"></div>
+
+    <!-- Simple JavaScript for basic functionality -->
+    <script>
+        // Global variables
+        let reportsData = [];
+
+        // Load reports from database
+        async function loadReports() {
+            try {
+                const response = await fetch('/doctor/api/reports');
+                const data = await response.json();
+
+                if (data.success) {
+                    reportsData = data.reports.map(report => ({
+                        id: report.id,
+                        patientId: report.patient_id,
+                        patientName: report.patient_name,
+                        reportType: report.report_type,
+                        reportDate: report.report_date,
+                        findings: report.findings,
+                        recommendations: report.recommendations,
+                        diagnosis: report.diagnosis,
+                        notes: report.notes
+                    }));
+
+                    renderReports();
+                } else {
+                    console.error('Failed to load reports:', data.error);
+                    showError('Failed to load reports: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                showError('Error loading reports. Please refresh the page.');
+            }
+        }
+        let isSubmitting = false;
+
+        // Available patients for selection (loaded from database)
+        let availablePatients = [];
+
+        // --- Utility Functions ---
+
+        /** Shows a temporary custom message box */
+        function showMessage(message, type = 'info') {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.className = 'message-box';
+            box.classList.add(type);
+            box.classList.add('show');
+            setTimeout(() => {
+                box.classList.remove('show');
+            }, 4000);
+        }
+
+        /** Shows error message in the main content area */
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        /** Shows success message in the main content area */
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        /** Formats date for display */
+        function formatDate(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch {
+                return dateString;
+            }
+        }
+
+        /** Load registered patients from database */
+        async function loadPatients() {
+            try {
+                const response = await fetch('/doctor/api/patients');
+                const data = await response.json();
+
+                if (data.success) {
+                    availablePatients = data.patients;
+                    populatePatientSelect();
+                    console.log(`Loaded ${data.count} registered patients`);
+                } else {
+                    showError('Failed to load patients: ' + data.error);
+                    availablePatients = [];
+                }
+            } catch (error) {
+                console.error('Error loading patients:', error);
+                showError('Error loading patients. Please try again.');
+                availablePatients = [];
+            }
+        }
+
+        /** Populates the patient selection dropdown */
+        function populatePatientSelect() {
+            const select = document.getElementById('patient-select');
+            select.innerHTML = '<option value="">-- Select a Patient --</option>';
+
+            if (availablePatients.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'No registered patients found';
+                option.disabled = true;
+                select.appendChild(option);
+                return;
+            }
+
+            availablePatients.forEach(patient => {
+                const option = document.createElement('option');
+                option.value = patient.id;
+                option.textContent = `${patient.name} (ID: ${patient.id})`;
+                if (patient.email) {
+                    option.textContent += ` - ${patient.email}`;
+                }
+                select.appendChild(option);
+            });
+        }
+
+
+
+
+
+        /** Renders the list of reports */
+        function renderReports() {
+            const container = document.getElementById('reports-container');
+            const countElement = document.getElementById('report-count');
+
+            countElement.textContent = reportsData.length;
+
+            if (reportsData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-file-medical"></i>
+                        <p>No reports have been published yet. Use the form on the left to create the first one.</p>
+                    </div>`;
+                return;
+            }
+
+            let reportsHTML = '';
+            reportsData.forEach(report => {
+                const isMyReport = report.doctorId === currentUserId;
+                const borderClass = isMyReport ? 'border-indigo-500' : 'border-gray-300';
+
+                reportsHTML += `
+                    <div class="report-item" style="border-left-color: ${isMyReport ? 'var(--primary-blue)' : '#ddd'};">
+                        <div class="report-header">
+                            <h3 class="report-patient">${report.patientName}</h3>
+                            <span class="report-date">${formatDate(report.date)}</span>
+                        </div>
+
+                        <div class="report-meta">
+                            <div class="report-doctor">
+                                <strong>Doctor ID:</strong> ${report.doctorId}
+                                ${isMyReport ? ' (You)' : ''}
+                            </div>
+                            <div class="report-patient-id">
+                                <strong>Patient ID:</strong> ${report.patientId}
+                            </div>
+                        </div>
+
+                        <div class="report-diagnosis">
+                            <h4><i class="fa-solid fa-stethoscope"></i> Diagnosis:</h4>
+                            <p>${report.diagnosis}</p>
+                        </div>
+
+                        <div class="report-notes">
+                            <h4><i class="fa-solid fa-notes-medical"></i> Treatment & Notes:</h4>
+                            <p>${report.notes}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = reportsHTML;
+        }
+
+        // Old Firebase-based function removed - now using database-based createReport function
+
+        // Load doctor name
+        async function loadDoctorName() {
+            try {
+                const response = await fetch('/auth/check-auth');
+                const data = await response.json();
+
+                if (data.authenticated && data.user) {
+                    const doctorNameDisplay = document.getElementById('doctor-name-display');
+                    if (doctorNameDisplay) {
+                        doctorNameDisplay.textContent = `- Dr. ${data.user.full_name}`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading doctor name:', error);
+            }
+        }
+
+        // --- Event Listeners and Initialization ---
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load doctor name
+            await loadDoctorName();
+
+            // Load reports from database
+            await loadReports();
+
+            // Load registered patients and populate dropdown
+            await loadPatients();
+
+            // Set up form submission
+            document.getElementById('report-form').addEventListener('submit', createReport);
+
+            // Set up patient selection handler
+            document.getElementById('patient-select').addEventListener('change', function() {
+                const selectedPatientId = this.value;
+                const selectedPatient = availablePatients.find(p => p.id == selectedPatientId);
+
+                if (selectedPatient) {
+                    document.getElementById('patient-name').value = selectedPatient.name;
+                } else {
+                    document.getElementById('patient-name').value = '';
+                }
+            });
+
+            // Set default date to today
+            document.getElementById('report-date').value = new Date().toISOString().split('T')[0];
+        });
+
+        /** Creates a new report */
+        async function createReport(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const reportData = {
+                patient_id: formData.get('patient-id'),
+                patient_name: formData.get('patient-name'),
+                report_type: formData.get('report-type'),
+                report_date: formData.get('report-date'),
+                findings: formData.get('findings'),
+                recommendations: formData.get('recommendations') || ''
+            };
+
+            // Validation
+            if (!reportData.patient_id) {
+                showError('Please select a patient.');
+                return;
+            }
+
+            if (!reportData.patient_name) {
+                showError('Patient name is required.');
+                return;
+            }
+
+            if (!reportData.report_type) {
+                showError('Please select a report type.');
+                return;
+            }
+
+            if (!reportData.report_date) {
+                showError('Please select a report date.');
+                return;
+            }
+
+            if (!reportData.findings) {
+                showError('Clinical findings are required.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/doctor/api/reports', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(reportData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage("Report created successfully!", "success");
+                    event.target.reset();
+                    // Reset date to today
+                    document.getElementById('report-date').value = new Date().toISOString().split('T')[0];
+                    await loadReports(); // Reload reports
+                } else {
+                    showError('Failed to create report: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error creating report:', error);
+                showError('Error creating report. Please try again.');
+            }
+        }
+
+        /** Renders reports in the container */
+        function renderReports() {
+            const container = document.getElementById('reports-container');
+
+            if (reportsData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <p>No reports found</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = reportsData.map(report => `
+                <div class="report-card">
+                    <div class="report-header">
+                        <h3>${report.reportType}</h3>
+                        <span class="report-date">${formatDate(report.reportDate)}</span>
+                    </div>
+                    <div class="report-content">
+                        <p><strong>Patient:</strong> ${report.patientName} (ID: ${report.patientId})</p>
+                        <p><strong>Findings:</strong> ${report.findings}</p>
+                        <p><strong>Recommendations:</strong> ${report.recommendations}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+    </script>
+</body>
+</html>

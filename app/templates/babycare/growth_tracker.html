@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Growth Tracker - Child Health Care System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #f472b6; /* Main Pink */
+            --primary-dark: #ec4899;
+            --secondary: #c084fc; /* Soft Purple */
+            --secondary-dark: #a855f7;
+            --accent: #fde047; /* Sunny Yellow */
+            --info: #7dd3fc; /* Soft Blue */
+            --light: #fdf2f8; /* Very light pink tint */
+            --dark: #581c87; /* Dark Purple */
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --success: #34d399;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+            --border-radius: 20px;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--light);
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+             color: var(--primary);
+        }
+        
+        .nav-link.active {
+            color: white;
+            background: var(--primary);
+            box-shadow: 0 4px 15px rgba(244, 114, 182, 0.4);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tracker-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        #growthChart {
+            max-height: 400px;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .history-table th {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .history-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .history-table tbody tr:hover {
+            background-color: var(--light);
+        }
+
+        .btn-submit:disabled {
+            background: var(--light-gray);
+            color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-submit:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        #baby-select {
+            transition: var(--transition);
+        }
+
+        #baby-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 992px) {
+            .tracker-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+            .nav-container, .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>Growth Tracker</span>
+            </a>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/pregnancy" class="nav-link"><i class="fas fa-heart"></i> Pregnancy</a></li>
+                    <li><a href="/babycare" class="nav-link active"><i class="fas fa-baby"></i> Baby Care</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div class="container">
+                <h1>Track Your Baby's Growth</h1>
+                <p>Monitor your little one's development by recording their weight, height, and head circumference over time.</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Baby Selection -->
+            <div class="card" id="baby-selection" style="margin-bottom: 2rem;">
+                <h2 class="card-title"><i class="fas fa-baby"></i> Select Baby</h2>
+                <div class="form-group">
+                    <select id="baby-select" style="width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--light-gray); border-radius: 10px; font-size: 1rem;">
+                        <option value="">Loading babies...</option>
+                    </select>
+                </div>
+                <div id="no-baby-message" style="display: none; text-align: center; padding: 1.5rem; background: var(--light); border-radius: 10px; margin-top: 1rem;">
+                    <i class="fas fa-baby" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--dark); margin-bottom: 0.5rem;">No Babies Registered</h3>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">You need to register a baby first to track growth records.</p>
+                    <button onclick="showRegistrationForm()" class="btn-submit" style="display: inline-block; width: auto; padding: 0.8rem 2rem;">
+                        <i class="fas fa-plus-circle"></i> Register a Baby
+                    </button>
+                </div>
+            </div>
+
+            <!-- Baby Registration Form (Hidden by default) -->
+            <div class="card" id="registration-form" style="display: none; margin-bottom: 2rem;">
+                <h2 class="card-title"><i class="fas fa-baby-carriage"></i> Register New Baby</h2>
+                <form id="baby-registration-form">
+                    <div class="form-group">
+                        <label for="baby-name">Baby Name *</label>
+                        <input type="text" id="baby-name" name="name" required placeholder="Enter baby's name">
+                    </div>
+                    <div class="form-group">
+                        <label for="baby-birth-date">Date of Birth *</label>
+                        <input type="date" id="baby-birth-date" name="birth_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="baby-gender">Gender *</label>
+                        <select id="baby-gender" name="gender" required style="width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--light-gray); border-radius: 10px; font-size: 1rem;">
+                            <option value="">Select gender...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="baby-weight">Weight at Birth (kg)</label>
+                        <input type="number" id="baby-weight" name="weight_at_birth" step="0.01" placeholder="e.g., 3.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="baby-height">Height at Birth (cm)</label>
+                        <input type="number" id="baby-height" name="height_at_birth" step="0.1" placeholder="e.g., 50.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="baby-blood-type">Blood Type</label>
+                        <select id="baby-blood-type" name="blood_type" style="width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--light-gray); border-radius: 10px; font-size: 1rem;">
+                            <option value="">Select blood type...</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="baby-notes">Notes (optional)</label>
+                        <textarea id="baby-notes" name="notes" rows="3" style="width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--light-gray); border-radius: 10px; font-size: 1rem; resize: vertical;" placeholder="Any additional information..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn-submit" id="register-baby-btn" style="flex: 1;">
+                            <i class="fas fa-save"></i> Register Baby
+                        </button>
+                        <button type="button" onclick="hideRegistrationForm()" class="btn-submit" style="flex: 1; background: var(--gray);">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tracker-layout">
+                <div class="tracker-sidebar">
+                    <div class="card">
+                        <h2 class="card-title"><i class="fas fa-plus-circle"></i> Add New Record</h2>
+                        <form id="growth-form">
+                            <div class="form-group">
+                                <label for="date">Date</label>
+                                <input type="date" id="date" name="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" id="weight" name="weight" step="0.01" placeholder="e.g., 5.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="height">Height (cm)</label>
+                                <input type="number" id="height" name="height" step="0.1" placeholder="e.g., 58.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="head">Head Circumference (cm)</label>
+                                <input type="number" id="head" name="head" step="0.1" placeholder="e.g., 38.2">
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Notes (optional)</label>
+                                <textarea id="notes" name="notes" rows="3" style="width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--light-gray); border-radius: 10px; font-size: 1rem; resize: vertical;" placeholder="Any additional notes..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit" disabled id="submit-btn">
+                                <i class="fas fa-save"></i> Save Record
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Recommendations Card -->
+                    <div class="card" id="recommendations-card" style="display: none; margin-top: 1.5rem;">
+                        <h2 class="card-title"><i class="fas fa-lightbulb"></i> Growth Insights</h2>
+                        <div id="recommendations-content">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <div class="tracker-main">
+                     <div class="card">
+                         <h2 class="card-title"><i class="fas fa-chart-bar"></i> Growth Chart</h2>
+                         <div style="margin-bottom: 1rem; padding: 1rem; background: var(--light); border-radius: 10px;">
+                             <p style="margin: 0; color: var(--gray); font-size: 0.9rem;">
+                                 <i class="fas fa-info-circle" style="color: var(--primary);"></i> 
+                                 The shaded areas represent WHO recommended growth ranges (5th-95th percentile) for healthy development.
+                             </p>
+                         </div>
+                         <canvas id="growthChart"></canvas>
+                     </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-history"></i> Record History</h2>
+                <div style="overflow-x: auto;">
+                    <table class="history-table" id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Weight</th>
+                                <th>Height</th>
+                                <th>Head Circumference</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    <div id="empty-state" style="display: none; text-align: center; padding: 3rem; color: var(--gray);">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <h3>No Growth Records Yet</h3>
+                        <p>Start tracking your baby's growth by adding their first measurement above.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const growthForm = document.getElementById('growth-form');
+            const historyTableBody = document.querySelector('#history-table tbody');
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            const babySelect = document.getElementById('baby-select');
+            const submitBtn = document.getElementById('submit-btn');
+            const babyRegistrationForm = document.getElementById('baby-registration-form');
+
+            // Set default date to today
+            document.getElementById('date').valueAsDate = new Date();
+            // Set max date for baby birth date to today
+            document.getElementById('baby-birth-date').max = new Date().toISOString().split('T')[0];
+
+            let growthData = [];
+            let babies = [];
+            let selectedBabyId = null;
+            let selectedBaby = null;
+
+            // WHO Growth Standards (simplified data for 0-24 months)
+            // Weight standards (kg) - [p5, p50, p95] for each month
+            const whoWeightBoys = [
+                [2.5, 3.3, 4.4], [3.4, 4.5, 5.8], [4.3, 5.6, 7.1], [5.0, 6.4, 7.8], 
+                [5.6, 7.0, 8.6], [6.0, 7.5, 9.2], [6.4, 7.9, 9.7], [6.7, 8.3, 10.2],
+                [6.9, 8.6, 10.5], [7.1, 8.9, 10.9], [7.4, 9.2, 11.2], [7.6, 9.4, 11.5],
+                [7.7, 9.6, 11.8], [7.9, 9.9, 12.1], [8.1, 10.1, 12.4], [8.3, 10.3, 12.7],
+                [8.4, 10.5, 13.0], [8.6, 10.7, 13.2], [8.8, 10.9, 13.5], [8.9, 11.1, 13.7],
+                [9.1, 11.3, 14.0], [9.2, 11.5, 14.2], [9.4, 11.8, 14.5], [9.5, 12.0, 14.7],
+                [9.7, 12.2, 15.0]
+            ];
+
+            const whoWeightGirls = [
+                [2.4, 3.2, 4.2], [3.2, 4.2, 5.5], [3.9, 5.1, 6.6], [4.5, 5.8, 7.5],
+                [5.0, 6.4, 8.2], [5.4, 6.9, 8.8], [5.7, 7.3, 9.3], [6.0, 7.6, 9.8],
+                [6.3, 7.9, 10.2], [6.5, 8.2, 10.5], [6.7, 8.5, 10.9], [6.9, 8.7, 11.2],
+                [7.0, 8.9, 11.5], [7.2, 9.2, 11.8], [7.4, 9.4, 12.1], [7.5, 9.6, 12.4],
+                [7.7, 9.8, 12.6], [7.8, 10.0, 12.9], [8.0, 10.2, 13.2], [8.1, 10.4, 13.5],
+                [8.3, 10.6, 13.7], [8.4, 10.9, 14.0], [8.6, 11.1, 14.3], [8.7, 11.3, 14.6],
+                [8.9, 11.5, 14.8]
+            ];
+
+            // Height/Length standards (cm) - [p5, p50, p95] for each month
+            const whoHeightBoys = [
+                [46.1, 49.9, 53.7], [50.8, 54.7, 58.6], [54.4, 58.4, 62.4], [57.3, 61.4, 65.5],
+                [59.7, 63.9, 68.0], [61.7, 65.9, 70.1], [63.3, 67.6, 71.9], [64.8, 69.2, 73.5],
+                [66.2, 70.6, 75.0], [67.5, 72.0, 76.5], [68.7, 73.3, 77.9], [69.9, 74.5, 79.2],
+                [71.0, 75.7, 80.5], [72.1, 76.9, 81.8], [73.1, 78.0, 83.0], [74.1, 79.1, 84.2],
+                [75.0, 80.2, 85.4], [76.0, 81.2, 86.5], [76.9, 82.3, 87.7], [77.7, 83.2, 88.8],
+                [78.6, 84.2, 89.8], [79.4, 85.1, 90.9], [80.2, 86.0, 91.9], [81.0, 86.9, 92.9],
+                [81.7, 87.8, 93.9]
+            ];
+
+            const whoHeightGirls = [
+                [45.4, 49.1, 52.9], [49.8, 53.7, 57.6], [53.0, 57.1, 61.1], [55.6, 59.8, 64.0],
+                [57.8, 62.1, 66.4], [59.6, 64.0, 68.5], [61.2, 65.7, 70.3], [62.7, 67.3, 71.9],
+                [64.0, 68.7, 73.5], [65.3, 70.1, 75.0], [66.5, 71.5, 76.4], [67.7, 72.8, 77.8],
+                [68.9, 74.0, 79.2], [70.0, 75.2, 80.5], [71.0, 76.4, 81.7], [72.0, 77.5, 83.0],
+                [73.0, 78.6, 84.2], [74.0, 79.7, 85.4], [74.9, 80.7, 86.5], [75.8, 81.7, 87.6],
+                [76.7, 82.7, 88.7], [77.5, 83.7, 89.8], [78.4, 84.6, 90.8], [79.2, 85.5, 91.9],
+                [80.0, 86.4, 92.9]
+            ];
+
+            // Load babies on page load
+            loadBabies();
+
+            // API Functions
+            async function loadBabies() {
+                try {
+                    const response = await fetch('/babycare/api/babies/list');
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            babies = result.babies;
+                            populateBabySelect();
+                        } else {
+                            showNotification('Failed to load babies', 'error');
+                        }
+                    } else if (response.status === 401) {
+                        window.location.href = '/auth/login';
+                    } else {
+                        showNotification('Failed to load babies', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error loading babies:', error);
+                    showNotification('Error loading babies', 'error');
+                }
+            }
+
+            function populateBabySelect() {
+                babySelect.innerHTML = '';
+                const noBabyMessage = document.getElementById('no-baby-message');
+                
+                if (babies.length === 0) {
+                    babySelect.innerHTML = '<option value="">No babies registered</option>';
+                    babySelect.disabled = true;
+                    submitBtn.disabled = true;
+                    noBabyMessage.style.display = 'block';
+                } else {
+                    babySelect.disabled = false;
+                    noBabyMessage.style.display = 'none';
+                    babySelect.innerHTML = '<option value="">Select a baby...</option>';
+                    babies.forEach(baby => {
+                        const option = document.createElement('option');
+                        option.value = baby.id;
+                        option.textContent = `${baby.name} (Born: ${new Date(baby.date_of_birth).toLocaleDateString()})`;
+                        babySelect.appendChild(option);
+                    });
+                    // Add option to register new baby
+                    const addOption = document.createElement('option');
+                    addOption.value = 'add_new';
+                    addOption.textContent = '+ Register New Baby';
+                    addOption.style.fontWeight = 'bold';
+                    addOption.style.color = 'var(--primary)';
+                    babySelect.appendChild(addOption);
+                }
+            }
+
+            // Calculate baby's age in months
+            function calculateAgeInMonths(birthDate) {
+                const birth = new Date(birthDate);
+                const today = new Date();
+                const months = (today.getFullYear() - birth.getFullYear()) * 12 + 
+                              (today.getMonth() - birth.getMonth());
+                return Math.max(0, Math.min(24, months)); // Cap at 0-24 months
+            }
+
+            // Get WHO standard for given age and gender
+            function getWHOStandard(ageMonths, gender, metric) {
+                const age = Math.floor(ageMonths);
+                if (age < 0 || age > 24) return null;
+                
+                if (metric === 'weight') {
+                    return gender.toLowerCase() === 'male' ? whoWeightBoys[age] : whoWeightGirls[age];
+                } else if (metric === 'height') {
+                    return gender.toLowerCase() === 'male' ? whoHeightBoys[age] : whoHeightGirls[age];
+                }
+                return null;
+            }
+
+            // Generate recommendations based on latest measurements
+            function generateRecommendations() {
+                const recommendationsCard = document.getElementById('recommendations-card');
+                const recommendationsContent = document.getElementById('recommendations-content');
+                
+                if (!selectedBaby || growthData.length === 0) {
+                    recommendationsCard.style.display = 'none';
+                    return;
+                }
+
+                const latestRecord = growthData[growthData.length - 1];
+                const ageMonths = calculateAgeInMonths(selectedBaby.date_of_birth);
+                const gender = selectedBaby.gender;
+
+                let recommendationsHTML = `
+                    <div style="margin-bottom: 1rem; padding: 0.75rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 10px;">
+                        <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem;">
+                            <i class="fas fa-baby"></i> ${selectedBaby.name}
+                        </h4>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">
+                            Age: ${ageMonths} months old • Gender: ${gender.charAt(0).toUpperCase() + gender.slice(1)}
+                        </p>
+                    </div>
+                `;
+
+                // Weight Analysis
+                if (latestRecord.weight) {
+                    const weightStandard = getWHOStandard(ageMonths, gender, 'weight');
+                    if (weightStandard) {
+                        const [p5, p50, p95] = weightStandard;
+                        let weightStatus = '';
+                        let weightColor = '';
+                        let weightIcon = '';
+                        let weightAdvice = '';
+
+                        if (latestRecord.weight < p5) {
+                            weightStatus = 'Below Average';
+                            weightColor = '#ef4444';
+                            weightIcon = 'fa-exclamation-triangle';
+                            weightAdvice = 'Weight is below the 5th percentile. Consider consulting a pediatrician to ensure proper nutrition and rule out any underlying issues.';
+                        } else if (latestRecord.weight > p95) {
+                            weightStatus = 'Above Average';
+                            weightColor = '#f59e0b';
+                            weightIcon = 'fa-info-circle';
+                            weightAdvice = 'Weight is above the 95th percentile. Monitor growth patterns and ensure a balanced diet with appropriate physical activity.';
+                        } else {
+                            weightStatus = 'Healthy Range';
+                            weightColor = 'var(--success)';
+                            weightIcon = 'fa-check-circle';
+                            weightAdvice = 'Weight is within the healthy range (5th-95th percentile). Continue with current feeding and care practices.';
+                        }
+
+                        recommendationsHTML += `
+                            <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-left: 4px solid ${weightColor}; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <i class="fas ${weightIcon}" style="color: ${weightColor};"></i>
+                                    <h4 style="margin: 0; font-size: 1rem; color: var(--dark);">Weight: ${latestRecord.weight} kg</h4>
+                                    <span style="margin-left: auto; padding: 0.25rem 0.75rem; background: ${weightColor}; color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                        ${weightStatus}
+                                    </span>
+                                </div>
+                                <p style="margin: 0.5rem 0 0 0; color: var(--gray); font-size: 0.9rem; line-height: 1.5;">
+                                    ${weightAdvice}
+                                </p>
+                                <div style="margin-top: 0.75rem; padding: 0.75rem; background: var(--light); border-radius: 6px;">
+                                    <p style="margin: 0; font-size: 0.85rem; color: var(--gray);">
+                                        <strong>WHO Reference Range:</strong><br>
+                                        5th percentile: ${p5} kg | 50th percentile: ${p50} kg | 95th percentile: ${p95} kg
+                                    </p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Height Analysis
+                if (latestRecord.height) {
+                    const heightStandard = getWHOStandard(ageMonths, gender, 'height');
+                    if (heightStandard) {
+                        const [p5, p50, p95] = heightStandard;
+                        let heightStatus = '';
+                        let heightColor = '';
+                        let heightIcon = '';
+                        let heightAdvice = '';
+
+                        if (latestRecord.height < p5) {
+                            heightStatus = 'Below Average';
+                            heightColor = '#ef4444';
+                            heightIcon = 'fa-exclamation-triangle';
+                            heightAdvice = 'Height is below the 5th percentile. Consult a pediatrician to assess growth patterns and ensure adequate nutrition.';
+                        } else if (latestRecord.height > p95) {
+                            heightStatus = 'Above Average';
+                            heightColor = '#f59e0b';
+                            heightIcon = 'fa-info-circle';
+                            heightAdvice = 'Height is above the 95th percentile. This is often genetic, but regular check-ups will ensure healthy development.';
+                        } else {
+                            heightStatus = 'Healthy Range';
+                            heightColor = 'var(--success)';
+                            heightIcon = 'fa-check-circle';
+                            heightAdvice = 'Height is within the healthy range (5th-95th percentile). Your baby is growing well!';
+                        }
+
+                        recommendationsHTML += `
+                            <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-left: 4px solid ${heightColor}; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <i class="fas ${heightIcon}" style="color: ${heightColor};"></i>
+                                    <h4 style="margin: 0; font-size: 1rem; color: var(--dark);">Height: ${latestRecord.height} cm</h4>
+                                    <span style="margin-left: auto; padding: 0.25rem 0.75rem; background: ${heightColor}; color: white; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">
+                                        ${heightStatus}
+                                    </span>
+                                </div>
+                                <p style="margin: 0.5rem 0 0 0; color: var(--gray); font-size: 0.9rem; line-height: 1.5;">
+                                    ${heightAdvice}
+                                </p>
+                                <div style="margin-top: 0.75rem; padding: 0.75rem; background: var(--light); border-radius: 6px;">
+                                    <p style="margin: 0; font-size: 0.85rem; color: var(--gray);">
+                                        <strong>WHO Reference Range:</strong><br>
+                                        5th percentile: ${p5} cm | 50th percentile: ${p50} cm | 95th percentile: ${p95} cm
+                                    </p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // General tips
+                recommendationsHTML += `
+                    <div style="padding: 1rem; background: linear-gradient(135deg, rgba(125, 211, 252, 0.1), rgba(192, 132, 252, 0.1)); border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.2);">
+                        <h4 style="margin: 0 0 0.75rem 0; color: var(--dark); font-size: 0.95rem;">
+                            <i class="fas fa-heart" style="color: var(--primary);"></i> General Health Tips
+                        </h4>
+                        <ul style="margin: 0; padding-left: 1.25rem; color: var(--gray); font-size: 0.9rem; line-height: 1.7;">
+                            <li>Track measurements consistently (monthly for infants)</li>
+                            <li>Ensure age-appropriate nutrition and feeding schedule</li>
+                            <li>Regular pediatric check-ups are essential</li>
+                            <li>Monitor developmental milestones alongside growth</li>
+                            <li>Keep vaccination schedule up to date</li>
+                        </ul>
+                    </div>
+                `;
+
+                recommendationsContent.innerHTML = recommendationsHTML;
+                recommendationsCard.style.display = 'block';
+            }
+
+            async function loadGrowthData(babyId) {
+                try {
+                    const response = await fetch(`/babycare/api/growth-records/${babyId}`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            growthData = result.records.map(record => ({
+                                date: record.date,
+                                weight: record.weight,
+                                height: record.height,
+                                head: record.head,
+                                notes: record.notes,
+                                id: record.id
+                            }));
+                            renderData();
+                        }
+                    } else {
+                        showNotification('Failed to load growth data', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error loading growth data:', error);
+                    showNotification('Error loading growth data', 'error');
+                }
+            }
+
+            async function saveGrowthRecord(recordData) {
+                try {
+                    const response = await fetch(`/babycare/api/growth-records/${selectedBabyId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(recordData)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            showNotification('Growth record saved successfully!', 'success');
+                            loadGrowthData(selectedBabyId); // Reload data
+                            return true;
+                        } else {
+                            showNotification(result.error || 'Failed to save record', 'error');
+                            return false;
+                        }
+                    } else {
+                        showNotification('Failed to save record', 'error');
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Error saving growth record:', error);
+                    showNotification('Error saving record', 'error');
+                    return false;
+                }
+            }
+
+            // Baby selection handler
+            babySelect.addEventListener('change', function() {
+                selectedBabyId = this.value;
+                
+                if (selectedBabyId === 'add_new') {
+                    showRegistrationForm();
+                    this.value = ''; // Reset selection
+                    submitBtn.disabled = true;
+                    growthData = [];
+                    selectedBaby = null;
+                    renderData();
+                } else if (selectedBabyId) {
+                    // Find selected baby details
+                    selectedBaby = babies.find(b => b.id == selectedBabyId);
+                    submitBtn.disabled = false;
+                    loadGrowthData(selectedBabyId);
+                } else {
+                    submitBtn.disabled = true;
+                    growthData = [];
+                    selectedBaby = null;
+                    renderData();
+                }
+            });
+
+            const growthChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Weight (kg)',
+                            data: [],
+                            borderColor: 'var(--primary)',
+                            backgroundColor: 'rgba(244, 114, 182, 0.1)',
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Height (cm)',
+                            data: [],
+                            borderColor: 'var(--secondary)',
+                            backgroundColor: 'rgba(192, 132, 252, 0.1)',
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y1',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            borderWidth: 3
+                        },
+                        // WHO Reference - Weight 5th percentile
+                        {
+                            label: 'Weight Range (WHO)',
+                            data: [],
+                            borderColor: 'rgba(244, 114, 182, 0.3)',
+                            backgroundColor: 'rgba(244, 114, 182, 0.08)',
+                            fill: '+1',
+                            tension: 0.4,
+                            yAxisID: 'y',
+                            pointRadius: 0,
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        },
+                        // WHO Reference - Weight 95th percentile
+                        {
+                            label: '',
+                            data: [],
+                            borderColor: 'rgba(244, 114, 182, 0.3)',
+                            backgroundColor: 'rgba(244, 114, 182, 0.08)',
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y',
+                            pointRadius: 0,
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        },
+                        // WHO Reference - Height 5th percentile
+                        {
+                            label: 'Height Range (WHO)',
+                            data: [],
+                            borderColor: 'rgba(192, 132, 252, 0.3)',
+                            backgroundColor: 'rgba(192, 132, 252, 0.08)',
+                            fill: '+1',
+                            tension: 0.4,
+                            yAxisID: 'y1',
+                            pointRadius: 0,
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        },
+                        // WHO Reference - Height 95th percentile
+                        {
+                            label: '',
+                            data: [],
+                            borderColor: 'rgba(192, 132, 252, 0.3)',
+                            backgroundColor: 'rgba(192, 132, 252, 0.08)',
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y1',
+                            pointRadius: 0,
+                            borderWidth: 1,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Date', font: { weight: 'bold' } }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Weight (kg)', font: { weight: 'bold' } },
+                            beginAtZero: true
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Height (cm)', font: { weight: 'bold' } },
+                            grid: {
+                                drawOnChartArea: false, 
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label && !label.includes('WHO') && label !== '') {
+                                        label += ': ';
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y;
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                filter: function(item) {
+                                    return item.text !== '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function renderData() {
+                // Sort data by date
+                growthData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                // Clear existing data
+                historyTableBody.innerHTML = '';
+                growthChart.data.labels = [];
+                growthChart.data.datasets[0].data = [];
+                growthChart.data.datasets[1].data = [];
+                growthChart.data.datasets[2].data = [];
+                growthChart.data.datasets[3].data = [];
+                growthChart.data.datasets[4].data = [];
+                growthChart.data.datasets[5].data = [];
+
+                const emptyState = document.getElementById('empty-state');
+                const historyTable = document.getElementById('history-table');
+
+                if (growthData.length === 0) {
+                    // Show empty state
+                    historyTable.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    document.getElementById('recommendations-card').style.display = 'none';
+                } else {
+                    // Show table and populate data
+                    historyTable.style.display = 'table';
+                    emptyState.style.display = 'none';
+
+                    // Populate table and chart
+                    growthData.forEach((record, index) => {
+                        const row = document.createElement('tr');
+                        const recordDate = new Date(record.date);
+                        
+                        // Calculate age at this record
+                        let ageMonths = 0;
+                        if (selectedBaby) {
+                            const birthDate = new Date(selectedBaby.date_of_birth);
+                            ageMonths = Math.floor((recordDate - birthDate) / (1000 * 60 * 60 * 24 * 30.44));
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${recordDate.toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'})}</td>
+                            <td>${record.weight ? record.weight + ' kg' : 'N/A'}</td>
+                            <td>${record.height ? record.height + ' cm' : 'N/A'}</td>
+                            <td>${record.head ? record.head + ' cm' : 'N/A'}</td>
+                            <td>${record.notes ? `<span title="${record.notes}" style="cursor: help;"><i class="fas fa-sticky-note" style="color: var(--primary);"></i></span>` : 'N/A'}</td>
+                            <td>
+                                <button onclick="deleteGrowthRecord(${record.id})" class="btn-delete" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.3s;">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        `;
+                        historyTableBody.appendChild(row);
+
+                        const dateLabel = recordDate.toLocaleDateString('en-IN', {day: 'numeric', month: 'short'});
+                        growthChart.data.labels.push(dateLabel);
+                        growthChart.data.datasets[0].data.push(record.weight);
+                        growthChart.data.datasets[1].data.push(record.height);
+
+                        // Add WHO reference data if baby is selected
+                        if (selectedBaby && ageMonths >= 0 && ageMonths <= 24) {
+                            const weightStd = getWHOStandard(ageMonths, selectedBaby.gender, 'weight');
+                            const heightStd = getWHOStandard(ageMonths, selectedBaby.gender, 'height');
+                            
+                            if (weightStd) {
+                                growthChart.data.datasets[2].data.push(weightStd[0]); // 5th percentile
+                                growthChart.data.datasets[3].data.push(weightStd[2]); // 95th percentile
+                            } else {
+                                growthChart.data.datasets[2].data.push(null);
+                                growthChart.data.datasets[3].data.push(null);
+                            }
+                            
+                            if (heightStd) {
+                                growthChart.data.datasets[4].data.push(heightStd[0]); // 5th percentile
+                                growthChart.data.datasets[5].data.push(heightStd[2]); // 95th percentile
+                            } else {
+                                growthChart.data.datasets[4].data.push(null);
+                                growthChart.data.datasets[5].data.push(null);
+                            }
+                        } else {
+                            growthChart.data.datasets[2].data.push(null);
+                            growthChart.data.datasets[3].data.push(null);
+                            growthChart.data.datasets[4].data.push(null);
+                            growthChart.data.datasets[5].data.push(null);
+                        }
+                    });
+
+                    // Generate recommendations for latest record
+                    generateRecommendations();
+                }
+
+                growthChart.update();
+            }
+
+            growthForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                if (!selectedBabyId) {
+                    showNotification('Please select a baby first', 'error');
+                    return;
+                }
+
+                const formData = new FormData(e.target);
+                const newRecord = {
+                    date: formData.get('date'),
+                    weight: formData.get('weight') ? parseFloat(formData.get('weight')) : null,
+                    height: formData.get('height') ? parseFloat(formData.get('height')) : null,
+                    head: formData.get('head') ? parseFloat(formData.get('head')) : null,
+                    notes: formData.get('notes') || ''
+                };
+
+                // Validate that at least one measurement is provided
+                if (!newRecord.weight && !newRecord.height && !newRecord.head) {
+                    showNotification('Please provide at least one measurement', 'error');
+                    return;
+                }
+
+                // Disable submit button during save
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                const success = await saveGrowthRecord(newRecord);
+
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Save Record';
+
+                if (success) {
+                    growthForm.reset();
+                    document.getElementById('date').valueAsDate = new Date();
+                }
+            });
+            
+            async function deleteGrowthRecord(recordId) {
+                if (!confirm('Are you sure you want to delete this growth record?')) {
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/babycare/api/growth-records/${selectedBabyId}/${recordId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            showNotification('Growth record deleted successfully', 'success');
+                            loadGrowthData(selectedBabyId);
+                        } else {
+                            showNotification(result.error || 'Failed to delete record', 'error');
+                        }
+                    } else {
+                        showNotification('Failed to delete record', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting growth record:', error);
+                    showNotification('Error deleting record', 'error');
+                }
+            }
+            
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 90px;
+                    right: 20px;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 9999;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    background: ${type === 'success' ? 'var(--success)' : 'var(--primary)'};
+                    opacity: 0;
+                    transform: translateX(20px);
+                    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => { 
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateX(0)';
+                }, 10);
+                
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(20px)';
+                    setTimeout(() => { document.body.removeChild(notification); }, 400);
+                }, 3000);
+            }
+
+            // Baby registration form handler
+            babyRegistrationForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const registerBtn = document.getElementById('register-baby-btn');
+                registerBtn.disabled = true;
+                registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+                
+                const formData = new FormData(e.target);
+                const babyData = {
+                    name: formData.get('name'),
+                    birth_date: formData.get('birth_date'),
+                    gender: formData.get('gender'),
+                    weight_at_birth: formData.get('weight_at_birth') || null,
+                    height_at_birth: formData.get('height_at_birth') || null,
+                    blood_type: formData.get('blood_type') || null,
+                    notes: formData.get('notes') || ''
+                };
+                
+                try {
+                    const response = await fetch('/api/babies', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(babyData)
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            showNotification('Baby registered successfully!', 'success');
+                            babyRegistrationForm.reset();
+                            hideRegistrationForm();
+                            loadBabies(); // Reload babies list
+                        } else {
+                            showNotification(result.error || 'Failed to register baby', 'error');
+                        }
+                    } else {
+                        const error = await response.json();
+                        showNotification(error.error || 'Failed to register baby', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error registering baby:', error);
+                    showNotification('Error registering baby', 'error');
+                } finally {
+                    registerBtn.disabled = false;
+                    registerBtn.innerHTML = '<i class="fas fa-save"></i> Register Baby';
+                }
+            });
+
+            // Show/hide registration form functions
+            function showRegistrationForm() {
+                document.getElementById('registration-form').style.display = 'block';
+                document.getElementById('baby-selection').style.display = 'none';
+                document.getElementById('baby-name').focus();
+            }
+
+            function hideRegistrationForm() {
+                document.getElementById('registration-form').style.display = 'none';
+                document.getElementById('baby-selection').style.display = 'block';
+            }
+
+            // Make functions globally accessible
+            window.showRegistrationForm = showRegistrationForm;
+            window.hideRegistrationForm = hideRegistrationForm;
+            window.deleteGrowthRecord = deleteGrowthRecord;
+
+            // Initial render
+            renderData();
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+
+            if (mobileMenuBtn && navMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

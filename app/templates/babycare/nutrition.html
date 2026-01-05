@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Child Health Care Essentials - Maternal Health and Child Health</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Arial", sans-serif;
+    }
+
+    body {
+      color: #333;
+      background-color: #fff5f7; /* Lighter, calming pink */
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.98);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #d63384; /* A professional pink */
+      display: flex;
+      align-items: center;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.5rem;
+    }
+
+    .nav-links a {
+      margin: 0 1rem;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #b52a6f;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #d63384;
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .book-now {
+      background-color: #d63384;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .book-now:hover {
+      background-color: #b52a6f;
+      transform: translateY(-2px);
+    }
+
+    /* Page header */
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url("https://images.unsplash.com/photo-1546015720-69320a173887?auto=format&fit=crop&w=1470&q=80")
+          no-repeat center center/cover;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-top: 70px; /* Adjusted for navbar height */
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Content section */
+    .content-section {
+      padding: 5rem 2rem;
+      background-color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #d63384;
+      font-size: 2.5rem;
+    }
+
+    /* Child Health Care Tab styles */
+    .baby-care-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background-color: #e9ecef;
+      border: none;
+      margin: 0 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background-color: #d63384;
+      color: white;
+      box-shadow: 0 4px 8px rgba(214, 51, 132, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Care Card styles */
+    .care-guide {
+      margin-bottom: 3rem;
+    }
+
+    .care-guide h3 {
+      color: #d63384;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+
+    .care-card {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .care-card h4 {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      color: #b52a6f;
+    }
+
+    .care-card h4 i {
+      margin-right: 10px;
+      color: #d63384;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .care-item {
+        padding: 10px;
+        border-left: 3px solid #d63384;
+        margin-bottom: 10px;
+        background: #fff;
+    }
+    .care-item strong {
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+    .care-item p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+    }
+
+
+    /* Admin Panel Styles */
+    .admin-panel {
+      background: rgba(214, 51, 132, 0.05);
+      border: 2px solid #d63384;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 32px rgba(214, 51, 132, 0.1);
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #d63384;
+    }
+
+    .admin-header i {
+      margin-right: 10px;
+      color: #ffd700;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-admin {
+      background: #d63384;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-admin:hover {
+      background: #b52a6f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+    }
+
+    /* Footer styles */
+    .footer {
+      background-color: #2c3e50;
+      color: white;
+      padding: 3rem 2rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .footer-column {
+      flex: 1 1 300px;
+      margin-bottom: 2rem;
+    }
+    
+    .footer-links a:hover {
+      color: #d63384;
+    }
+    
+    .social-icons a:hover {
+      background-color: #d63384;
+      transform: translateY(-3px);
+    }
+
+    /* Other shared styles (footer-logo, etc.) can remain similar */
+    .footer-logo { font-size: 1.8rem; font-weight: bold; margin-bottom: 1rem; display: flex; align-items: center; }
+    .footer-logo i { margin-right: 10px; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.5rem; }
+    .footer-links a { color: #ecf0f1; text-decoration: none; transition: color 0.3s; }
+    .social-icons { display: flex; margin-top: 1rem; }
+    .social-icons a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: #34495e; color: white; margin-right: 1rem; transition: all 0.3s; }
+    .footer-bottom { width: 100%; text-align: center; padding-top: 2rem; margin-top: 2rem; border-top: 1px solid #34495e; }
+
+    /* Mobile Responsive */
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: #333; cursor: pointer; }
+    @media (max-width: 768px) {
+      .mobile-menu-btn { display: block; }
+      .nav-links { position: fixed; top: 70px; left: 0; width: 100%; background-color: white; flex-direction: column; align-items: center; padding: 2rem 0; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); transform: translateY(-150%); transition: transform 0.3s; }
+      .nav-links.active { transform: translateY(0); }
+      .nav-links a { margin: 1rem 0; }
+    }
+
+    /* Utility States */
+    .empty-state, .loading { text-align: center; padding: 3rem 2rem; color: #666; }
+    .empty-state h4, .loading h4 { margin-bottom: 0.5rem; color: #333; }
+    .empty-state p, .loading p { color: #999; font-style: italic; }
+    .loading i { font-size: 2rem; color: #d63384; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <i class="fas fa-baby"></i>
+      Maternal Health & Child Health
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <a href="/home.html">Home</a>
+      <a href="/pages/Preg/pregcare.html">Pregnancy Care</a>
+      <a href="/pages/baby/baby-care.html">Child Health Care</a>
+      <a href="/pages/doctor/dashboard.html">Consult Doctor</a>
+      <a href="/pages/Preg/schemes.html">Schemes</a>
+      <a href="/pages/contact.html">Contact</a>
+    </nav>
+    <button class="book-now">Get Started</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </header>
+
+  <section class="page-header">
+    <div>
+      <h1>Child Health Care Essentials</h1>
+      <p>Your trusted guide to feeding, sleeping, and developmental milestones.</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <!-- Admin Panel for Child Health Care -->
+      <div id="baby-care-admin-panel" class="admin-panel" style="display: none;">
+        <div class="admin-header">
+          <i class="fas fa-crown"></i>
+          <span>Child Health Care Admin Panel</span>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-admin" onclick="addBabyCareItem()">
+            <i class="fas fa-plus"></i> Add Care Guide Item
+          </button>
+          <button class="btn btn-admin" onclick="addBabyCareTip()">
+            <i class="fas fa-lightbulb"></i> Add General Tip
+          </button>
+        </div>
+      </div>
+
+      <h2 class="section-title">Age-Specific Child Health Care Guides</h2>
+      
+      <div class="baby-care-tabs">
+        <button class="tab-btn active" data-tab="newborn">Newborn (0-3 Months)</button>
+        <button class="tab-btn" data-tab="infant_4_6">Infant (4-6 Months)</button>
+        <button class="tab-btn" data-tab="infant_7_12">Infant (7-12 Months)</button>
+        <button class="tab-btn" data-tab="toddler">Toddler (1-3 Years)</button>
+      </div>
+
+      <div id="newborn" class="tab-content active">
+        <div class="care-guide">
+          <h3>Newborn Care (0-3 Months)</h3>
+          <div id="newborn-content" class="age-content">
+            <div class="empty-state">
+              <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No care guides available</h4>
+              <p>Guides for this age will be added by our pediatric experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="infant_4_6" class="tab-content">
+        <div class="care-guide">
+          <h3>Infant Care (4-6 Months)</h3>
+          <div id="infant_4_6-content" class="age-content">
+            <div class="empty-state">
+              <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No care guides available</h4>
+              <p>Guides for this age will be added by our pediatric experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="infant_7_12" class="tab-content">
+        <div class="care-guide">
+          <h3>Infant Care (7-12 Months)</h3>
+          <div id="infant_7_12-content" class="age-content">
+            <div class="empty-state">
+              <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No care guides available</h4>
+              <p>Guides for this age will be added by our pediatric experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="toddler" class="tab-content">
+        <div class="care-guide">
+          <h3>Toddler Care (1-3 Years)</h3>
+          <div id="toddler-content" class="age-content">
+            <div class="empty-state">
+              <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+              <h4>No care guides available</h4>
+              <p>Guides for this age will be added by our pediatric experts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <div class="footer-logo">
+          <i class="fas fa-baby"></i>
+          Maternal Health & Child Health
+        </div>
+        <p>Your trusted companion for pregnancy and child health care, providing expert guidance and support.</p>
+        <div class="social-icons">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="/home.html">Home</a></li>
+          <li><a href="/pages/Preg/pregcare.html">Pregnancy Care</a></li>
+          <li><a href="/pages/baby/baby-care.html">Child Health Care</a></li>
+          <li><a href="/pages/doctor/dashboard.html">Consult Doctor</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Services</h3>
+        <ul class="footer-links">
+          <li><a href="/pages/Preg/nutrition.html">Nutrition Plans</a></li>
+          <li><a href="/pages/Preg/schemes.html">Government Schemes</a></li>
+          <li><a href="/pages/contact.html">Contact Us</a></li>
+          <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-phone"></i> 9876543210</p>
+        <p><i class="fas fa-envelope"></i> pregnanacy2523@gmail.com</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Maternal Health and Child Health. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetTab = this.getAttribute('data-tab');
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById(targetTab).classList.add('active');
+        });
+      });
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+      }
+      
+      // Get Started button
+      document.querySelector('.book-now')?.addEventListener('click', () => window.location.href = '/signup');
+      
+      // Load initial data and check admin status
+      checkBabyCareAdminStatus();
+      loadBabyCareData();
+    });
+
+    // Check if user is admin and show admin panel
+    function checkBabyCareAdminStatus() {
+      // To test admin panel, set this in your browser's developer console:
+      // localStorage.setItem('user_data', JSON.stringify({ role: 'admin' }));
+      const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+      if (userData.role === 'admin') {
+        document.getElementById('baby-care-admin-panel').style.display = 'block';
+      }
+    }
+    
+    // Create modal helper
+    function createModal(title, content) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center;`;
+        modal.innerHTML = `
+            <div style="background: white; padding: 20px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80%; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0; color: #d63384;">${title}</h3>
+                    <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                </div>
+                ${content}
+            </div>`;
+        document.body.appendChild(modal);
+        return modal;
+    }
+
+    // Show notification helper
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        const bgColor = type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3';
+        notification.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 10001; padding: 15px 20px; border-radius: 5px; color: white; font-weight: bold; background: ${bgColor}; box-shadow: 0 4px 8px rgba(0,0,0,0.2);`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    // Add Child Health Care Item (Admin)
+    function addBabyCareItem() {
+      const modal = createModal('Add Child Health Care Guide Item', `
+        <form id="add-baby-care-form">
+          <div style="margin-bottom: 1rem;">
+            <label>Age Range:</label>
+            <select id="care-age-range" required style="width: 100%; padding: 8px; margin-top: 5px;">
+              <option value="newborn">Newborn (0-3 Months)</option>
+              <option value="infant_4_6">Infant (4-6 Months)</option>
+              <option value="infant_7_12">Infant (7-12 Months)</option>
+              <option value="toddler">Toddler (1-3 Years)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label>Category:</label>
+            <select id="care-category" required style="width: 100%; padding: 8px; margin-top: 5px;">
+              <option value="feeding">Feeding</option>
+              <option value="development">Development</option>
+              <option value="health_safety">Health & Safety</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label>Topic:</label>
+            <input type="text" id="care-topic" required style="width: 100%; padding: 8px; margin-top: 5px;" placeholder="e.g., Tummy Time">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label>Description:</label>
+            <textarea id="care-description" required style="width: 100%; padding: 8px; margin-top: 5px; height: 80px;" placeholder="Details about the topic..."></textarea>
+          </div>
+          <button type="submit" style="background: #d63384; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Add Care Item</button>
+        </form>
+      `);
+
+      document.getElementById('add-baby-care-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const careData = {
+          age_range: document.getElementById('care-age-range').value,
+          category: document.getElementById('care-category').value,
+          topic: document.getElementById('care-topic').value,
+          description: document.getElementById('care-description').value,
+        };
+        saveBabyCareItem(careData);
+        modal.remove();
+      });
+    }
+
+    // (Dummy function for now, replace with actual implementation)
+    function addBabyCareTip() {
+      showNotification('This feature is coming soon!', 'info');
+    }
+
+    // Save Child Health Care Item to Local Storage
+    async function saveBabyCareItem(data) {
+      try {
+        const existingData = JSON.parse(localStorage.getItem('babyCareData') || '[]');
+        existingData.push(data);
+        localStorage.setItem('babyCareData', JSON.stringify(existingData));
+        showNotification('Care guide item added successfully!', 'success');
+        loadBabyCareData(); // Refresh data from storage
+      } catch (error) {
+        console.error('Error saving care item:', error);
+        showNotification('Error saving care item', 'error');
+      }
+    }
+
+    // Load Child Health Care Data from Local Storage or use mock data
+    async function loadBabyCareData() {
+      showLoadingState();
+      try {
+        let data = JSON.parse(localStorage.getItem('babyCareData'));
+
+        if (!data || data.length === 0) {
+          // If no data in local storage, use initial mock data
+          data = [
+            { age_range: 'newborn', category: 'feeding', topic: 'Breastfeeding Tips', description: 'Ensure a good latch. Feed on demand, typically every 2-3 hours.' },
+            { age_range: 'newborn', category: 'development', topic: 'Tummy Time', description: 'Start with short, supervised tummy time sessions a few times a day to build neck strength.' },
+            { age_range: 'infant_4_6', category: 'feeding', topic: 'Introducing Solids', description: 'Look for signs of readiness, like good head control. Start with single-grain cereals or pureed vegetables.' },
+            { age_range: 'infant_4_6', category: 'development', topic: 'Rolling Over', description: 'Encourage rolling by placing toys just out of reach during tummy time.' },
+            { age_range: 'infant_7_12', category: 'health_safety', topic: 'Baby Proofing', description: 'Cover electrical outlets, secure furniture to walls, and keep small objects out of reach as baby becomes mobile.' },
+            { age_range: 'toddler', category: 'development', topic: 'First Words', description: 'Talk, read, and sing to your toddler daily to encourage language development. Narrate your activities.' }
+          ];
+          // Save mock data to local storage for future visits
+          localStorage.setItem('babyCareData', JSON.stringify(data));
+        }
+        
+        // Use a timeout to simulate network latency for a better UX
+        setTimeout(() => {
+            renderBabyCareData(data);
+        }, 500);
+
+      } catch (error) {
+        console.error('Error loading child health care data:', error);
+        showEmptyState(); // Show empty state on error
+      }
+    }
+
+    function showLoadingState() {
+      document.querySelectorAll('.age-content').forEach(container => {
+        container.innerHTML = `
+          <div class="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Loading care guides...</p>
+          </div>`;
+      });
+    }
+
+    function showEmptyState() {
+        const ageRanges = {
+            'newborn': 'Newborn (0-3 Months)',
+            'infant_4_6': 'Infant (4-6 Months)',
+            'infant_7_12': 'Infant (7-12 Months)',
+            'toddler': 'Toddler (1-3 Years)'
+        };
+        Object.keys(ageRanges).forEach(age => {
+            const container = document.getElementById(`${age}-content`);
+            if (container) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <h4>No care guides available</h4>
+                        <p>Guides for ${ageRanges[age]} will be added by our pediatric experts.</p>
+                    </div>`;
+            }
+        });
+    }
+
+    function renderBabyCareData(data) {
+        const ageRanges = ['newborn', 'infant_4_6', 'infant_7_12', 'toddler'];
+        
+        ageRanges.forEach(age => {
+            const container = document.getElementById(`${age}-content`);
+            if (!container) return;
+
+            const ageData = data.filter(item => item.age_range === age);
+
+            if (ageData.length === 0) {
+                const ageName = document.querySelector(`.tab-btn[data-tab="${age}"]`).textContent;
+                 container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <h4>No care guides available</h4>
+                        <p>Guides for ${ageName} will be added by our pediatric experts.</p>
+                    </div>`;
+                return;
+            }
+
+            const categories = {
+                'feeding': { icon: 'fas fa-utensils', title: 'Feeding' },
+                'development': { icon: 'fas fa-puzzle-piece', title: 'Development' },
+                'health_safety': { icon: 'fas fa-first-aid', title: 'Health & Safety' }
+            };
+
+            let html = '';
+            for (const catKey in categories) {
+                const categoryData = ageData.filter(item => item.category === catKey);
+                if (categoryData.length > 0) {
+                    html += `
+                        <div class="care-card">
+                            <h4><i class="${categories[catKey].icon}"></i> ${categories[catKey].title}</h4>
+                            <div class="care-items">`;
+                    
+                    categoryData.forEach(item => {
+                        html += `
+                            <div class="care-item">
+                                <strong>${item.topic}</strong>
+                                <p>${item.description}</p>
+                            </div>`;
+                    });
+
+                    html += `</div></div>`;
+                }
+            }
+            
+            if (html) {
+                container.innerHTML = html;
+            } else {
+                const ageName = document.querySelector(`.tab-btn[data-tab="${age}"]`).textContent;
+                 container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-baby-carriage" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <h4>No care guides available</h4>
+                        <p>Guides for ${ageName} will be added by our pediatric experts.</p>
+                    </div>`;
+            }
+        });
+    }
+
+  </script>
+</body>
+</html>
+

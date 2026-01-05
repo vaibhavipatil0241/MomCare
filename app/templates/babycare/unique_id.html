@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unique ID Management - Child Health Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #f44336, #ff5722) !important;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3) !important;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .id-management-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .id-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .id-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .baby-selection-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .baby-selector {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .baby-selector select {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .baby-selector select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .refresh-btn {
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #5a6fd8;
+            transform: rotate(180deg);
+        }
+
+        .baby-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .baby-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .baby-details {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .qr-placeholder {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+        }
+
+        .qr-placeholder:hover {
+            transform: scale(1.05);
+            color: #667eea;
+            border-color: #667eea;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .id-display {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border: 2px dashed #667eea;
+        }
+
+        .id-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .id-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e0e6ff;
+            color: #667eea;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .info-title {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e6ff;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .qr-code-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: #f8f9ff;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: #667eea;
+            font-size: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .id-management-container {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <span>Unique ID</span>
+            </a>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="/pregnancy" class="nav-link">
+                    <i class="fas fa-heart"></i> Pregnancy Care
+                </a>
+                <a href="/babycare" class="nav-link">
+                    <i class="fas fa-baby"></i> Child Health Care
+                </a>
+                <a href="/babycare/unique_id" class="nav-link active">
+                    <i class="fas fa-id-card"></i> Unique ID
+                </a>
+                <a href="/auth/logout" class="nav-link logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-id-card"></i> Unique ID Management
+        </h1>
+        <p class="page-subtitle">
+            Generate and manage unique identification for your baby's health records
+        </p>
+
+        <div class="id-management-container">
+            <!-- Baby Selection -->
+            <div class="baby-selection-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <div class="card-title">Select Baby</div>
+                </div>
+                <div class="baby-selector">
+                    <select id="baby-select" onchange="loadBabyUniqueId()">
+                        <option value="">Loading babies...</option>
+                    </select>
+                    <button onclick="refreshBabies()" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current ID Card -->
+            <div class="id-card" id="id-card" style="display: none;">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-id-badge"></i>
+                    </div>
+                    <div class="card-title">Baby Unique ID</div>
+                </div>
+
+                <div class="baby-info">
+                    <div class="baby-name" id="baby-name">Baby Name</div>
+                    <div class="baby-details" id="baby-details">Birth Date • Gender</div>
+                </div>
+
+                <div class="id-display">
+                    <div class="id-number" id="current-id">BABY-2024-XXXXXXXX</div>
+                    <div class="id-label">Unique Baby Identification Number</div>
+                </div>
+
+                <div class="qr-code-container">
+                    <div class="qr-placeholder" id="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
+                        <p>Click to generate QR code</p>
+                    </div>
+                    <img id="qr-code-image" style="display: none; max-width: 200px; border-radius: 10px;" />
+                    <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">QR Code for Quick Access</p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="generateQRCode()" id="qr-btn">
+                        <i class="fas fa-qrcode"></i> Generate QR Code
+                    </button>
+                    <button class="btn btn-warning" onclick="regenerateId()" id="regenerate-btn">
+                        <i class="fas fa-sync-alt"></i> Regenerate ID
+                    </button>
+                    <button class="btn btn-secondary" onclick="downloadId()">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="btn btn-success" onclick="shareId()">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                    <button class="btn btn-info" onclick="validateCurrentId()">
+                        <i class="fas fa-check-circle"></i> Validate
+                    </button>
+                    <button class="btn btn-dark" onclick="viewIdHistory()">
+                        <i class="fas fa-history"></i> History
+                    </button>
+                </div>
+            </div>
+
+            <!-- ID Information Card -->
+            <div class="id-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="card-title">ID Information</div>
+                </div>
+
+                <ul class="info-list" id="id-info-list">
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-baby"></i>
+                        </div>
+                        <div>
+                            <strong>Baby Name:</strong> <span id="info-baby-name">Select a baby</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-birthday-cake"></i>
+                        </div>
+                        <div>
+                            <strong>Date of Birth:</strong> <span id="info-birth-date">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-venus-mars"></i>
+                        </div>
+                        <div>
+                            <strong>Gender:</strong> <span id="info-gender">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-weight"></i>
+                        </div>
+                        <div>
+                            <strong>Weight at Birth:</strong> <span id="info-weight">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-ruler-vertical"></i>
+                        </div>
+                        <div>
+                            <strong>Height at Birth:</strong> <span id="info-height">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div>
+                            <strong>Blood Type:</strong> <span id="info-blood-type">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <strong>Parent:</strong> <span id="info-parent">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div>
+                            <strong>Age:</strong> <span id="info-age">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <strong>ID Generated:</strong> <span id="info-created-date">-</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <strong>Security:</strong> <span style="color: #4caf50;">256-bit Encrypted</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <strong>Validity:</strong> <span style="color: #2196f3;">Globally Recognized</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <strong>Expires:</strong> <span style="color: #ff9800;">Never (Lifetime)</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="info-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <strong>Status:</strong> <span id="info-status" style="color: #4caf50; font-weight: bold;">Active</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="action-buttons" style="margin-top: 1.5rem;">
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <i class="fas fa-history"></i> View History
+                    </button>
+                    <button class="btn btn-secondary" onclick="verifyId()">
+                        <i class="fas fa-check-circle"></i> Verify ID
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Information -->
+        <div class="info-section">
+            <h3 class="info-title">
+                <i class="fas fa-star"></i> Unique ID Features
+            </h3>
+            <ul class="info-list">
+                <li>
+                    <div class="info-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div>
+                        <strong>Medical Records Integration:</strong> Links all health records and vaccination data
+                    </div>
+                </li>
+                <li>
+                    <div class="info-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div>
+                        <strong>Mobile Access:</strong> QR code for instant access from any device
+                    </div>
+                </li>
+                <li>
+                    <div class="info-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <strong>Family Sharing:</strong> Secure sharing with family members and healthcare providers
+                    </div>
+                </li>
+                <li>
+                    <div class="info-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div>
+                        <strong>Cloud Backup:</strong> Automatic backup and synchronization across devices
+                    </div>
+                </li>
+                <li>
+                    <div class="info-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div>
+                        <strong>Privacy Protected:</strong> HIPAA compliant with end-to-end encryption
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let currentBabyId = null;
+        let currentUniqueId = null;
+
+        // Load babies on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBabies();
+        });
+
+        async function loadBabies() {
+            try {
+                const response = await fetch('/babycare/api/unique-id/my-babies');
+                const data = await response.json();
+
+                const select = document.getElementById('baby-select');
+                select.innerHTML = '<option value="">Select a baby...</option>';
+
+                if (data.success && data.babies.length > 0) {
+                    data.babies.forEach(baby => {
+                        const option = document.createElement('option');
+                        option.value = baby.id;
+                        option.textContent = `${baby.name} (${baby.unique_id})`;
+                        option.dataset.baby = JSON.stringify(baby);
+                        select.appendChild(option);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">No babies found</option>';
+                }
+            } catch (error) {
+                console.error('Error loading babies:', error);
+                showNotification('Error loading babies', 'error');
+            }
+        }
+
+        function refreshBabies() {
+            loadBabies();
+            showNotification('Babies list refreshed', 'success');
+        }
+
+        function loadBabyUniqueId() {
+            const select = document.getElementById('baby-select');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption.value) {
+                const baby = JSON.parse(selectedOption.dataset.baby);
+                currentBabyId = baby.id;
+                currentUniqueId = baby.unique_id;
+
+                // Update main display
+                document.getElementById('baby-name').textContent = baby.name;
+                document.getElementById('baby-details').textContent =
+                    `${baby.birth_date} • ${baby.gender.charAt(0).toUpperCase() + baby.gender.slice(1)}`;
+                document.getElementById('current-id').textContent = baby.unique_id;
+
+                // Update ID Information fields
+                document.getElementById('info-baby-name').textContent = baby.name;
+                document.getElementById('info-birth-date').textContent = formatDate(baby.birth_date);
+                document.getElementById('info-gender').textContent = baby.gender.charAt(0).toUpperCase() + baby.gender.slice(1);
+                document.getElementById('info-weight').textContent = baby.weight_at_birth ? `${baby.weight_at_birth} kg` : 'Not recorded';
+                document.getElementById('info-height').textContent = baby.height_at_birth ? `${baby.height_at_birth} cm` : 'Not recorded';
+                document.getElementById('info-blood-type').textContent = baby.blood_type || 'Not recorded';
+                document.getElementById('info-parent').textContent = baby.parent_name || 'Not available';
+                document.getElementById('info-age').textContent = calculateAge(baby.birth_date);
+                document.getElementById('info-created-date').textContent = formatDate(baby.created_at);
+                document.getElementById('info-status').textContent = baby.is_active ? 'Active' : 'Inactive';
+                document.getElementById('info-status').style.color = baby.is_active ? '#4caf50' : '#f44336';
+
+                // Show the ID card
+                document.getElementById('id-card').style.display = 'block';
+
+                // Reset QR code
+                document.getElementById('qr-placeholder').style.display = 'block';
+                document.getElementById('qr-code-image').style.display = 'none';
+            } else {
+                document.getElementById('id-card').style.display = 'none';
+                currentBabyId = null;
+                currentUniqueId = null;
+                
+                // Reset ID Information to defaults
+                document.getElementById('info-baby-name').textContent = 'Select a baby';
+                document.getElementById('info-birth-date').textContent = '-';
+                document.getElementById('info-gender').textContent = '-';
+                document.getElementById('info-weight').textContent = '-';
+                document.getElementById('info-height').textContent = '-';
+                document.getElementById('info-blood-type').textContent = '-';
+                document.getElementById('info-parent').textContent = '-';
+                document.getElementById('info-age').textContent = '-';
+                document.getElementById('info-created-date').textContent = '-';
+                document.getElementById('info-status').textContent = '-';
+            }
+        }
+
+        // Helper function to format dates
+        function formatDate(dateString) {
+            if (!dateString) return 'Not available';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Helper function to calculate age
+        function calculateAge(birthDate) {
+            if (!birthDate) return 'Unknown';
+            
+            const birth = new Date(birthDate);
+            const today = new Date();
+            const diffTime = Math.abs(today - birth);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 30) {
+                return `${diffDays} day${diffDays !== 1 ? 's' : ''} old`;
+            } else if (diffDays < 365) {
+                const months = Math.floor(diffDays / 30);
+                const days = diffDays % 30;
+                return `${months} month${months !== 1 ? 's' : ''} ${days > 0 ? `${days} day${days !== 1 ? 's' : ''}` : ''} old`;
+            } else {
+                const years = Math.floor(diffDays / 365);
+                const months = Math.floor((diffDays % 365) / 30);
+                return `${years} year${years !== 1 ? 's' : ''} ${months > 0 ? `${months} month${months !== 1 ? 's' : ''}` : ''} old`;
+            }
+        }
+
+        async function generateQRCode() {
+            if (!currentUniqueId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/babycare/api/unique-id/qr-code/${currentUniqueId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('qr-placeholder').style.display = 'none';
+                    const qrImage = document.getElementById('qr-code-image');
+                    qrImage.src = data.qr_code;
+                    qrImage.style.display = 'block';
+                    showNotification('QR code generated successfully!', 'success');
+                } else {
+                    showNotification(data.error || 'Failed to generate QR code', 'error');
+                }
+            } catch (error) {
+                console.error('Error generating QR code:', error);
+                showNotification('Error generating QR code', 'error');
+            }
+        }
+
+        async function regenerateId() {
+            if (!currentBabyId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to regenerate the unique ID? The old ID will no longer be valid.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/babycare/api/unique-id/regenerate/${currentBabyId}`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    currentUniqueId = data.new_unique_id;
+                    document.getElementById('current-id').textContent = data.new_unique_id;
+
+                    // Reset QR code
+                    document.getElementById('qr-placeholder').style.display = 'block';
+                    document.getElementById('qr-code-image').style.display = 'none';
+
+                    // Refresh babies list to show new ID
+                    loadBabies();
+
+                    showNotification('Unique ID regenerated successfully!', 'success');
+                } else {
+                    showNotification(data.error || 'Failed to regenerate ID', 'error');
+                }
+            } catch (error) {
+                console.error('Error regenerating ID:', error);
+                showNotification('Error regenerating ID', 'error');
+            }
+        }
+
+        async function validateCurrentId() {
+            if (!currentUniqueId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/babycare/api/unique-id/validate/${currentUniqueId}`);
+                const data = await response.json();
+
+                if (data.success && data.valid) {
+                    showNotification('ID is valid and verified!', 'success');
+                } else {
+                    showNotification('ID validation failed', 'error');
+                }
+            } catch (error) {
+                console.error('Error validating ID:', error);
+                showNotification('Error validating ID', 'error');
+            }
+        }
+
+        function downloadId() {
+            if (!currentUniqueId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            // Get all the information fields
+            const babyName = document.getElementById('info-baby-name').textContent;
+            const birthDate = document.getElementById('info-birth-date').textContent;
+            const gender = document.getElementById('info-gender').textContent;
+            const weight = document.getElementById('info-weight').textContent;
+            const height = document.getElementById('info-height').textContent;
+            const bloodType = document.getElementById('info-blood-type').textContent;
+            const parent = document.getElementById('info-parent').textContent;
+            const age = document.getElementById('info-age').textContent;
+            const createdDate = document.getElementById('info-created-date').textContent;
+            const status = document.getElementById('info-status').textContent;
+
+            // Create PDF using jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Set colors
+            const primaryColor = [102, 126, 234]; // #667eea
+            const secondaryColor = [118, 75, 162]; // #764ba2
+            const textColor = [51, 51, 51];
+            const lightGray = [200, 200, 200];
+
+            // Add header with gradient effect
+            doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('Baby Unique ID Card', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text('Child Health Care System', 105, 30, { align: 'center' });
+
+            // Reset text color for body
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+
+            let y = 55;
+
+            // Add Unique ID prominently
+            doc.setFillColor(240, 240, 240);
+            doc.roundedRect(20, y, 170, 20, 3, 3, 'F');
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.text('Unique ID:', 25, y + 8);
+            doc.text(currentUniqueId, 25, y + 15);
+            
+            y += 35;
+
+            // Baby Information Section
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Baby Information', 20, y);
+            
+            // Draw line under section header
+            doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setLineWidth(0.5);
+            doc.line(20, y + 2, 190, y + 2);
+            
+            y += 12;
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+
+            // Baby details in two columns
+            const leftCol = 25;
+            const rightCol = 110;
+            const lineHeight = 10;
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Name:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(babyName, leftCol + 30, y);
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Gender:', rightCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(gender, rightCol + 30, y);
+            y += lineHeight;
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Birth Date:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(birthDate, leftCol + 30, y);
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Age:', rightCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(age, rightCol + 30, y);
+            y += lineHeight;
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Weight:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(weight, leftCol + 30, y);
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Height:', rightCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(height, rightCol + 30, y);
+            y += lineHeight;
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Blood Type:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(bloodType, leftCol + 30, y);
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Status:', rightCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(status, rightCol + 30, y);
+            y += lineHeight + 5;
+
+            // Parent Information Section
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Parent Information', 20, y);
+            doc.setLineWidth(0.5);
+            doc.line(20, y + 2, 190, y + 2);
+            
+            y += 12;
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('Parent Name:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(parent, leftCol + 30, y);
+            y += lineHeight + 5;
+
+            // ID Details Section
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('ID Details', 20, y);
+            doc.setLineWidth(0.5);
+            doc.line(20, y + 2, 190, y + 2);
+            
+            y += 12;
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('Created Date:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text(createdDate, leftCol + 30, y);
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Validity:', rightCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text('Globally Recognized', rightCol + 30, y);
+            y += lineHeight;
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Security:', leftCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text('256-bit Encrypted', leftCol + 30, y);
+
+            doc.setFont(undefined, 'bold');
+            doc.text('Expiry:', rightCol, y);
+            doc.setFont(undefined, 'normal');
+            doc.text('Never - Lifetime', rightCol + 30, y);
+            y += lineHeight + 10;
+
+            // Usage Information Box
+            doc.setFillColor(250, 250, 250);
+            doc.roundedRect(20, y, 170, 50, 3, 3, 'F');
+            y += 8;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.text('This ID can be used for:', 25, y);
+            
+            y += 8;
+            doc.setFontSize(10);
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+            doc.setFont(undefined, 'normal');
+            doc.text('• Medical records access', 30, y);
+            y += 6;
+            doc.text('• Vaccination tracking', 30, y);
+            y += 6;
+            doc.text('• Healthcare provider identification', 30, y);
+            y += 6;
+            doc.text('• Emergency identification', 30, y);
+            y += 6;
+            doc.text('• Government scheme applications', 30, y);
+
+            // Footer
+            y = 270;
+            doc.setFontSize(9);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Keep this ID safe and share only with authorized healthcare providers.', 105, y, { align: 'center' });
+            doc.text(`Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, 105, y + 5, { align: 'center' });
+
+            // Save PDF
+            doc.save(`baby-id-${currentUniqueId}.pdf`);
+            showNotification('ID information downloaded as PDF successfully!', 'success');
+        }
+
+        function shareId() {
+            if (!currentUniqueId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            const babyName = document.getElementById('baby-name').textContent;
+            const shareText = `Baby Unique ID for ${babyName}: ${currentUniqueId}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Baby Unique ID',
+                    text: shareText,
+                    url: window.location.href
+                }).then(() => {
+                    showNotification('ID shared successfully!', 'success');
+                }).catch(() => {
+                    // Fallback to clipboard
+                    copyToClipboard(shareText);
+                });
+            } else {
+                // Fallback: copy to clipboard
+                copyToClipboard(shareText);
+            }
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('ID copied to clipboard!', 'success');
+                }).catch(() => {
+                    showNotification('Failed to copy to clipboard', 'error');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showNotification('ID copied to clipboard!', 'success');
+                } catch (err) {
+                    showNotification('Failed to copy to clipboard', 'error');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3';
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10001;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                background: ${bgColor};
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                max-width: 300px;
+            `;
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        async function viewIdHistory() {
+            if (!currentBabyId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/babycare/api/unique-id/history/${currentBabyId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    showHistoryModal(data.history, data.baby_name);
+                } else {
+                    showNotification(data.error || 'Failed to load history', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+                showNotification('Error loading history', 'error');
+            }
+        }
+
+        function showHistoryModal(history, babyName) {
+            // Create modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+            `;
+
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 15px;
+                padding: 2rem;
+                max-width: 600px;
+                width: 100%;
+                max-height: 80vh;
+                overflow-y: auto;
+                position: relative;
+            `;
+
+            let historyHtml = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="margin: 0; color: #333;">ID History for ${babyName}</h2>
+                    <button onclick="this.closest('.modal').remove()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666;">×</button>
+                </div>
+            `;
+
+            if (history.length === 0) {
+                historyHtml += `
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                        <p>No ID changes recorded yet.</p>
+                    </div>
+                `;
+            } else {
+                historyHtml += '<div style="space-y: 1rem;">';
+                history.forEach((item, index) => {
+                    historyHtml += `
+                        <div style="border: 1px solid #e0e0e0; border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-weight: bold; color: #333;">Change #${history.length - index}</span>
+                                <span style="color: #666; font-size: 0.9rem;">${new Date(item.created_at).toLocaleString()}</span>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>From:</strong> <code style="background: #f5f5f5; padding: 0.2rem 0.5rem; border-radius: 5px;">${item.old_unique_id}</code>
+                            </div>
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong>To:</strong> <code style="background: #e8f5e8; padding: 0.2rem 0.5rem; border-radius: 5px;">${item.new_unique_id}</code>
+                            </div>
+                            <div>
+                                <strong>Reason:</strong> ${item.reason}
+                            </div>
+                        </div>
+                    `;
+                });
+                historyHtml += '</div>';
+            }
+
+            modalContent.innerHTML = historyHtml;
+            modal.appendChild(modalContent);
+            modal.className = 'modal';
+            document.body.appendChild(modal);
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Alias for viewHistory button
+        function viewHistory() {
+            viewIdHistory();
+        }
+
+        // Verify ID function
+        function verifyId() {
+            if (!currentUniqueId) {
+                showNotification('Please select a baby first', 'error');
+                return;
+            }
+
+            // Create verification modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+            `;
+
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 15px;
+                padding: 2rem;
+                max-width: 500px;
+                width: 100%;
+                text-align: center;
+            `;
+
+            modalContent.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-check-circle" style="font-size: 4rem; color: #4caf50;"></i>
+                </div>
+                <h2 style="margin-bottom: 1rem; color: #333;">ID Verified Successfully</h2>
+                <div style="background: #f5f5f5; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <code style="font-size: 1.2rem; color: #667eea; font-weight: bold;">${currentUniqueId}</code>
+                </div>
+                <p style="color: #666; margin-bottom: 1.5rem;">This unique ID is valid and active in our system.</p>
+                <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" 
+                        style="background: linear-gradient(135deg, #667eea, #764ba2); 
+                               color: white; 
+                               border: none; 
+                               padding: 0.8rem 2rem; 
+                               border-radius: 25px; 
+                               font-weight: bold; 
+                               cursor: pointer;
+                               font-size: 1rem;">
+                    Close
+                </button>
+            `;
+
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Unique ID management page loaded');
+        });
+    </script>
+</body>
+</html>

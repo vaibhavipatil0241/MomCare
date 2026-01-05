@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Unique ID - Doctor Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4caf50;
+            --primary-dark: #388e3c;
+            --secondary: #2196f3;
+            --accent: #ff9800;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --light: #f8fafc;
+            --dark: #2d3748;
+            --gray: #718096;
+            --light-gray: #e2e8f0;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+            --border-radius: 16px;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .doctor-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-logo i {
+            font-size: 2rem;
+            color: #764ba2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .doctor-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-primary:disabled {
+            background: var(--light-gray);
+            color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .unique-id-display {
+            background: linear-gradient(135deg, #e8f5e8, #f0f8ff);
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .unique-id-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .qr-code-container {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .qr-code {
+            max-width: 200px;
+            height: auto;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+
+        .baby-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .baby-item {
+            background: var(--light);
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .baby-item:hover {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .baby-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .baby-details h4 {
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .baby-details p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .baby-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-view {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-regenerate {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.4s ease;
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .doctor-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="doctor-nav">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <i class="fas fa-id-card"></i>
+                <span>Unique ID Generator</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('doctor.dashboard') }}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="{{ url_for('doctor.patients') }}">
+                    <i class="fas fa-users"></i> Patients
+                </a>
+                <a href="{{ url_for('doctor.appointments') }}">
+                    <i class="fas fa-calendar-alt"></i> Appointments
+                </a>
+                <a href="{{ url_for('doctor.generate_id') }}" class="active">
+                    <i class="fas fa-id-card"></i> Generate ID
+                </a>
+                <a href="{{ url_for('doctor.reports') }}">
+                    <i class="fas fa-chart-line"></i> Reports
+                </a>
+                <a href="{{ url_for('auth.logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="doctor-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-id-card"></i>
+                Unique ID Management
+            </h1>
+            <p>Generate and manage unique identification codes for babies in your care</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Generate New ID Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-plus-circle"></i>
+                    Generate New Unique ID
+                </div>
+
+                <form id="generateIdForm">
+                    <div class="form-group">
+                        <label for="babyName">Baby Name</label>
+                        <input type="text" id="babyName" name="babyName" required placeholder="Enter baby's full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthDate">Birth Date</label>
+                        <input type="date" id="birthDate" name="birthDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parentEmail">Parent Email</label>
+                        <input type="email" id="parentEmail" name="parentEmail" required placeholder="parent@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weight">Weight at Birth (kg)</label>
+                        <input type="number" id="weight" name="weight" step="0.1" placeholder="3.5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height">Height at Birth (cm)</label>
+                        <input type="number" id="height" name="height" step="0.1" placeholder="50.0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Medical Notes</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Any important medical information..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="generateBtn">
+                        <i class="fas fa-magic"></i>
+                        Generate Unique ID
+                    </button>
+                </form>
+
+                <!-- Generated ID Display -->
+                <div id="generatedIdSection" style="display: none;">
+                    <div class="unique-id-display">
+                        <div class="unique-id-value" id="generatedId"></div>
+                        <p>Unique ID generated successfully!</p>
+                    </div>
+
+                    <div class="qr-code-container">
+                        <img id="qrCode" class="qr-code" style="display: none;" alt="QR Code">
+                        <p><small>QR Code for easy scanning</small></p>
+                    </div>
+
+                    <button type="button" class="btn-primary" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i>
+                        Copy ID to Clipboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Existing IDs Management -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-list"></i>
+                    Manage Existing IDs
+                </div>
+
+                <div class="baby-list" id="babyList">
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>Loading babies...</p>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-primary" onclick="refreshBabyList()">
+                    <i class="fas fa-refresh"></i>
+                    Refresh List
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Global variables
+        let allBabies = [];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBabyList();
+
+            // Set max date to today for birth date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('birthDate').setAttribute('max', today);
+        });
+
+        // Generate ID Form Handler
+        document.getElementById('generateIdForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const generateBtn = document.getElementById('generateBtn');
+            const originalText = generateBtn.innerHTML;
+
+            // Show loading state
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            generateBtn.disabled = true;
+
+            try {
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                // Validate parent email exists
+                const parentResponse = await fetch('/doctor/api/validate-parent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: data.parentEmail })
+                });
+
+                const parentResult = await parentResponse.json();
+
+                if (!parentResult.success) {
+                    showNotification('Parent email not found in system. Please ensure the parent is registered.', 'error');
+                    return;
+                }
+
+                // Generate unique ID
+                const response = await fetch('/doctor/api/generate-unique-id', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ...data,
+                        parent_id: parentResult.parent_id
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Display generated ID
+                    document.getElementById('generatedId').textContent = result.unique_id;
+                    document.getElementById('generatedIdSection').style.display = 'block';
+
+                    // Generate and display QR code
+                    if (result.qr_code) {
+                        const qrImg = document.getElementById('qrCode');
+                        qrImg.src = 'data:image/png;base64,' + result.qr_code;
+                        qrImg.style.display = 'block';
+                    }
+
+                    showNotification('Unique ID generated successfully!', 'success');
+
+                    // Reset form
+                    this.reset();
+
+                    // Refresh baby list
+                    loadBabyList();
+                } else {
+                    showNotification(result.error || 'Failed to generate unique ID', 'error');
+                }
+            } catch (error) {
+                console.error('Error generating ID:', error);
+                showNotification('Error generating unique ID. Please try again.', 'error');
+            } finally {
+                // Reset button
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            }
+        });
+
+        // Load baby list
+        async function loadBabyList() {
+            const babyList = document.getElementById('babyList');
+
+            try {
+                babyList.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading babies...</p>
+                    </div>
+                `;
+
+                const response = await fetch('/doctor/api/babies-with-ids');
+                const result = await response.json();
+
+                if (result.success) {
+                    allBabies = result.babies;
+                    renderBabyList(allBabies);
+                } else {
+                    babyList.innerHTML = `
+                        <div class="loading">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Error loading babies: ${result.error}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading babies:', error);
+                babyList.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Error loading babies. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render baby list
+        function renderBabyList(babies) {
+            const babyList = document.getElementById('babyList');
+
+            if (babies.length === 0) {
+                babyList.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-baby"></i>
+                        <p>No babies found. Generate your first unique ID!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            babyList.innerHTML = babies.map(baby => `
+                <div class="baby-item">
+                    <div class="baby-info">
+                        <div class="baby-details">
+                            <h4>${baby.name}</h4>
+                            <p><strong>ID:</strong> ${baby.unique_id}</p>
+                            <p><strong>Birth Date:</strong> ${formatDate(baby.birth_date)}</p>
+                            <p><strong>Parent:</strong> ${baby.parent_name}</p>
+                        </div>
+                        <div class="baby-actions">
+                            <button class="btn-small btn-view" onclick="viewBabyDetails(${baby.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn-small btn-regenerate" onclick="regenerateId(${baby.id})">
+                                <i class="fas fa-refresh"></i> Regenerate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // View baby details
+        async function viewBabyDetails(babyId) {
+            try {
+                const response = await fetch(`/doctor/api/baby/${babyId}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const baby = result.baby;
+                    alert(`Baby Details:
+Name: ${baby.name}
+Unique ID: ${baby.unique_id}
+Birth Date: ${formatDate(baby.birth_date)}
+Gender: ${baby.gender}
+Weight at Birth: ${baby.weight_at_birth || 'Not recorded'} kg
+Height at Birth: ${baby.height_at_birth || 'Not recorded'} cm
+Parent: ${baby.parent_name}
+Created: ${formatDate(baby.created_at)}`);
+                } else {
+                    showNotification('Error loading baby details', 'error');
+                }
+            } catch (error) {
+                console.error('Error viewing baby details:', error);
+                showNotification('Error loading baby details', 'error');
+            }
+        }
+
+        // Regenerate unique ID
+        async function regenerateId(babyId) {
+            if (!confirm('Are you sure you want to regenerate this unique ID? The old ID will become invalid.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/doctor/api/regenerate-unique-id/${babyId}`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showNotification('Unique ID regenerated successfully!', 'success');
+                    loadBabyList(); // Refresh the list
+                } else {
+                    showNotification(result.error || 'Failed to regenerate unique ID', 'error');
+                }
+            } catch (error) {
+                console.error('Error regenerating ID:', error);
+                showNotification('Error regenerating unique ID', 'error');
+            }
+        }
+
+        // Copy to clipboard
+        function copyToClipboard() {
+            const uniqueId = document.getElementById('generatedId').textContent;
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(uniqueId).then(() => {
+                    showNotification('Unique ID copied to clipboard!', 'success');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = uniqueId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('Unique ID copied to clipboard!', 'success');
+            }
+        }
+
+        // Refresh baby list
+        function refreshBabyList() {
+            loadBabyList();
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            if (!dateString) return 'Not specified';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // Hide notification after 4 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
